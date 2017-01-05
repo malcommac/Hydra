@@ -128,10 +128,10 @@ Hydra supports:
 - `timeout`: add a timeout timer to the Promise; if it does not fulfill or reject after given interval it will be marked as rejected.
 - `all`: create a Promise that resolved when the list of passed Promises resolves (promises are resolved in parallel). Promise also reject as soon as a promise reject for any reason.
 - `any`: create a Promise that resolves as soon as one passed from list resolves. It also reject as soon as a promise reject for any reason.
-- `delay`: delay the execution of a Promise by a given time interval.
 - `forward`: Perform an operation in the middle of a chain that does not affect the resolved value but may reject the chain.
 - `recover`: Allows recovery of a Promise by returning another Promise if it fails.
 - `zip`: Create a Promise tuple of a two promises
+- `delay`: delay the execution of a Promise by a given time interval.
 
 ### always
 `always` func is very useful if you want to execute code when the promise fulfills — regardless of whether it succeeds or fails.
@@ -139,11 +139,11 @@ Hydra supports:
 ```swift
 showLoadingHUD("Logging in...")
 loginUser(username,pass).then { user in
- print("Welcome \(user.username)")
+	print("Welcome \(user.username)")
 }.catch { err in
- print("Cannot login \(err)")
+ 	print("Cannot login \(err)")
 }.always {
- hideLoadingHUD()
+ 	hideLoadingHUD()
 }
 ```
 
@@ -206,3 +206,24 @@ any(getFile(mirror_1), getFile(mirror_2)).then { data in
 }
 ```
 
+### forward
+`forward` is useful for performing an operation in the middle of a promise chain without changing the type of the Promise.
+You may also reject the entire chain.
+You can also return a Promise from the tap handler and the chain will wait for that promise to resolve (see the second `then` in the example below).
+
+```swift
+loginUser(user,pass).tap { userObj in 
+	print("Fullname is \(user.fullname)")
+}.then { userObj in
+	updateLastActivity(userObj)
+}.then { userObj in
+	print("Login succeded!")
+}
+```
+
+### recover
+`recover` allows you to recover a failed Promise by returning another.
+
+### zip
+
+### delay
