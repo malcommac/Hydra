@@ -29,6 +29,7 @@
 		08295D111E1E6080009D32C3 /* Await.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08295D101E1E6080009D32C3 /* Await.swift */; };
 		08295D131E1E7123009D32C3 /* Promise+Forward.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08295D121E1E7123009D32C3 /* Promise+Forward.swift */; };
 		08C7029A1E1EB54F0062706A /* Promise+Recover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C702991E1EB54F0062706A /* Promise+Recover.swift */; };
+		08C7029C1E1EB7080062706A /* Promise+Zip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C7029B1E1EB7080062706A /* Promise+Zip.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,6 +76,7 @@
 		08295D101E1E6080009D32C3 /* Await.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Await.swift; path = ../Sources/Await.swift; sourceTree = "<group>"; };
 		08295D121E1E7123009D32C3 /* Promise+Forward.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Forward.swift"; path = "../Sources/Promise+Forward.swift"; sourceTree = "<group>"; };
 		08C702991E1EB54F0062706A /* Promise+Recover.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Recover.swift"; path = "../Sources/Promise+Recover.swift"; sourceTree = "<group>"; };
+		08C7029B1E1EB7080062706A /* Promise+Zip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Zip.swift"; path = "../Sources/Promise+Zip.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +122,7 @@
 				08295CF51E1E56F1009D32C3 /* Promise+Delay.swift */,
 				08295D121E1E7123009D32C3 /* Promise+Forward.swift */,
 				08C702991E1EB54F0062706A /* Promise+Recover.swift */,
+				08C7029B1E1EB7080062706A /* Promise+Zip.swift */,
 				08295CCB1E1E4ED3009D32C3 /* Hydra */,
 				08295CD61E1E4ED3009D32C3 /* HydraTests */,
 				08295CFC1E1E57E5009D32C3 /* DemoApp */,
@@ -317,6 +320,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				08295CEC1E1E545B009D32C3 /* Promise+Always.swift in Sources */,
+				08C7029C1E1EB7080062706A /* Promise+Zip.swift in Sources */,
 				08295CF01E1E54A0009D32C3 /* Promise+Timeout.swift in Sources */,
 				08295CEE1E1E5485009D32C3 /* Promise+Ensure.swift in Sources */,
 				08295D111E1E6080009D32C3 /* Await.swift in Sources */,
