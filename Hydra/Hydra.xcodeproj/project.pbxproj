@@ -28,6 +28,7 @@
 		08295D0F1E1E57F0009D32C3 /* Hydra.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08295CC91E1E4ED3009D32C3 /* Hydra.framework */; };
 		08295D111E1E6080009D32C3 /* Await.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08295D101E1E6080009D32C3 /* Await.swift */; };
 		08295D131E1E7123009D32C3 /* Promise+Forward.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08295D121E1E7123009D32C3 /* Promise+Forward.swift */; };
+		08C7029A1E1EB54F0062706A /* Promise+Recover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C702991E1EB54F0062706A /* Promise+Recover.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +74,7 @@
 		08295D091E1E57E5009D32C3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		08295D101E1E6080009D32C3 /* Await.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Await.swift; path = ../Sources/Await.swift; sourceTree = "<group>"; };
 		08295D121E1E7123009D32C3 /* Promise+Forward.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Forward.swift"; path = "../Sources/Promise+Forward.swift"; sourceTree = "<group>"; };
+		08C702991E1EB54F0062706A /* Promise+Recover.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Recover.swift"; path = "../Sources/Promise+Recover.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +108,7 @@
 			isa = PBXGroup;
 			children = (
 				08295CE51E1E5156009D32C3 /* Shared.swift */,
+				08295D101E1E6080009D32C3 /* Await.swift */,
 				08295CE31E1E4EE6009D32C3 /* Promise.swift */,
 				08295CE71E1E538F009D32C3 /* Promise+Then.swift */,
 				08295CE91E1E543E009D32C3 /* Promise+Catch.swift */,
@@ -116,7 +119,7 @@
 				08295CF31E1E5518009D32C3 /* Promise+Any.swift */,
 				08295CF51E1E56F1009D32C3 /* Promise+Delay.swift */,
 				08295D121E1E7123009D32C3 /* Promise+Forward.swift */,
-				08295D101E1E6080009D32C3 /* Await.swift */,
+				08C702991E1EB54F0062706A /* Promise+Recover.swift */,
 				08295CCB1E1E4ED3009D32C3 /* Hydra */,
 				08295CD61E1E4ED3009D32C3 /* HydraTests */,
 				08295CFC1E1E57E5009D32C3 /* DemoApp */,
@@ -324,6 +327,7 @@
 				08295CE81E1E538F009D32C3 /* Promise+Then.swift in Sources */,
 				08295CEA1E1E543E009D32C3 /* Promise+Catch.swift in Sources */,
 				08295CF21E1E54FF009D32C3 /* Promise+All.swift in Sources */,
+				08C7029A1E1EB54F0062706A /* Promise+Recover.swift in Sources */,
 				08295CF61E1E56F1009D32C3 /* Promise+Delay.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -591,6 +595,7 @@
 				08295CDF1E1E4ED3009D32C3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		08295CE01E1E4ED3009D32C3 /* Build configuration list for PBXNativeTarget "HydraTests" */ = {
 			isa = XCConfigurationList;
@@ -599,6 +604,7 @@
 				08295CE21E1E4ED3009D32C3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		08295D0A1E1E57E5009D32C3 /* Build configuration list for PBXNativeTarget "DemoApp" */ = {
 			isa = XCConfigurationList;
@@ -607,6 +613,7 @@
 				08295D0C1E1E57E5009D32C3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
