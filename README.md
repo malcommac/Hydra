@@ -132,3 +132,77 @@ Hydra supports:
 - `forward`: Perform an operation in the middle of a chain that does not affect the resolved value but may reject the chain.
 - `recover`: Allows recovery of a Promise by returning another Promise if it fails.
 - `zip`: Create a Promise tuple of a two promises
+
+### always
+`always` func is very useful if you want to execute code when the promise fulfills — regardless of whether it succeeds or fails.
+
+```swift
+showLoadingHUD("Logging in...")
+loginUser(username,pass).then { user in
+ print("Welcome \(user.username)")
+}.catch { err in
+ print("Cannot login \(err)")
+}.always {
+ hideLoadingHUD()
+}
+```
+
+### ensure
+`ensure` is a func that takes a predicate, and rejects the promise chain if that predicate fails.
+
+```swift
+getAllUsersResponse().ensure { httpResponse in
+	guard let httpResponse.statusCode == 200 else {
+		return false
+	}
+	return true
+}.then { usersList in
+	// do something
+}.catch { error in
+	// request failed, or the status code was != 200
+}
+
+```
+
+### timeout
+`timeout` allows you to attach a timeout timer to a Promise; if it does not resolve before elapsed interval it will be rejected with `.timeoutError`.
+
+```swift
+loginUser(username,pass).timeout(.main, 10, .MyCustomTimeoutError).then { user in
+	// logged in
+}.catch { err in
+	// an error has occurred, may be `MyCustomTimeoutError
+}
+```
+
+### all
+`Promise.all` is a static method that waits for all the promises you give it to fulfill, and once they have, it fulfills itself with the array of all fulfilled values (in order).
+
+If one Promise fail the chain fail with the same error.
+
+Execution of all promises is done in parallel.
+
+```swift
+let promises = usernameList.map { return getAvatar(username: $0) }
+Promise.all(promises).then { usersAvatars in
+	// you will get an array of UIImage with the avatars of input
+	// usernames, all in the same order of the input.
+	// Download of the avatar is done in parallel in background!
+}.catch { err in
+	// something bad has occurred
+}
+```
+
+### any
+`any` easily handle race conditions: as soon as one Promise of the input list resolves the handler is called and will never be called again.
+
+```swift
+let mirror_1 = "https://mirror1.mycompany.com/file"
+let mirror_2 = "https://mirror2.mycompany.com/file"
+
+any(getFile(mirror_1), getFile(mirror_2)).then { data in
+	// the first fulfilled promise also resolve the any Promise
+	// handler is called exactly one time!
+}
+```
+
