@@ -160,19 +160,22 @@ print("The result is \(result)")
 ```
 
 There is also an await operator:
-* `..` followed by a Promise instance
-* `..!` followed by a Promsie instance: this operator does not throws exceptions; in case of promise's rejection result is nil instead.
+* **await with throw**: `..` followed by a Promise instance: this operator must be prefixed by `try` and should use `do/catch` statement in order to handle rejection of the Promise.
+* **await without throw**: `..!` followed by a Promise instance: this operator does not throws exceptions; in case of promise's rejection result is nil instead.
 
 Examples:
 ```swift
-// .. operator
+// `..` operator
 do {
-	let result_1 = try ..asyncOperation1(param)
-	let result_2 = try ..asyncOperation2(param)
+	let result_1 = try ..asyncOperation1()
+	let result_2 = try ..asyncOperation2(result_1) // result_1 is always valid
+} catch {
+	// something goes bad with one of these async operations
 }
 
 // or using `..!`
-let result_1 = ..!asyncOperation1(param) // may return nil if promise fail. does not throw!
+let result_1 = ..!asyncOperation1() // may return nil if promise fail. does not throw!
+let result_2 = ..!asyncOperation2(result_1) // you must handle nil case manually
 ```
 
 <a name="allfeature" />
