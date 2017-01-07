@@ -13,22 +13,22 @@ Hydra is full-featured lightweight library which allows you to write better asyn
 With Hydra your code will be cleaner, easy to mantain and sexy as ever.
 
 ## Index
-* **What's a Promise**(#whatspromise)
-* **Create a Promise**(#createpromise)
-* **How to use a Promise**(#howtousepromise)
-* **Chaining Multiple Promises**(#chaining)
-* **Await, your async code in sync fashion**(#await)
-* **All Features**(#allfeatures)
-	* **always()**(#always)
-	* **ensure()**(#ensure)
-	* **timeout()**(#timeout)
-	* **all()**(#all)
-	* **any()**(#any)
-	* **forward()**(#forward)
-	* **recover()**(#recover)
-	* **map()**(#map)
-	* **zip()**(#zip)
-	* **delay()**(#delay)
+* **[What's a Promise](#whatspromise)**
+* **[Create a Promise](#createpromise)**
+* **[How to use a Promise](#howtousepromise)**
+* **[Chaining Multiple Promises](#chaining)**
+* **[Await, your async code in sync fashion](#await)**
+* **[All Features](#allfeatures)**
+	* **[always](#always)**
+	* **[ensure](#ensure)**
+	* **[timeout](#timeout)**
+	* **[all](#all)**
+	* **[any](#any)**
+	* **[forward](#forward)**
+	* **[recover](#recover)**
+	* **[map](#map)**
+	* **[zip](#zip)**
+	* **[delay](#delay)**
 
 <a name="whatspromise" />
 
