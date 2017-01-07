@@ -29,6 +29,9 @@ With Hydra your code will be cleaner, easy to mantain and sexy as ever.
 	* **[map](#map)**
 	* **[zip](#zip)**
 	* **[delay](#delay)**
+* **[Installation (CocoaPods, SwiftPM and Carthage)](#installation)**
+* **[Requirements](#requirements)**
+* **[Credits](#credits)**
 
 <a name="whatspromise" />
 
@@ -321,4 +324,58 @@ As name said, `delay` delays the executon of a Promise chain by some number of s
 
 ```swift
 asyncFunc1().delay(.main, 5).then...
+```
+
+<a name="installation" />
+
+## Installation
+You can install Swiftline using CocoaPods, carthage and Swift package manager
+
+### CocoaPods
+    use_frameworks!
+    pod 'Hydra'
+
+### Carthage
+    github 'malcommac/Hydra'
+
+### Swift Package Manager
+Add swiftline as dependency in your `Package.swift`
+
+```
+  import PackageDescription
+
+  let package = Package(name: "YourPackage",
+    dependencies: [
+      .Package(url: "https://github.com/malcommac/Hydra.git", majorVersion: 0),
+    ]
+  )
+```
+
+<a name="requirements" />
+
+## Requirements
+
+Current version is compatible with:
+
+* Swift 3.0+
+* iOS 8.0 or later
+* tvOS 9.0 or later
+* macOS 10.0 or later
+* watchOS 3.0 or later
+
+<a name="credits" />
+
+## Credits & License
+Hydra is owned and maintained by [Daniele Margutti](http://www.danielemargutti.com/).
+
+As open source creation any help is welcome!
+
+The code of this library is licensed under MIT License; you can use it in commercial products without any limitation.
+
+The only requirement is to add a line in your Credits/About section with the text below:
+
+```
+This software uses open source Hydra's library to manage rich attributed strings.
+Web: http://github.com/malcommac/Hydra
+Created by Daniele Margutti and licensed under MIT License.
 ```
