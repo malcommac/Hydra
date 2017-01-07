@@ -16,9 +16,9 @@ public extension Promise {
 	/// - Returns: a new promise to append to the chain
 	public func recover(_ recovery: @escaping (Error) throws -> Promise<R>) -> Promise<R> {
 		return Promise<R>(self.context, { resolve, reject in
-			self.then(self.context, resolve).catch(context: self.context, { error in
+			self.then(in: self.context, resolve).catch(context: self.context, { error in
 				do {
-					try recovery(error).then(self.context, resolve)
+					try recovery(error).then(in: self.context, resolve)
 				} catch (let error) {
 					reject(error)
 				}

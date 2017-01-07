@@ -30,6 +30,7 @@
 		08295D131E1E7123009D32C3 /* Promise+Forward.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08295D121E1E7123009D32C3 /* Promise+Forward.swift */; };
 		08C7029A1E1EB54F0062706A /* Promise+Recover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C702991E1EB54F0062706A /* Promise+Recover.swift */; };
 		08C7029C1E1EB7080062706A /* Promise+Zip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C7029B1E1EB7080062706A /* Promise+Zip.swift */; };
+		08C7029E1E21477E0062706A /* Promise+Map.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C7029D1E21477E0062706A /* Promise+Map.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +78,7 @@
 		08295D121E1E7123009D32C3 /* Promise+Forward.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Forward.swift"; path = "../Sources/Promise+Forward.swift"; sourceTree = "<group>"; };
 		08C702991E1EB54F0062706A /* Promise+Recover.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Recover.swift"; path = "../Sources/Promise+Recover.swift"; sourceTree = "<group>"; };
 		08C7029B1E1EB7080062706A /* Promise+Zip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Zip.swift"; path = "../Sources/Promise+Zip.swift"; sourceTree = "<group>"; };
+		08C7029D1E21477E0062706A /* Promise+Map.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Map.swift"; path = "../Sources/Promise+Map.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,6 +125,7 @@
 				08295D121E1E7123009D32C3 /* Promise+Forward.swift */,
 				08C702991E1EB54F0062706A /* Promise+Recover.swift */,
 				08C7029B1E1EB7080062706A /* Promise+Zip.swift */,
+				08C7029D1E21477E0062706A /* Promise+Map.swift */,
 				08295CCB1E1E4ED3009D32C3 /* Hydra */,
 				08295CD61E1E4ED3009D32C3 /* HydraTests */,
 				08295CFC1E1E57E5009D32C3 /* DemoApp */,
@@ -330,6 +333,7 @@
 				08295D131E1E7123009D32C3 /* Promise+Forward.swift in Sources */,
 				08295CE81E1E538F009D32C3 /* Promise+Then.swift in Sources */,
 				08295CEA1E1E543E009D32C3 /* Promise+Catch.swift in Sources */,
+				08C7029E1E21477E0062706A /* Promise+Map.swift in Sources */,
 				08295CF21E1E54FF009D32C3 /* Promise+All.swift in Sources */,
 				08C7029A1E1EB54F0062706A /* Promise+Recover.swift in Sources */,
 				08295CF61E1E56F1009D32C3 /* Promise+Delay.swift in Sources */,

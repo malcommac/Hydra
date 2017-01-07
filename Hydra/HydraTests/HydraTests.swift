@@ -14,9 +14,7 @@ class HydraTests: XCTestCase {
     override func setUp() {
         super.setUp()
 		
-		let x = ["a","b"]
-		let y = x.map { return 
-		}
+	
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
     

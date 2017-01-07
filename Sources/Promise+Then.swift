@@ -21,14 +21,13 @@ public extension Promise {
 	///   - fulfillEndHandler: this is the handler executed when the first promise (left side) is resolved. You can return
 	///     another promise to chain or your code which end up with a promise to chain.
 	/// - Returns: a new Promise with the new value defined by right side Promise
-	@discardableResult
-	public func then<N>(_ context: Context = .main, _ fulfillEndHandler: @escaping (R) throws -> Promise<N>) -> Promise<N> {
+	public func then<N>(in context: Context = .main, _ fulfillEndHandler: @escaping (R) throws -> Promise<N>) -> Promise<N> {
 		return Promise<N> { resolve, reject in
 			let fulfillLeft: (R) -> (Void) = { value in
 				// Let's try to execute then handler by passing first promise's result as first argument of the chained promise
 				do {
 					let returnedPromise = try fulfillEndHandler(value)
-					returnedPromise.then(context, resolve, reject)
+					returnedPromise.then(in: context, fulfill: resolve, reject: reject)
 				} catch let error {
 					reject(error)
 				}
@@ -48,8 +47,8 @@ public extension Promise {
 	///   - onFulfill: block to run when Promise resolved, returns a Promsie that mutates the Promise chain
 	/// - Returns: a Promise with the new value to return
 	@discardableResult
-	public func then<N>(_ context: Context = .main, _ onFulfill: @escaping (R) throws -> N) -> Promise<N> {
-		return then(context, { (value) -> Promise<N> in
+	public func then<N>(in context: Context = .main, _ onFulfill: @escaping (R) throws -> N) -> Promise<N> {
+		return then(in: context, { (value) -> Promise<N> in
 			do {
 				return Promise<N>(fulfilled: try onFulfill(value))
 			} catch let error {
@@ -59,9 +58,9 @@ public extension Promise {
 	}
 	
 	@discardableResult
-	private func then(_ context: Context = .main, _ onFulfill: @escaping (R) -> (), _ onReject: @escaping (Error) -> () = { _ in }) -> Promise<R> {
+	private func then(in context: Context = .main, fulfill: @escaping (R) -> (), reject: @escaping (Error) -> () = { _ in }) -> Promise<R> {
 		return Promise<R> { resolve, reject in
-			self.registerObserver(in: context, fulfill: onFulfill, reject: onReject)
+			self.registerObserver(in: context, fulfill: fulfill, reject: reject)
 		}
 	}
 	

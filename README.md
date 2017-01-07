@@ -130,6 +130,7 @@ Hydra supports:
 - `any`: create a Promise that resolves as soon as one passed from list resolves. It also reject as soon as a promise reject for any reason.
 - `forward`: Perform an operation in the middle of a chain that does not affect the resolved value but may reject the chain.
 - `recover`: Allows recovery of a Promise by returning another Promise if it fails.
+- `map`: Transform items to Promises and resolve them (in paralle or in series)
 - `zip`: Create a Promise tuple of a two promises
 - `delay`: delay the execution of a Promise by a given time interval.
 
@@ -176,7 +177,7 @@ loginUser(username,pass).timeout(.main, 10, .MyCustomTimeoutError).then { user i
 ```
 
 ### all
-`Promise.all` is a static method that waits for all the promises you give it to fulfill, and once they have, it fulfills itself with the array of all fulfilled values (in order).
+`all` is a static method that waits for all the promises you give it to fulfill, and once they have, it fulfills itself with the array of all fulfilled values (in order).
 
 If one Promise fail the chain fail with the same error.
 
@@ -224,6 +225,45 @@ loginUser(user,pass).tap { userObj in
 ### recover
 `recover` allows you to recover a failed Promise by returning another.
 
+```swift
+let promise = Promise<Int>(in: .background, { fulfill, reject in
+	reject(AnError)
+}).recover({ error in
+    return Promise(in: .background, { (fulfill, reject) in
+		fulfill(value)
+    })
+})
+```
+
+### map
+Map is used to transform a list of items into promises and resolve them in parallel or serially.
+
+```swift
+[urlString1,urlString2,urlString3].map {
+	return self.asyncFunc2(value: $0)
+}.then(.main, { dataArray in
+	// get the list of all downloaded data from urls
+}).catch({
+	// something bad has occurred
+})
+```
+
+
 ### zip
+`zip` allows you to join different promises (2,3 or 4) and return a tuple with the result of them. Promises are resolved in parallel.
+
+```swift
+join(getUserProfile(user), getUserAvatar(user), getUserFriends(user))
+  .then { profile, avatar, friends in
+	// ... let's do something
+}.catch {
+	// something bad as occurred. at least one of given promises failed
+}
+```
 
 ### delay
+As name said, `delay` delays the executon of a Promise chain by some number of seconds from current time.
+
+```swift
+asyncFunc1().delay(.main, 5).then...
+```

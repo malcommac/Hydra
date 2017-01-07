@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 public class Promise<R> {
 	
 	/// This is a typealias which define the body of a promise.
@@ -31,6 +30,14 @@ public class Promise<R> {
 	
 	/// Context in which the promise's body will be resolved
 	private(set) var context: Context = .background
+	
+	public var value: R? {
+		return self.state.value
+	}
+	
+	public var error: Error? {
+		return self.state.error
+	}
 	
 	//MARK: Initialization functions
 	
@@ -153,6 +160,16 @@ public class Promise<R> {
 			}
 			self.observers.removeAll()
 		})
+	}
+	
+	
+	/// Transform given promise to a void promise
+	///
+	/// - Returns: promise
+	internal func voidPromise() -> Promise<Void> {
+		return self.then { _ in
+			return ()
+		}
 	}
 	
 }

@@ -56,7 +56,7 @@ public extension Context {
 		// the promise is fulfilled or rejected
 		let semaphore = DispatchSemaphore(value: 0)
 		
-		promise.then(self) { value -> Void in
+		promise.then(in: self) { value -> Void in
 			// promise is fulfilled, fillup error and resume code execution
 			result = value
 			semaphore.signal()

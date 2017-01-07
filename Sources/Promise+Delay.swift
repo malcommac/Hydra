@@ -19,7 +19,7 @@ public extension Promise {
 	///   - result: the Promise to resolve to after the delay
 	/// - Returns: Promise
 	public func delay(_ context: Context = .main, fromNow seconds: TimeInterval) -> Promise<R> {
-		return self.then(context, { value in
+		return self.then(in: context, { value in
 			return Promise<R> { resolve, _ in
 				let fireTime: DispatchTime = .now() + seconds
 				context.queue.asyncAfter(deadline: fireTime) {

@@ -34,7 +34,6 @@ public enum Context {
 	case userInitiated
 	case `default`
 	case utility
-	
 	case custom(queue: DispatchQueue)
 	
 	public var queue: DispatchQueue {

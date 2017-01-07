@@ -23,14 +23,27 @@ class ViewController: UIViewController {
 				resolve(5)
 			})
 		})
-
-		print("ok")
+		
+		let a: [Promise<T>] = [1,2,3].map {
+			return self.asyncFunc2(value: $0)
+		}
+		
+		print("")
+		
 	}
 	
 	func asyncFunc1() -> Promise<Int> {
 		return Promise<Int> { (resolve, reject) in
 			delay(2, context: .background, closure: {
 				resolve(5)
+			})
+		}
+	}
+	
+	func asyncFunc2(value: Int) -> Promise<Int> {
+		return Promise<Int> { (resolve, reject) in
+			delay(2, context: .background, closure: {
+				resolve(10*value)
 			})
 		}
 	}

@@ -18,8 +18,8 @@ public extension Promise {
 	///   - body: block to run in the middle of the promise chain. Chain waits for the returned Promise to resolve
 	/// - Returns: Promise that resolves to the result of the previous Promise
 	public func forward<N>(_ context: Context = .main, _ body: @escaping (R) throws -> Promise<N>) -> Promise<R> {
-		return self.then(context, { value in
-			try body(value).then(context, { _ in
+		return self.then(in: context, { value in
+			try body(value).then(in: context, { _ in
 				Promise(fulfilled: value)
 			})
 		})
