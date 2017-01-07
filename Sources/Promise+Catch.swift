@@ -17,20 +17,21 @@ public extension Promise {
 	///   - handler: handler to run when Promise chain rejects
 	/// - Returns: a void Promise
 	@discardableResult
-	public func `catch`(context: Context = .main, _ handler: @escaping (Error) throws -> Void) -> Promise<Void> {
+	public func `catch`(_ context: Context? = nil, _ body: @escaping (Error) throws -> Void) -> Promise<Void> {
+		let ctx = context ?? .main
 		return Promise<Void> { (resolve, reject) in
 			let onResolve: (R) -> (Void) = { value in
 				resolve(())
 			}
 			let onReject: (Error) -> (Void) = { error in
 				do {
-					try handler(error)
+					try body(error)
 				} catch {
 					return reject(error)
 				}
 				resolve(())
 			}
-			self.registerObserver(in: context, fulfill: onResolve, reject: onReject)
+			self.addObserver(in: ctx, fulfill: onResolve, reject: onReject)
 		}
 	}
 	

@@ -15,7 +15,6 @@ import Foundation
 /// The exact number of tasks executing at any given point is variable and depends on system conditions.
 let awaitContext = Context.custom(queue: DispatchQueue(label: "com.hydra.awaitcontext", attributes: .concurrent))
 
-
 /// This define a `..` operator you can use instead of calling `await` func.
 /// If you use this operator you need to also use `do/catch` in order to catch exception for rejected promises.
 prefix operator ..
@@ -36,12 +35,14 @@ public prefix func ..!<T> (_ promise: Promise<T>) -> T? {
 
 /// Awaits that the given promise fulfilled with its value or throws an error if the promise fails
 ///
-/// - Parameter promise: target promise
+/// - Parameters:
+///   - context: context in which you want to execute the operation. If not specified default concurrent `awaitContext` is used instead.
+///   - promise: target promise
 /// - Returns: fufilled value of the promise
-/// - Throws: exception if promise fails due to an error
+/// - Throws: throws an exception if promise fails due to an error
 @discardableResult
-public func await<T>(_ promise: Promise<T>) throws -> T {
-	return try awaitContext.await(promise)
+public func await<T>(_ context: Context? = nil, _ promise: Promise<T>) throws -> T {
+	return try (context ?? awaitContext).await(promise)
 }
 
 /// Awaits that the given body is resolved. This is a shortcut which simply create a Promise; as for a Promise you need to
@@ -55,8 +56,11 @@ public func await<T>(_ promise: Promise<T>) throws -> T {
 @discardableResult
 public func await<T>(_ context: Context = .background, _ body: @escaping ((_ fulfill: @escaping (T) -> (), _ reject: @escaping (Error) -> () ) throws -> ())) throws -> T {
 	let promise = Promise<T>(context,body)
-	return try await(promise)
+	return try await(context, promise)
 }
+
+
+// MARK: - Extension of Context
 
 public extension Context {
 	
@@ -79,11 +83,11 @@ public extension Context {
 		// the promise is fulfilled or rejected
 		let semaphore = DispatchSemaphore(value: 0)
 		
-		promise.then(in: self) { value -> Void in
+		promise.then(self) { value -> Void in
 			// promise is fulfilled, fillup error and resume code execution
 			result = value
 			semaphore.signal()
-		}.catch(context: self) { err in
+		}.catch(self) { err in
 			// promise is rejected, fillup error and resume code execution
 			error = err
 			semaphore.signal()

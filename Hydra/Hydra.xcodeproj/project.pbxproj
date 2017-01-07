@@ -168,13 +168,13 @@
 				08295CEB1E1E545B009D32C3 /* Promise+Always.swift */,
 				08295CED1E1E5485009D32C3 /* Promise+Ensure.swift */,
 				08295CEF1E1E54A0009D32C3 /* Promise+Timeout.swift */,
-				08295CF11E1E54FF009D32C3 /* Promise+All.swift */,
-				08295CF31E1E5518009D32C3 /* Promise+Any.swift */,
 				08295CF51E1E56F1009D32C3 /* Promise+Delay.swift */,
+				08C7029B1E1EB7080062706A /* Promise+Zip.swift */,
+				08295CF31E1E5518009D32C3 /* Promise+Any.swift */,
 				08295D121E1E7123009D32C3 /* Promise+Forward.swift */,
 				08C702991E1EB54F0062706A /* Promise+Recover.swift */,
-				08C7029B1E1EB7080062706A /* Promise+Zip.swift */,
 				08C7029D1E21477E0062706A /* Promise+Map.swift */,
+				08295CF11E1E54FF009D32C3 /* Promise+All.swift */,
 			);
 			name = Operations;
 			sourceTree = "<group>";

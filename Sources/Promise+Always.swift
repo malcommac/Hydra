@@ -13,15 +13,16 @@ public extension Promise {
 	/// If added to the chain this function always run given handler regardless of the wether the chain resolves or rejects.
 	///
 	/// - Parameters:
-	///   - context: handler to run the handler on
-	///   - finallyHandler: handler to run at the end of the promise chain
+	///   - context: handler to run the handler on (if not specified `background` queue is used instead)
+	///   - body: handler to run at the end of the promise chain
 	/// - Returns: a Promise to chain
 	@discardableResult
-	public func always(_ context: Context = .main, _ finallyHandler: @escaping () throws -> Void) -> Promise<R> {
+	public func always(_ context: Context? = nil, _ body: @escaping () throws -> Void) -> Promise<R> {
+		let ctx = context ?? .background
 		return Promise<R> { resolve, reject in
 			let onResolve: (R) -> (Void) = { value in
 				do {
-					try finallyHandler()
+					try body()
 					resolve(value)
 				} catch {
 					reject(error)
@@ -29,13 +30,13 @@ public extension Promise {
 			}
 			let onReject: (Error) -> (Void) = { error in
 				do {
-					try finallyHandler()
+					try body()
 					reject(error)
 				} catch {
 					reject(error)
 				}
 			}
-			self.registerObserver(in: context, fulfill: onResolve, reject: onReject)
+			self.addObserver(in: ctx, fulfill: onResolve, reject: onReject)
 		}
 	}
 	

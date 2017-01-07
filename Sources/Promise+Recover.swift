@@ -9,16 +9,19 @@
 import Foundation
 
 public extension Promise {
-	
+
 	/// Allows Promise recovery by returning another Promise
 	///
-	/// - Parameter recovery: recovery handler which should return a new promise
-	/// - Returns: a new promise to append to the chain
-	public func recover(_ recovery: @escaping (Error) throws -> Promise<R>) -> Promise<R> {
-		return Promise<R>(self.context, { resolve, reject in
-			self.then(in: self.context, resolve).catch(context: self.context, { error in
+	/// - Parameters:
+	///   - context: context in which recovery handler (`body`) is executed (if not specified `background` context is used instead).
+	///   - body: recovery handler which should return a new promise
+	/// - Returns: Promise
+	public func recover(_ context: Context? = nil, _ body: @escaping (Error) throws -> Promise<R>) -> Promise<R> {
+		let ctx = context ?? .background
+		return Promise<R>(ctx, { resolve, reject in
+			self.then(ctx, resolve).catch(self.context, { error in
 				do {
-					try recovery(error).then(in: self.context, resolve)
+					try body(error).then(self.context, resolve)
 				} catch (let error) {
 					reject(error)
 				}

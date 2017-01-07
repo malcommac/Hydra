@@ -13,14 +13,6 @@ class ViewController: UIViewController {
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		
-		do {
-			let x = try await(self.asyncFunc1())
-			let y = try ..self.asyncFunc1()
-			
-		} catch {
-			
-		}
 	}
 	
 	func asyncFunc1() -> Promise<Int> {

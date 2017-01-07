@@ -31,19 +31,11 @@ public class Promise<R> {
 	/// Context in which the promise's body will be resolved
 	private(set) var context: Context = .background
 	
-	public var value: R? {
-		return self.state.value
-	}
-	
-	public var error: Error? {
-		return self.state.error
-	}
-	
 	//MARK: Initialization functions
 	
 	/// Initialize a new empty state promise
 	/// Each state is always initialized in pending state.
-	public init() {
+	private init() {
 		self.state = .pending
 	}
 	
@@ -53,10 +45,10 @@ public class Promise<R> {
 	///   - context: context represent the GCD queue in which the body of the promise is executed. If not specified background queue is used
 	///   - body:	this closure represent the container of your Promise's function. Here you will add your code and to mark the promise's
 	///				the status as `fullfiled` or `rejected` you will call one of the two functions defined by the closure signature.
-	public convenience init(_ context: Context = .background, _ body: @escaping Body) {
+	public convenience init(_ context: Context? = nil, _ body: @escaping Body) {
 		self.init()
-		self.context = context
-		context.queue.async(execute: {
+		self.context = context ?? .background
+		self.context.queue.async(execute: {
 			// Do/catch statement allows you to reject a promises also using throw function
 			// (in addition to the classic reject() call)
 			do {
@@ -73,7 +65,7 @@ public class Promise<R> {
 	/// by several Promise's function like `.then()` or `.catch()`.
 	///
 	/// - Parameter value: fulfill value of the Promise
-	public convenience init(fulfilled value: R) {
+	public convenience init(asFulfilled value: R) {
 		self.init()
 		self.state = .fulfilled(value: value)
 	}
@@ -83,7 +75,7 @@ public class Promise<R> {
 	/// by several Promise's function like `.then()` or `.catch()`.
 	///
 	/// - Parameter value: reject error
-	public convenience init(rejected error: Error) {
+	public convenience init(asRejected error: Error) {
 		self.init()
 		self.state = .rejected(error: error)
 	}
@@ -93,24 +85,22 @@ public class Promise<R> {
 	/// This is the function passed as Promise's fulfill value in `body`'s closure function.
 	///
 	/// - Parameter value: `value` used to set fulfilled state for this Promise
-	public func fulfill(_ value: R) {
-		self.updateState(.fulfilled(value: value))
+	private func fulfill(_ value: R) {
+		self.changeState(.fulfilled(value: value))
 	}
-	
 	
 	/// This is the function passed as Promise's reject value in `body`'s closure function
 	///
 	/// - Parameter error: `error` used to set the rejected state for this Promise
-	public func reject(_ error: Error) {
-		self.updateState(.rejected(error: error))
+	private func reject(_ error: Error) {
+		self.changeState(.rejected(error: error))
 	}
-	
 	
 	/// This function change the state of the Promise (it's thread safe).
 	/// Any change of the Promise's internal state fire appropriate registered callbacks (based upon the new state).
 	///
 	/// - Parameter state: new state to set
-	private func updateState(_ state: State<R>) {
+	private func changeState(_ state: State<R>) {
 		guard case .pending = self.state else {
 			return
 		}
@@ -128,7 +118,7 @@ public class Promise<R> {
 	///   - context: context in which registered callbacks are called.
 	///   - fHandler: optional fulfill handler to call
 	///   - rHandler: optional reject handler to call
-	internal func registerObserver(in context: Context, fulfill fHandler: ((R) -> (Void))?, reject rHandler: ((Error) -> (Void))? ) {
+	internal func addObserver(in context: Context, fulfill fHandler: ((R) -> (Void))?, reject rHandler: ((Error) -> (Void))? ) {
 		lockQueue.async(execute: {
 			if fHandler != nil {
 				let fulfillCallback = Observer<R>.whenFulfilled(context: context, handler: fHandler!)
@@ -171,5 +161,4 @@ public class Promise<R> {
 			return ()
 		}
 	}
-	
 }
