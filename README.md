@@ -12,6 +12,26 @@ Hydra is full-featured lightweight library which allows you to write better asyn
 
 With Hydra your code will be cleaner, easy to mantain and sexy as ever.
 
+## Index
+* **What's a Promise**(#whatspromise)
+* **Create a Promise**(#createpromise)
+* **How to use a Promise**(#howtousepromise)
+* **Chaining Multiple Promises**(#chaining)
+* **Await, your async code in sync fashion**(#await)
+* **All Features**(#allfeatures)
+	* **always()**(#always)
+	* **ensure()**(#ensure)
+	* **timeout()**(#timeout)
+	* **all()**(#all)
+	* **any()**(#any)
+	* **forward()**(#forward)
+	* **recover()**(#recover)
+	* **map()**(#map)
+	* **zip()**(#zip)
+	* **delay()**(#delay)
+
+<a name="whatspromise" />
+
 ## What's a Promise?
 A Promise is a way to represent a value that will exists, or will fail with an error, at some point in the future. You can think about it as a Swift's `Optional`: it may or may not be a value. A more detailed article which explain how Hydra was implemented can be found here.
 
@@ -25,6 +45,8 @@ A Promise is, in fact, a proxy object; due to the fact the system knows what suc
 - write async code as you may write standard sync code
 - resolve dependent async operations by passing the result of each value to the next operation, then get the final result
 - avoid callbacks, pyramid of dooms and make your code cleaner!
+
+<a name="createpromise" />
 
 ## Create a Promise
 Creating a Promise is trivial; you need to specify the `context` (a GCD Queue) in which your async operations will be executed in and add your own async code as `body` of the Promise.
@@ -53,6 +75,8 @@ You need to remember only few things:
 - your async code (defined into the Promise's `body`) must alert the promise about its completion; if you have the fulfill value you will call `resolve(yourValue)`; if an error has occurred you can call `reject(occurredError)` or throw it using Swift's `throw occurredError`.
 - the `context` of a Promise define the Grand Central Dispatch's queue in which the async code will be executed in; you can use one of the defined queues (`.background`,`.userInitiated` etc. [Here you can found](http://www.appcoda.com/grand-central-dispatch/) a nice tutorial about this topic)
 
+<a name="howtousepromise" />
+
 ## How to use a Promise
 Using a Promise is even easier.  
 You can get the result of a promise by using `then` function; it will be called automatically when your Promise fullfill with expected value.
@@ -75,6 +99,7 @@ getImage(url).then(.main, { image in
 	print("Something bad occurred: \(error)")
 })
 ```
+<a name="chaining" />
 
 ## Chaining Multiple Promises
 Chaining Promises is the next step thought mastering Hydra. Suppose you have defined some Promises:
@@ -98,7 +123,9 @@ loginUser(username,pass).then(getFollowers).then(unfollow).then { count in
 
 Easy uh? (Please note: in this example context is not specified so the default `.main` is used instead).
 
-## Await
+<a name="await" />
+
+## Await, your async code in sync fashion
 Have you ever dream to write asynchronous code like its synchronous counterpart? Hydra was heavily inspired by [Async/Await specification in ES8 (ECMAScript 2017) ](https://github.com/tc39/ecmascript-asyncawait)which provides a powerful way to write async doe in a sequential manner.
 
 Using `await` with Hydraw's Promises is pretty simple: for example the code above can be rewritten directly as:
@@ -129,7 +156,9 @@ let result = try! await(.background, { resolve,reject in
 print("The result is \(result)")
 ```
 
-## Advanced Usage
+<a name="allfeature" />
+
+## All Features
 Because promises formalize how success and failure blocks look, it's possible to build behaviors on top of them.
 Hydra supports:
 
@@ -144,6 +173,8 @@ Hydra supports:
 - `zip`: Create a Promise tuple of a two promises
 - `delay`: delay the execution of a Promise by a given time interval.
 
+<a name="always" />
+
 ### always
 `always` func is very useful if you want to execute code when the promise fulfills — regardless of whether it succeeds or fails.
 
@@ -157,6 +188,7 @@ loginUser(username,pass).then { user in
  	hideLoadingHUD()
 }
 ```
+<a name="ensure" />
 
 ### ensure
 `ensure` is a func that takes a predicate, and rejects the promise chain if that predicate fails.
@@ -175,6 +207,8 @@ getAllUsersResponse().ensure { httpResponse in
 
 ```
 
+<a name="timeout" />
+
 ### timeout
 `timeout` allows you to attach a timeout timer to a Promise; if it does not resolve before elapsed interval it will be rejected with `.timeoutError`.
 
@@ -185,6 +219,8 @@ loginUser(username,pass).timeout(.main, 10, .MyCustomTimeoutError).then { user i
 	// an error has occurred, may be `MyCustomTimeoutError
 }
 ```
+
+<a name="all" />
 
 ### all
 `all` is a static method that waits for all the promises you give it to fulfill, and once they have, it fulfills itself with the array of all fulfilled values (in order).
@@ -204,6 +240,8 @@ Promise.all(promises).then { usersAvatars in
 }
 ```
 
+<a name="any" />
+
 ### any
 `any` easily handle race conditions: as soon as one Promise of the input list resolves the handler is called and will never be called again.
 
@@ -216,6 +254,8 @@ any(getFile(mirror_1), getFile(mirror_2)).then { data in
 	// handler is called exactly one time!
 }
 ```
+
+<a name="forward" />
 
 ### forward
 `forward` is useful for performing an operation in the middle of a promise chain without changing the type of the Promise.
@@ -231,6 +271,7 @@ loginUser(user,pass).tap { userObj in
 	print("Login succeded!")
 }
 ```
+<a name="recover" />
 
 ### recover
 `recover` allows you to recover a failed Promise by returning another.
@@ -244,6 +285,7 @@ let promise = Promise<Int>(in: .background, { fulfill, reject in
     })
 })
 ```
+<a name="map" />
 
 ### map
 Map is used to transform a list of items into promises and resolve them in parallel or serially.
@@ -258,6 +300,7 @@ Map is used to transform a list of items into promises and resolve them in paral
 })
 ```
 
+<a name="zip" />
 
 ### zip
 `zip` allows you to join different promises (2,3 or 4) and return a tuple with the result of them. Promises are resolved in parallel.
@@ -270,6 +313,8 @@ join(getUserProfile(user), getUserAvatar(user), getUserFriends(user))
 	// something bad as occurred. at least one of given promises failed
 }
 ```
+
+<a name="delay" />
 
 ### delay
 As name said, `delay` delays the executon of a Promise chain by some number of seconds from current time.
