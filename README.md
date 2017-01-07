@@ -1,3 +1,11 @@
+<p align="center" >
+  <img src="https://raw.githubusercontent.com/malcommac/Hydra/develop/hydra-logo.png" width=150px height=146px alt="Hydra" title="Hydra">
+</p>
+
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage) [![CI Status](https://travis-ci.org/malcommac/Hydra.svg)](https://travis-ci.org/malcommac/Hydra) [![Version](https://img.shields.io/cocoapods/v/Hydra.svg?style=flat)](http://cocoadocs.org/docsets/Hydra) [![License](https://img.shields.io/cocoapods/l/Hydra.svg?style=flat)](http://cocoadocs.org/docsets/Hydra) [![Platform](https://img.shields.io/cocoapods/p/Hydra.svg?style=flat)](http://cocoadocs.org/docsets/Hydra)
+
+We really ♥ Swift and we think that dates and timez
+
 Hydra is full-featured lightweight library which allows you to write better async code in Swift 3+. It's partially based on JavaScript A+ specs and also implements modern construct like `await`.
 
 With Hydra your code will be cleaner, easy to mantain and sexy as ever.
