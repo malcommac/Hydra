@@ -17,7 +17,7 @@ With Hydra your code will be cleaner, easy to mantain and sexy as ever.
 * **[Create a Promise](#createpromise)**
 * **[How to use a Promise](#howtousepromise)**
 * **[Chaining Multiple Promises](#chaining)**
-* **[Await, your async code in sync fashion](#await)**
+* **[Await: async code in sync manner](#await)**
 * **[All Features](#allfeatures)**
 	* **[always](#always)**
 	* **[ensure](#ensure)**
@@ -128,7 +128,7 @@ Easy uh? (Please note: in this example context is not specified so the default `
 
 <a name="await" />
 
-## Await, your async code in sync fashion
+## Await: async code in sync manner
 Have you ever dream to write asynchronous code like its synchronous counterpart? Hydra was heavily inspired by [Async/Await specification in ES8 (ECMAScript 2017) ](https://github.com/tc39/ecmascript-asyncawait)which provides a powerful way to write async doe in a sequential manner.
 
 Using `await` with Hydraw's Promises is pretty simple: for example the code above can be rewritten directly as:
@@ -157,6 +157,22 @@ let result = try! await(.background, { resolve,reject in
 	})
 })
 print("The result is \(result)")
+```
+
+There is also an await operator:
+* `..` followed by a Promise instance
+* `..!` followed by a Promsie instance: this operator does not throws exceptions; in case of promise's rejection result is nil instead.
+
+Examples:
+```swift
+// .. operator
+do {
+	let result_1 = try ..asyncOperation1(param)
+	let result_2 = try ..asyncOperation2(param)
+}
+
+// or using `..!`
+let result_1 = ..!asyncOperation1(param) // may return nil if promise fail. does not throw!
 ```
 
 <a name="allfeature" />

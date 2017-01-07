@@ -122,7 +122,7 @@ public enum Observer<R> {
 	/// - Parameter value: value received from fulfilled promise
 	func fulfill(value: R) {
 		guard case .whenFulfilled(let ctx, let fulfillHandler) = self else {
-			return
+			return // handler is executed only if this observer represent a for-fulfilled event
 		}
 		ctx.queue.async(execute: {
 			fulfillHandler(value)
@@ -135,7 +135,7 @@ public enum Observer<R> {
 	/// - Parameter error: error received from rejected promise
 	func reject(error: Error) {
 		guard case .whenRejected(let ctx, let errorHandler) = self else {
-			return
+			return // handler is executed only if this observer represent a for-rejected event
 		}
 		ctx.queue.async(execute: {
 			errorHandler(error)
