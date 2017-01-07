@@ -46,7 +46,7 @@ public extension Context {
 	internal func await<T>(_ promise: Promise<T>) throws -> T {
 		guard self.queue != DispatchQueue.main else {
 			// execute a promise on main context does not make sense
-			throw PromiseError.awaitOnMainQueue
+			throw PromiseError.invalidContext
 		}
 		
 		var result: T?

@@ -19,7 +19,7 @@ public extension Promise {
 	public func ensure(_ context: Context = .main, _ predicate: @escaping (R) -> Bool) -> Promise<R> {
 		return self.then(in: context, { (value: R) -> R in
 			guard predicate(value) else {
-				throw PromiseError.predicateRejected
+				throw PromiseError.rejected
 			}
 			return value
 		})

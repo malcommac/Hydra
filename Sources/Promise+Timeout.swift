@@ -16,7 +16,7 @@ public extension Promise {
 	/// - Parameters:
 	///   - context: context queue to reject on
 	///   - seconds: timeout interval (after passed interval promise will be rejected)
-	///   - error: optional; if non-nil value is passed Promise will be rejected with passed error; otherwise `.TimeoutFired` is used instead.
+	///   - error: optional; if non-nil value is passed Promise will be rejected with passed error; otherwise `.timeout` is used instead.
 	/// - Returns: Promise
 	public func timeout(_ context: Context = .main, interval seconds: TimeInterval, reject error: Error? = nil) -> Promise<R> {
 		let timeoutPromise = Promise<R> { (resolve, reject) in
@@ -27,9 +27,9 @@ public extension Promise {
 			
 			// In order to support timeout we start an async timer; if fired it will mark
 			// promise as rejected and return the error you have passed in signature (if nil
-			// a generic `.timeoutFired` is fired instead.
+			// a generic `.timeout` is fired instead.
 			context.queue.asyncAfter(deadline: (.now() + seconds), execute: {
-				let errorToPass = (error ?? PromiseError.timeoutFired)
+				let errorToPass = (error ?? PromiseError.timeout)
 				reject(errorToPass)
 			})
 		}
