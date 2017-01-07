@@ -165,7 +165,7 @@ There is also an await operator:
 
 Examples:
 ```swift
-// `..` operator
+// AWAIT OPERATOR WITH DO/CATCH: `..`
 do {
 	let result_1 = try ..asyncOperation1()
 	let result_2 = try ..asyncOperation2(result_1) // result_1 is always valid
@@ -173,7 +173,7 @@ do {
 	// something goes bad with one of these async operations
 }
 
-// or using `..!`
+// AWAIT OPERATOR WITH NIL-RESULT: `..!`
 let result_1 = ..!asyncOperation1() // may return nil if promise fail. does not throw!
 let result_2 = ..!asyncOperation2(result_1) // you must handle nil case manually
 ```
