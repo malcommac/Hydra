@@ -12,24 +12,7 @@ import Hydra
 class ViewController: UIViewController {
 
 	override func viewDidLoad() {
-		super.viewDidLoad()
-		
-	
-		print("ciao")
-		//let r = try! await(self.asyncFunc1())
-		
-		let w:Int = try! await(.background, { resolve,reject in
-			delay(2, context: .background, closure: {
-				resolve(5)
-			})
-		})
-		
-		let a: [Promise<T>] = [1,2,3].map {
-			return self.asyncFunc2(value: $0)
-		}
-		
-		print("")
-		
+		super.viewDidLoad()		
 	}
 	
 	func asyncFunc1() -> Promise<Int> {

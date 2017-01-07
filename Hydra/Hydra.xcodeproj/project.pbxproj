@@ -111,21 +111,7 @@
 		08295CBF1E1E4ED3009D32C3 = {
 			isa = PBXGroup;
 			children = (
-				08295CE51E1E5156009D32C3 /* Shared.swift */,
-				08295D101E1E6080009D32C3 /* Await.swift */,
-				08295CE31E1E4EE6009D32C3 /* Promise.swift */,
-				08295CE71E1E538F009D32C3 /* Promise+Then.swift */,
-				08295CE91E1E543E009D32C3 /* Promise+Catch.swift */,
-				08295CEB1E1E545B009D32C3 /* Promise+Always.swift */,
-				08295CED1E1E5485009D32C3 /* Promise+Ensure.swift */,
-				08295CEF1E1E54A0009D32C3 /* Promise+Timeout.swift */,
-				08295CF11E1E54FF009D32C3 /* Promise+All.swift */,
-				08295CF31E1E5518009D32C3 /* Promise+Any.swift */,
-				08295CF51E1E56F1009D32C3 /* Promise+Delay.swift */,
-				08295D121E1E7123009D32C3 /* Promise+Forward.swift */,
-				08C702991E1EB54F0062706A /* Promise+Recover.swift */,
-				08C7029B1E1EB7080062706A /* Promise+Zip.swift */,
-				08C7029D1E21477E0062706A /* Promise+Map.swift */,
+				08C702A01E2163280062706A /* Library Sources */,
 				08295CCB1E1E4ED3009D32C3 /* Hydra */,
 				08295CD61E1E4ED3009D32C3 /* HydraTests */,
 				08295CFC1E1E57E5009D32C3 /* DemoApp */,
@@ -172,6 +158,36 @@
 				08295D091E1E57E5009D32C3 /* Info.plist */,
 			);
 			path = DemoApp;
+			sourceTree = "<group>";
+		};
+		08C7029F1E21631F0062706A /* Operations */ = {
+			isa = PBXGroup;
+			children = (
+				08295CE71E1E538F009D32C3 /* Promise+Then.swift */,
+				08295CE91E1E543E009D32C3 /* Promise+Catch.swift */,
+				08295CEB1E1E545B009D32C3 /* Promise+Always.swift */,
+				08295CED1E1E5485009D32C3 /* Promise+Ensure.swift */,
+				08295CEF1E1E54A0009D32C3 /* Promise+Timeout.swift */,
+				08295CF11E1E54FF009D32C3 /* Promise+All.swift */,
+				08295CF31E1E5518009D32C3 /* Promise+Any.swift */,
+				08295CF51E1E56F1009D32C3 /* Promise+Delay.swift */,
+				08295D121E1E7123009D32C3 /* Promise+Forward.swift */,
+				08C702991E1EB54F0062706A /* Promise+Recover.swift */,
+				08C7029B1E1EB7080062706A /* Promise+Zip.swift */,
+				08C7029D1E21477E0062706A /* Promise+Map.swift */,
+			);
+			name = Operations;
+			sourceTree = "<group>";
+		};
+		08C702A01E2163280062706A /* Library Sources */ = {
+			isa = PBXGroup;
+			children = (
+				08295CE51E1E5156009D32C3 /* Shared.swift */,
+				08295D101E1E6080009D32C3 /* Await.swift */,
+				08295CE31E1E4EE6009D32C3 /* Promise.swift */,
+				08C7029F1E21631F0062706A /* Operations */,
+			);
+			name = "Library Sources";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

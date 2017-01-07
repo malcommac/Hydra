@@ -18,21 +18,22 @@ import Foundation
 
 import Foundation
 
-/// GCD Wrapper
+/// Grand Central Dispatch Queues
+/// This is essentially a wrapper around GCD Queues and allows you to specify a queue in which operation will be executed in.
 ///
-/// - background: A system-defined global concurrent queue with a Background quality of service class.
-/// - main:  The serial queue associated with the application’s main thread.
-/// - userInteractive: A system-defined global concurrent queue with a User Interactive quality of service class
-/// - userInitiated:  A system-defined global concurrent queue with a User Initiated quality of service class.
-/// - `default`: A system-defined global concurrent queue with a Default quality of service class.
-/// - utility: A system-defined global concurrent queue with a Utility quality of service class.
-/// - custom: A user-created custom queue. Use DispatchQueue.createSerial() or DispatchQueue.createConcurrent().
+/// More on GCD QoS info are available [here](https://developer.apple.com/library/content/documentation/Performance/Conceptual/EnergyGuide-iOS/PrioritizeWorkWithQoS.html).
+///
+/// - background: Should we used when work takes significant time, such as minutes or hours. Work is not visible to the user, such as indexing, synchronizing, and backups. Focuses on energy efficiency.
+/// - main: The serial queue associated with the application’s main thread.
+/// - userInteractive: Should we used when work is virtually instantaneous (work that is interacting with the user, such as operating on the main thread, refreshing the user interface, or performing animations. If the work doesn’t happen quickly, the user interface may appear frozen. Focuses on responsiveness and performance).
+/// - userInitiated: Should we used when work is nearly instantaneous, such as a few seconds or less (work that the user has initiated and requires immediate results, such as opening a saved document or performing an action when the user clicks something in the user interface. The work is required in order to continue user interaction. Focuses on responsiveness and performance).
+/// - utility: Should we used when work takes a few seconds to a few minutes (work that may take some time to complete and doesn’t require an immediate result, such as downloading or importing data. Utility tasks typically have a progress bar that is visible to the user. Focuses on providing a balance between responsiveness, performance, and energy efficiency).
+/// - custom: provide a custom queue
 public enum Context {
 	case background
 	case main
 	case userInteractive
 	case userInitiated
-	case `default`
 	case utility
 	case custom(queue: DispatchQueue)
 	
@@ -46,8 +47,6 @@ public enum Context {
 			return DispatchQueue.global(qos: .userInteractive)
 		case .userInitiated:
 			return DispatchQueue.global(qos: .userInitiated)
-		case .default:
-			return DispatchQueue.global(qos: .default)
 		case .utility:
 			return DispatchQueue.global(qos: .utility)
 		case .custom(let queue):
