@@ -8,7 +8,7 @@
 Made with love in pure Swift 3+ ♥
 </p>
 
-Hydra is full-featured lightweight library which allows you to write better async code in Swift 3+. It's partially based on JavaScript A+ specs and also implements modern construct like `await`.
+Hydra is full-featured lightweight library which allows you to write better async code in Swift 3+. It's partially based on [JavaScript A+](https://promisesaplus.com) specs and also implements modern construct like `await` (as seen in [Async/Await specification in ES8 (ECMAScript 2017)](https://github.com/tc39/ecmascript-asyncawait) or C#) which allows you to write async code in sync manner.
 
 With Hydra your code will be cleaner, easy to mantain and sexy as ever.
 
@@ -129,7 +129,7 @@ Easy uh? (Please note: in this example context is not specified so the default `
 <a name="await" />
 
 ## Await: async code in sync manner
-Have you ever dream to write asynchronous code like its synchronous counterpart? Hydra was heavily inspired by [Async/Await specification in ES8 (ECMAScript 2017) ](https://github.com/tc39/ecmascript-asyncawait)which provides a powerful way to write async doe in a sequential manner.
+Have you ever dream to write asynchronous code like its synchronous counterpart? Hydra was heavily inspired by [Async/Await specification in ES8 (ECMAScript 2017) ](https://github.com/tc39/ecmascript-asyncawait) which provides a powerful way to write async doe in a sequential manner.
 
 Using `await` with Hydraw's Promises is pretty simple: for example the code above can be rewritten directly as:
 
