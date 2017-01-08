@@ -10,27 +10,27 @@
 		08295CD31E1E4ED3009D32C3 /* Hydra.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08295CC91E1E4ED3009D32C3 /* Hydra.framework */; };
 		08295CD81E1E4ED3009D32C3 /* HydraTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08295CD71E1E4ED3009D32C3 /* HydraTests.swift */; };
 		08295CDA1E1E4ED3009D32C3 /* Hydra.h in Headers */ = {isa = PBXBuildFile; fileRef = 08295CCC1E1E4ED3009D32C3 /* Hydra.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		08295CE41E1E4EE6009D32C3 /* Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08295CE31E1E4EE6009D32C3 /* Promise.swift */; };
-		08295CE61E1E5156009D32C3 /* Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08295CE51E1E5156009D32C3 /* Shared.swift */; };
-		08295CE81E1E538F009D32C3 /* Promise+Then.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08295CE71E1E538F009D32C3 /* Promise+Then.swift */; };
-		08295CEA1E1E543E009D32C3 /* Promise+Catch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08295CE91E1E543E009D32C3 /* Promise+Catch.swift */; };
-		08295CEC1E1E545B009D32C3 /* Promise+Always.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08295CEB1E1E545B009D32C3 /* Promise+Always.swift */; };
-		08295CEE1E1E5485009D32C3 /* Promise+Ensure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08295CED1E1E5485009D32C3 /* Promise+Ensure.swift */; };
-		08295CF01E1E54A0009D32C3 /* Promise+Timeout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08295CEF1E1E54A0009D32C3 /* Promise+Timeout.swift */; };
-		08295CF21E1E54FF009D32C3 /* Promise+All.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08295CF11E1E54FF009D32C3 /* Promise+All.swift */; };
-		08295CF41E1E5518009D32C3 /* Promise+Any.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08295CF31E1E5518009D32C3 /* Promise+Any.swift */; };
-		08295CF61E1E56F1009D32C3 /* Promise+Delay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08295CF51E1E56F1009D32C3 /* Promise+Delay.swift */; };
 		08295CFE1E1E57E5009D32C3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08295CFD1E1E57E5009D32C3 /* AppDelegate.swift */; };
 		08295D001E1E57E5009D32C3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08295CFF1E1E57E5009D32C3 /* ViewController.swift */; };
 		08295D031E1E57E5009D32C3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08295D011E1E57E5009D32C3 /* Main.storyboard */; };
 		08295D051E1E57E5009D32C3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 08295D041E1E57E5009D32C3 /* Assets.xcassets */; };
 		08295D081E1E57E5009D32C3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08295D061E1E57E5009D32C3 /* LaunchScreen.storyboard */; };
 		08295D0F1E1E57F0009D32C3 /* Hydra.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08295CC91E1E4ED3009D32C3 /* Hydra.framework */; };
-		08295D111E1E6080009D32C3 /* Await.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08295D101E1E6080009D32C3 /* Await.swift */; };
-		08295D131E1E7123009D32C3 /* Promise+Forward.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08295D121E1E7123009D32C3 /* Promise+Forward.swift */; };
-		08C7029A1E1EB54F0062706A /* Promise+Recover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C702991E1EB54F0062706A /* Promise+Recover.swift */; };
-		08C7029C1E1EB7080062706A /* Promise+Zip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C7029B1E1EB7080062706A /* Promise+Zip.swift */; };
-		08C7029E1E21477E0062706A /* Promise+Map.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08C7029D1E21477E0062706A /* Promise+Map.swift */; };
+		086DE79C1E22447800B07D59 /* Await.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086DE78D1E22447800B07D59 /* Await.swift */; };
+		086DE79D1E22447800B07D59 /* Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086DE78E1E22447800B07D59 /* Promise.swift */; };
+		086DE79E1E22447800B07D59 /* Promise+All.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086DE78F1E22447800B07D59 /* Promise+All.swift */; };
+		086DE79F1E22447800B07D59 /* Promise+Always.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086DE7901E22447800B07D59 /* Promise+Always.swift */; };
+		086DE7A01E22447800B07D59 /* Promise+Any.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086DE7911E22447800B07D59 /* Promise+Any.swift */; };
+		086DE7A11E22447800B07D59 /* Promise+Catch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086DE7921E22447800B07D59 /* Promise+Catch.swift */; };
+		086DE7A21E22447800B07D59 /* Promise+Delay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086DE7931E22447800B07D59 /* Promise+Delay.swift */; };
+		086DE7A31E22447800B07D59 /* Promise+Ensure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086DE7941E22447800B07D59 /* Promise+Ensure.swift */; };
+		086DE7A41E22447800B07D59 /* Promise+Forward.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086DE7951E22447800B07D59 /* Promise+Forward.swift */; };
+		086DE7A51E22447800B07D59 /* Promise+Map.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086DE7961E22447800B07D59 /* Promise+Map.swift */; };
+		086DE7A61E22447800B07D59 /* Promise+Recover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086DE7971E22447800B07D59 /* Promise+Recover.swift */; };
+		086DE7A71E22447800B07D59 /* Promise+Then.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086DE7981E22447800B07D59 /* Promise+Then.swift */; };
+		086DE7A81E22447800B07D59 /* Promise+Timeout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086DE7991E22447800B07D59 /* Promise+Timeout.swift */; };
+		086DE7A91E22447800B07D59 /* Promise+Zip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086DE79A1E22447800B07D59 /* Promise+Zip.swift */; };
+		086DE7AA1E22447800B07D59 /* Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086DE79B1E22447800B07D59 /* Shared.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,16 +57,6 @@
 		08295CD21E1E4ED3009D32C3 /* HydraTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HydraTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		08295CD71E1E4ED3009D32C3 /* HydraTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HydraTests.swift; sourceTree = "<group>"; };
 		08295CD91E1E4ED3009D32C3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		08295CE31E1E4EE6009D32C3 /* Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Promise.swift; path = ../Sources/Promise.swift; sourceTree = "<group>"; };
-		08295CE51E1E5156009D32C3 /* Shared.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Shared.swift; path = ../Sources/Shared.swift; sourceTree = "<group>"; };
-		08295CE71E1E538F009D32C3 /* Promise+Then.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Then.swift"; path = "../Sources/Promise+Then.swift"; sourceTree = "<group>"; };
-		08295CE91E1E543E009D32C3 /* Promise+Catch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Catch.swift"; path = "../Sources/Promise+Catch.swift"; sourceTree = "<group>"; };
-		08295CEB1E1E545B009D32C3 /* Promise+Always.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Always.swift"; path = "../Sources/Promise+Always.swift"; sourceTree = "<group>"; };
-		08295CED1E1E5485009D32C3 /* Promise+Ensure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Ensure.swift"; path = "../Sources/Promise+Ensure.swift"; sourceTree = "<group>"; };
-		08295CEF1E1E54A0009D32C3 /* Promise+Timeout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Timeout.swift"; path = "../Sources/Promise+Timeout.swift"; sourceTree = "<group>"; };
-		08295CF11E1E54FF009D32C3 /* Promise+All.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+All.swift"; path = "../Sources/Promise+All.swift"; sourceTree = "<group>"; };
-		08295CF31E1E5518009D32C3 /* Promise+Any.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Any.swift"; path = "../Sources/Promise+Any.swift"; sourceTree = "<group>"; };
-		08295CF51E1E56F1009D32C3 /* Promise+Delay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Delay.swift"; path = "../Sources/Promise+Delay.swift"; sourceTree = "<group>"; };
 		08295CFB1E1E57E5009D32C3 /* DemoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DemoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		08295CFD1E1E57E5009D32C3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		08295CFF1E1E57E5009D32C3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -74,11 +64,21 @@
 		08295D041E1E57E5009D32C3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		08295D071E1E57E5009D32C3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		08295D091E1E57E5009D32C3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		08295D101E1E6080009D32C3 /* Await.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Await.swift; path = ../Sources/Await.swift; sourceTree = "<group>"; };
-		08295D121E1E7123009D32C3 /* Promise+Forward.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Forward.swift"; path = "../Sources/Promise+Forward.swift"; sourceTree = "<group>"; };
-		08C702991E1EB54F0062706A /* Promise+Recover.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Recover.swift"; path = "../Sources/Promise+Recover.swift"; sourceTree = "<group>"; };
-		08C7029B1E1EB7080062706A /* Promise+Zip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Zip.swift"; path = "../Sources/Promise+Zip.swift"; sourceTree = "<group>"; };
-		08C7029D1E21477E0062706A /* Promise+Map.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Map.swift"; path = "../Sources/Promise+Map.swift"; sourceTree = "<group>"; };
+		086DE78D1E22447800B07D59 /* Await.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Await.swift; path = ../Sources/Hydra/Await.swift; sourceTree = "<group>"; };
+		086DE78E1E22447800B07D59 /* Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Promise.swift; path = ../Sources/Hydra/Promise.swift; sourceTree = "<group>"; };
+		086DE78F1E22447800B07D59 /* Promise+All.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+All.swift"; path = "../Sources/Hydra/Promise+All.swift"; sourceTree = "<group>"; };
+		086DE7901E22447800B07D59 /* Promise+Always.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Always.swift"; path = "../Sources/Hydra/Promise+Always.swift"; sourceTree = "<group>"; };
+		086DE7911E22447800B07D59 /* Promise+Any.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Any.swift"; path = "../Sources/Hydra/Promise+Any.swift"; sourceTree = "<group>"; };
+		086DE7921E22447800B07D59 /* Promise+Catch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Catch.swift"; path = "../Sources/Hydra/Promise+Catch.swift"; sourceTree = "<group>"; };
+		086DE7931E22447800B07D59 /* Promise+Delay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Delay.swift"; path = "../Sources/Hydra/Promise+Delay.swift"; sourceTree = "<group>"; };
+		086DE7941E22447800B07D59 /* Promise+Ensure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Ensure.swift"; path = "../Sources/Hydra/Promise+Ensure.swift"; sourceTree = "<group>"; };
+		086DE7951E22447800B07D59 /* Promise+Forward.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Forward.swift"; path = "../Sources/Hydra/Promise+Forward.swift"; sourceTree = "<group>"; };
+		086DE7961E22447800B07D59 /* Promise+Map.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Map.swift"; path = "../Sources/Hydra/Promise+Map.swift"; sourceTree = "<group>"; };
+		086DE7971E22447800B07D59 /* Promise+Recover.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Recover.swift"; path = "../Sources/Hydra/Promise+Recover.swift"; sourceTree = "<group>"; };
+		086DE7981E22447800B07D59 /* Promise+Then.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Then.swift"; path = "../Sources/Hydra/Promise+Then.swift"; sourceTree = "<group>"; };
+		086DE7991E22447800B07D59 /* Promise+Timeout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Timeout.swift"; path = "../Sources/Hydra/Promise+Timeout.swift"; sourceTree = "<group>"; };
+		086DE79A1E22447800B07D59 /* Promise+Zip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Zip.swift"; path = "../Sources/Hydra/Promise+Zip.swift"; sourceTree = "<group>"; };
+		086DE79B1E22447800B07D59 /* Shared.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Shared.swift; path = ../Sources/Hydra/Shared.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,32 +160,24 @@
 			path = DemoApp;
 			sourceTree = "<group>";
 		};
-		08C7029F1E21631F0062706A /* Operations */ = {
-			isa = PBXGroup;
-			children = (
-				08295CE71E1E538F009D32C3 /* Promise+Then.swift */,
-				08295CE91E1E543E009D32C3 /* Promise+Catch.swift */,
-				08295CEB1E1E545B009D32C3 /* Promise+Always.swift */,
-				08295CED1E1E5485009D32C3 /* Promise+Ensure.swift */,
-				08295CEF1E1E54A0009D32C3 /* Promise+Timeout.swift */,
-				08295CF51E1E56F1009D32C3 /* Promise+Delay.swift */,
-				08C7029B1E1EB7080062706A /* Promise+Zip.swift */,
-				08295CF31E1E5518009D32C3 /* Promise+Any.swift */,
-				08295D121E1E7123009D32C3 /* Promise+Forward.swift */,
-				08C702991E1EB54F0062706A /* Promise+Recover.swift */,
-				08C7029D1E21477E0062706A /* Promise+Map.swift */,
-				08295CF11E1E54FF009D32C3 /* Promise+All.swift */,
-			);
-			name = Operations;
-			sourceTree = "<group>";
-		};
 		08C702A01E2163280062706A /* Library Sources */ = {
 			isa = PBXGroup;
 			children = (
-				08295CE51E1E5156009D32C3 /* Shared.swift */,
-				08295D101E1E6080009D32C3 /* Await.swift */,
-				08295CE31E1E4EE6009D32C3 /* Promise.swift */,
-				08C7029F1E21631F0062706A /* Operations */,
+				086DE79B1E22447800B07D59 /* Shared.swift */,
+				086DE78E1E22447800B07D59 /* Promise.swift */,
+				086DE78D1E22447800B07D59 /* Await.swift */,
+				086DE78F1E22447800B07D59 /* Promise+All.swift */,
+				086DE7901E22447800B07D59 /* Promise+Always.swift */,
+				086DE7911E22447800B07D59 /* Promise+Any.swift */,
+				086DE7921E22447800B07D59 /* Promise+Catch.swift */,
+				086DE7931E22447800B07D59 /* Promise+Delay.swift */,
+				086DE7941E22447800B07D59 /* Promise+Ensure.swift */,
+				086DE7951E22447800B07D59 /* Promise+Forward.swift */,
+				086DE7961E22447800B07D59 /* Promise+Map.swift */,
+				086DE7971E22447800B07D59 /* Promise+Recover.swift */,
+				086DE7981E22447800B07D59 /* Promise+Then.swift */,
+				086DE7991E22447800B07D59 /* Promise+Timeout.swift */,
+				086DE79A1E22447800B07D59 /* Promise+Zip.swift */,
 			);
 			name = "Library Sources";
 			sourceTree = "<group>";
@@ -338,21 +330,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				08295CEC1E1E545B009D32C3 /* Promise+Always.swift in Sources */,
-				08C7029C1E1EB7080062706A /* Promise+Zip.swift in Sources */,
-				08295CF01E1E54A0009D32C3 /* Promise+Timeout.swift in Sources */,
-				08295CEE1E1E5485009D32C3 /* Promise+Ensure.swift in Sources */,
-				08295D111E1E6080009D32C3 /* Await.swift in Sources */,
-				08295CF41E1E5518009D32C3 /* Promise+Any.swift in Sources */,
-				08295CE61E1E5156009D32C3 /* Shared.swift in Sources */,
-				08295CE41E1E4EE6009D32C3 /* Promise.swift in Sources */,
-				08295D131E1E7123009D32C3 /* Promise+Forward.swift in Sources */,
-				08295CE81E1E538F009D32C3 /* Promise+Then.swift in Sources */,
-				08295CEA1E1E543E009D32C3 /* Promise+Catch.swift in Sources */,
-				08C7029E1E21477E0062706A /* Promise+Map.swift in Sources */,
-				08295CF21E1E54FF009D32C3 /* Promise+All.swift in Sources */,
-				08C7029A1E1EB54F0062706A /* Promise+Recover.swift in Sources */,
-				08295CF61E1E56F1009D32C3 /* Promise+Delay.swift in Sources */,
+				086DE7AA1E22447800B07D59 /* Shared.swift in Sources */,
+				086DE79C1E22447800B07D59 /* Await.swift in Sources */,
+				086DE7A91E22447800B07D59 /* Promise+Zip.swift in Sources */,
+				086DE79D1E22447800B07D59 /* Promise.swift in Sources */,
+				086DE7A71E22447800B07D59 /* Promise+Then.swift in Sources */,
+				086DE79F1E22447800B07D59 /* Promise+Always.swift in Sources */,
+				086DE7A31E22447800B07D59 /* Promise+Ensure.swift in Sources */,
+				086DE79E1E22447800B07D59 /* Promise+All.swift in Sources */,
+				086DE7A01E22447800B07D59 /* Promise+Any.swift in Sources */,
+				086DE7A81E22447800B07D59 /* Promise+Timeout.swift in Sources */,
+				086DE7A51E22447800B07D59 /* Promise+Map.swift in Sources */,
+				086DE7A21E22447800B07D59 /* Promise+Delay.swift in Sources */,
+				086DE7A41E22447800B07D59 /* Promise+Forward.swift in Sources */,
+				086DE7A11E22447800B07D59 /* Promise+Catch.swift in Sources */,
+				086DE7A61E22447800B07D59 /* Promise+Recover.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
