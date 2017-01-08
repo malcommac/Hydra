@@ -381,6 +381,7 @@ Current version is compatible with:
 * tvOS 9.0 or later
 * macOS 10.0 or later
 * watchOS 3.0 or later
+* Linux compatible environments
 
 <a name="credits" />
 
@@ -394,7 +395,7 @@ The code of this library is licensed under MIT License; you can use it in commer
 The only requirement is to add a line in your Credits/About section with the text below:
 
 ```
-This software uses open source Hydra's library to manage rich attributed strings.
+This software uses open source Hydra's library to manage async code.
 Web: http://github.com/malcommac/Hydra
 Created by Daniele Margutti and licensed under MIT License.
 ```
