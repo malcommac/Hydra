@@ -5,12 +5,12 @@
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage) [![CI Status](https://travis-ci.org/malcommac/Hydra.svg)](https://travis-ci.org/malcommac/Hydra) [![Version](https://img.shields.io/cocoapods/v/Hydra.svg?style=flat)](http://cocoadocs.org/docsets/Hydra) [![License](https://img.shields.io/cocoapods/l/Hydra.svg?style=flat)](http://cocoadocs.org/docsets/Hydra) [![Platform](https://img.shields.io/cocoapods/p/Hydra.svg?style=flat)](http://cocoadocs.org/docsets/Hydra)
 
 <p align="center" >Love your async code again with Hydra <br/>
-Made with love in pure Swift 3+ ♥
+Made with ♥ in pure Swift 3+, no dependencies and fully portable
 </p>
 
 Hydra is full-featured lightweight library which allows you to write better async code in Swift 3+. It's partially based on [JavaScript A+](https://promisesaplus.com) specs and also implements modern construct like `await` (as seen in [Async/Await specification in ES8 (ECMAScript 2017)](https://github.com/tc39/ecmascript-asyncawait) or C#) which allows you to write async code in sync manner.
 
-With Hydra your code will be cleaner, easy to mantain and sexy as ever.
+*With Hydra your code will be cleaner, easy to mantain and sexy as never.*
 
 ## Index
 * **[What's a Promise](#whatspromise)**
