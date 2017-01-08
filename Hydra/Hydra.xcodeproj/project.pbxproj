@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		08295CD31E1E4ED3009D32C3 /* Hydra.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08295CC91E1E4ED3009D32C3 /* Hydra.framework */; };
-		08295CD81E1E4ED3009D32C3 /* HydraTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08295CD71E1E4ED3009D32C3 /* HydraTests.swift */; };
 		08295CDA1E1E4ED3009D32C3 /* Hydra.h in Headers */ = {isa = PBXBuildFile; fileRef = 08295CCC1E1E4ED3009D32C3 /* Hydra.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		08295CFE1E1E57E5009D32C3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08295CFD1E1E57E5009D32C3 /* AppDelegate.swift */; };
 		08295D001E1E57E5009D32C3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08295CFF1E1E57E5009D32C3 /* ViewController.swift */; };
@@ -31,6 +30,8 @@
 		086DE7A81E22447800B07D59 /* Promise+Timeout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086DE7991E22447800B07D59 /* Promise+Timeout.swift */; };
 		086DE7A91E22447800B07D59 /* Promise+Zip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086DE79A1E22447800B07D59 /* Promise+Zip.swift */; };
 		086DE7AA1E22447800B07D59 /* Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086DE79B1E22447800B07D59 /* Shared.swift */; };
+		086DE7AC1E22473E00B07D59 /* HydraTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086DE7AB1E22473E00B07D59 /* HydraTests.swift */; };
+		086DE7AE1E22478600B07D59 /* HydraTestThen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086DE7AD1E22478600B07D59 /* HydraTestThen.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,7 +56,6 @@
 		08295CCC1E1E4ED3009D32C3 /* Hydra.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Hydra.h; sourceTree = "<group>"; };
 		08295CCD1E1E4ED3009D32C3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		08295CD21E1E4ED3009D32C3 /* HydraTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HydraTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		08295CD71E1E4ED3009D32C3 /* HydraTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HydraTests.swift; sourceTree = "<group>"; };
 		08295CD91E1E4ED3009D32C3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		08295CFB1E1E57E5009D32C3 /* DemoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DemoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		08295CFD1E1E57E5009D32C3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -79,6 +79,8 @@
 		086DE7991E22447800B07D59 /* Promise+Timeout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Timeout.swift"; path = "../Sources/Hydra/Promise+Timeout.swift"; sourceTree = "<group>"; };
 		086DE79A1E22447800B07D59 /* Promise+Zip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Zip.swift"; path = "../Sources/Hydra/Promise+Zip.swift"; sourceTree = "<group>"; };
 		086DE79B1E22447800B07D59 /* Shared.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Shared.swift; path = ../Sources/Hydra/Shared.swift; sourceTree = "<group>"; };
+		086DE7AB1E22473E00B07D59 /* HydraTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HydraTests.swift; path = ../../Tests/HydraTests/HydraTests.swift; sourceTree = "<group>"; };
+		086DE7AD1E22478600B07D59 /* HydraTestThen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HydraTestThen.swift; path = ../../Tests/HydraTests/HydraTestThen.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,9 +113,8 @@
 		08295CBF1E1E4ED3009D32C3 = {
 			isa = PBXGroup;
 			children = (
-				08C702A01E2163280062706A /* Library Sources */,
 				08295CCB1E1E4ED3009D32C3 /* Hydra */,
-				08295CD61E1E4ED3009D32C3 /* HydraTests */,
+				08295CD61E1E4ED3009D32C3 /* Unit Tests */,
 				08295CFC1E1E57E5009D32C3 /* DemoApp */,
 				08295CCA1E1E4ED3009D32C3 /* Products */,
 			);
@@ -134,16 +135,19 @@
 			children = (
 				08295CCC1E1E4ED3009D32C3 /* Hydra.h */,
 				08295CCD1E1E4ED3009D32C3 /* Info.plist */,
+				08C702A01E2163280062706A /* Sources */,
 			);
 			path = Hydra;
 			sourceTree = "<group>";
 		};
-		08295CD61E1E4ED3009D32C3 /* HydraTests */ = {
+		08295CD61E1E4ED3009D32C3 /* Unit Tests */ = {
 			isa = PBXGroup;
 			children = (
-				08295CD71E1E4ED3009D32C3 /* HydraTests.swift */,
+				086DE7AB1E22473E00B07D59 /* HydraTests.swift */,
+				086DE7AD1E22478600B07D59 /* HydraTestThen.swift */,
 				08295CD91E1E4ED3009D32C3 /* Info.plist */,
 			);
+			name = "Unit Tests";
 			path = HydraTests;
 			sourceTree = "<group>";
 		};
@@ -160,7 +164,7 @@
 			path = DemoApp;
 			sourceTree = "<group>";
 		};
-		08C702A01E2163280062706A /* Library Sources */ = {
+		08C702A01E2163280062706A /* Sources */ = {
 			isa = PBXGroup;
 			children = (
 				086DE79B1E22447800B07D59 /* Shared.swift */,
@@ -179,7 +183,8 @@
 				086DE7991E22447800B07D59 /* Promise+Timeout.swift */,
 				086DE79A1E22447800B07D59 /* Promise+Zip.swift */,
 			);
-			name = "Library Sources";
+			name = Sources;
+			path = ..;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -352,7 +357,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				08295CD81E1E4ED3009D32C3 /* HydraTests.swift in Sources */,
+				086DE7AC1E22473E00B07D59 /* HydraTests.swift in Sources */,
+				086DE7AE1E22478600B07D59 /* HydraTestThen.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
