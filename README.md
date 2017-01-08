@@ -6,8 +6,10 @@
 
 <p align="center" >Love your async code again with Hydra <br/>
 Made with ♥ in pure Swift 3+, no dependencies and fully portable
-</p>
+<p/>
+<p align="center" >★★ <b>Star our github repository to help us!</b> ★★</p>
 
+# Hydra
 Hydra is full-featured lightweight library which allows you to write better async code in Swift 3+. It's partially based on [JavaScript A+](https://promisesaplus.com) specs and also implements modern construct like `await` (as seen in [Async/Await specification in ES8 (ECMAScript 2017)](https://github.com/tc39/ecmascript-asyncawait) or C#) which allows you to write async code in sync manner.
 
 *With Hydra your code will be cleaner, easy to mantain and sexy as never.*
