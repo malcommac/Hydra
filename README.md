@@ -5,13 +5,15 @@
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage) [![CI Status](https://travis-ci.org/malcommac/Hydra.svg)](https://travis-ci.org/malcommac/Hydra) [![Version](https://img.shields.io/cocoapods/v/Hydra.svg?style=flat)](http://cocoadocs.org/docsets/Hydra) [![License](https://img.shields.io/cocoapods/l/Hydra.svg?style=flat)](http://cocoadocs.org/docsets/Hydra) [![Platform](https://img.shields.io/cocoapods/p/Hydra.svg?style=flat)](http://cocoadocs.org/docsets/Hydra)
 
 <p align="center" >Love your async code again with Hydra <br/>
-Made with ♥ in pure Swift 3+, no dependencies and fully portable
+Made with ♥ in pure Swift 3+, no dependencies, lightweight & fully portable
 <p/>
 <p align="center" >★★ <b>Star our github repository to help us!</b> ★★</p>
 <p align="center" >Created by <a href="http://www.danielemargutti.com">Daniele Margutti</a> (<a href="http://www.twitter.com/danielemargutti">@danielemargutti</a>)</p>
 
 # Hydra
 Hydra is full-featured lightweight library which allows you to write better async code in Swift 3+. It's partially based on [JavaScript A+](https://promisesaplus.com) specs and also implements modern construct like `await` (as seen in [Async/Await specification in ES8 (ECMAScript 2017)](https://github.com/tc39/ecmascript-asyncawait) or C#) which allows you to write async code in sync manner.
+Hydra supports all sexiest operatorsa as like `always`, `validate`, `timeout`, `retry`, `all`, `any`, `pass`, `recover`, `map`, `zip`, `defer` and `retry`.
+Starts writing better async code with Hydra!
 
 *With Hydra your code will be cleaner, easy to mantain and sexy as never.*
 
@@ -23,7 +25,7 @@ Hydra is full-featured lightweight library which allows you to write better asyn
 * **[Await: async code in sync manner](#await)**
 * **[All Features](#allfeatures)**
 	* **[always](#always)**
-	* **[ensure](#ensure)**
+	* **[validate](#validate)**
 	* **[timeout](#timeout)**
 	* **[all](#all)**
 	* **[any](#any)**
@@ -189,7 +191,7 @@ Because promises formalize how success and failure blocks look, it's possible to
 Hydra supports:
 
 - `always`: allows you to specify a block which will be always executed both for `fulfill` and `reject` of the Promise
-- `ensure`: allows you to specify a predica block; if predicate return `false` the Promise fails.
+- `validate`: allows you to specify a predica block; if predicate return `false` the Promise fails.
 - `timeout`: add a timeout timer to the Promise; if it does not fulfill or reject after given interval it will be marked as rejected.
 - `all`: create a Promise that resolved when the list of passed Promises resolves (promises are resolved in parallel). Promise also reject as soon as a promise reject for any reason.
 - `any`: create a Promise that resolves as soon as one passed from list resolves. It also reject as soon as a promise reject for any reason.
@@ -214,13 +216,13 @@ loginUser(username,pass).then { user in
  	hideLoadingHUD()
 }
 ```
-<a name="ensure" />
+<a name="validate" />
 
-### ensure
-`ensure` is a func that takes a predicate, and rejects the promise chain if that predicate fails.
+### validate
+`validate` is a func that takes a predicate, and rejects the promise chain if that predicate fails.
 
 ```swift
-getAllUsersResponse().ensure { httpResponse in
+getAllUsersResponse().validate { httpResponse in
 	guard let httpResponse.statusCode == 200 else {
 		return false
 	}
