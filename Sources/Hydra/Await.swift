@@ -80,7 +80,7 @@ public func await<T>(_ context: Context? = nil, _ promise: Promise<T>) throws ->
 /// - Throws: an exception if operation fails
 @discardableResult
 public func await<T>(_ context: Context = .background, _ body: @escaping ((_ fulfill: @escaping (T) -> (), _ reject: @escaping (Error) -> () ) throws -> ())) throws -> T {
-	let promise = Promise<T>(context,body)
+	let promise = Promise<T>(in: context, body)
 	return try await(context, promise)
 }
 
@@ -108,11 +108,11 @@ public extension Context {
 		// the promise is fulfilled or rejected
 		let semaphore = DispatchSemaphore(value: 0)
 		
-		promise.then(self) { value -> Void in
+		promise.then(in: self) { value -> Void in
 			// promise is fulfilled, fillup error and resume code execution
 			result = value
 			semaphore.signal()
-		}.catch(self) { err in
+		}.catch(in: self) { err in
 			// promise is rejected, fillup error and resume code execution
 			error = err
 			semaphore.signal()

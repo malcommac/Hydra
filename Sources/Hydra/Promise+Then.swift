@@ -35,60 +35,119 @@ import Foundation
 
 public extension Promise {
 	
-	/// Perform an operation on a Promise once it resolves. The chain will then resolve to the Promise returned from the handler.
-	/// This `.then` is used to chain a Promise with another Promise. So, for example, you can do this:
-	/// `self.asyncFunc1.then(self.asyncFunc2)`
-	/// the result of the first promise is passed as first argument to the second chained promise and the output is the
-	/// type of the second promise.
+	
+	/// This `then` allows to execute a block which return a value; this value is used to get a chainable
+	/// Promise already resolved with that value.
+	/// Executed body can also reject the chain if throws.
 	///
 	/// - Parameters:
-	///   - context: context in which the `body` is called (if not specified `main` is used instead)
-	///   - body: this is the handler executed when the first promise (left side) is resolved. You can return
-	///     another promise to chain or your code which end up with a promise to chain.
-	/// - Returns: a new Promise with the new value defined by right side Promise
-	public func then<N>(_ context: Context? = nil, _ body: @escaping (R) throws -> Promise<N>) -> Promise<N> {
-		let ctx = context ?? .main
-		return Promise<N> { resolve, reject in
-			let fulfillLeft: (R) -> (Void) = { value in
-				// Let's try to execute then handler by passing first promise's result as first argument of the chained promise
-				do {
-					let returnedPromise = try body(value)
-					returnedPromise.then(ctx, fulfill: resolve, reject: reject)
-				} catch let error {
-					reject(error)
-				}
-			}
-			// We want to get notified when a Promise ends up with a fullfill or a rejection
-			// If left side (first/self) Promise ends fulfilled we want to pass it's argument as first argument of the
-			// second promise; otherwise if its ends rejected we simply forward to rejection function.
-			self.addObserver(in: ctx, fulfill: fulfillLeft, reject: reject)
-		}
-	}
-	
-	
-	/// Perform an operation on a Promise once it resolves. The chain will then resolve to the Promise returned from the handler.
-	///
-	/// - Parameters:
-	///   - context: context in which the `fulfillEndHandler` is called (that's not the context in which the second Promise is called)
-	///   - onFulfill: block to run when Promise resolved, returns a Promsie that mutates the Promise chain
-	/// - Returns: a Promise with the new value to return
+	///   - queue: context in which the queue is executed
+	///   - body: block to execute
+	/// - Returns: a chainable promise
 	@discardableResult
-	public func then<N>(_ context: Context? = nil, _ onFulfill: @escaping (R) throws -> N) -> Promise<N> {
-		let ctx = context ?? .main
-		return then(ctx, { (value) -> Promise<N> in
+	public func then<N>(in context: Context? = nil, _ body: @escaping ( (Value) throws -> N) ) -> Promise<N> {
+		let ctx = context ?? .background
+		return self.then(in: ctx, { value in
 			do {
-				return Promise<N>(asFulfilled: try onFulfill(value))
+				// get the value from body (or throws) and
+				// create a resolved Promise with that which is returned
+				// as output of the then as chainable promise.
+				let transformedValue = try body(value)
+				return Promise<N>(resolved: transformedValue)
 			} catch let error {
-				return Promise<N>(asRejected: error)
+				// if body throws a rejected promise with catched error is generated
+				return Promise<N>(rejected: error)
 			}
 		})
 	}
 	
+	
+	/// This `then` allows to execute a block of code which can transform the result of the promise in another
+	/// promise.
+	/// It's also possible to use it in order to send the output of a promise an input of another one and use it:
+	/// `asyncFunc1().then(asyncFunc2).then...`
+	/// Executed body can also reject the chain if throws.
+	///
+	/// - Parameters:
+	///   - queue: context in which the queue is executed
+	///   - body: body to execute
+	/// - Returns: chainable promise
 	@discardableResult
-	private func then(_ context: Context = .main, fulfill: @escaping (R) -> (), reject: @escaping (Error) -> () = { _ in }) -> Promise<R> {
-		return Promise<R> { resolve, reject in
-			self.addObserver(in: context, fulfill: fulfill, reject: reject)
-		}
+	public func then<N>(in context: Context? = nil, _ body: @escaping ( (Value) throws -> (Promise<N>) )) -> Promise<N> {
+		let ctx = context ?? .background
+		let nextPromise = Promise<N>(in: ctx, { resolve, reject in
+			
+			// Observe the resolve of the self promise
+			let onResolve = Observer<Value>.onResolve(ctx, { value in
+				do {
+					// Pass the value to the body and get back a new promise
+					// with another value
+					let promise = try body(value)
+					// execute the promise's body and get the result of it
+					let pResolve = Observer<N>.onResolve(ctx, resolve)
+					let pReject = Observer<N>.onReject(ctx, reject)
+					promise.add(observers: pResolve,pReject)
+					promise.runBody()
+				} catch let error {
+					reject(error)
+				}
+			})
+			
+			// Observe the reject of the self promise
+			let onReject = Observer<Value>.onReject(ctx, { error in
+				reject(error)
+			})
+			
+			self.add(observers: onResolve,onReject)
+		})
+		nextPromise.runBody()
+		self.runBody()
+		return nextPromise
+	}
+	
+	
+	/// This `then` variant allows to catch the resolved value of the promise and execute a block of code
+	/// without returning anything.
+	/// Defined body can also reject the next promise if throw.
+	/// Returned object is a promise which is able to dispatch both error or resolved value of the promise.
+	///
+	/// - Parameters:
+	///   - queue: queue in which the context is executed
+	///   - body: code block to execute
+	/// - Returns: a chainable promise
+	@discardableResult
+	public func then(in context: Context? = nil, _ body: @escaping ( (Value) throws -> () ) ) -> Promise<Value> {
+		let ctx = context ?? .background
+		// This is the simplest `then` is possible to create; it simply execute the body of the
+		// promise, get the value and allows to execute a body. Body can also throw and reject
+		// next chained promise.
+		let nextPromise = Promise<Value>(in: ctx, { resolve, reject in
+			let onResolve = Observer<Value>.onResolve(ctx, { value in
+				do {
+					// execute body and resolve this promise with the same value
+					// no transformations are allowed in this `then` except the throw.
+					// if body throw nextPromise is rejected.
+					try body(value)
+					resolve(value)
+				} catch let error {
+					// body throws, this nextPromise reject with given error
+					reject(error)
+				}
+			})
+			
+			let onReject = Observer<Value>.onReject(ctx, { error in
+				// this promise rejects so nextPromise also rejects with the error
+				reject(error)
+			})
+			self.add(observers: onResolve, onReject)
+		})
+		// execute the body of nextPromise so we can register observer
+		// to this promise and get back value/error once its resolved/rejected.
+		nextPromise.runBody()
+		// run the body of the self promise. Body is executed only one time; if this
+		// promise is the main promise it simply execute the core of the promsie functions.
+		self.runBody()
+		return nextPromise
 	}
 	
 }

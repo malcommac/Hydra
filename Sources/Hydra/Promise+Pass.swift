@@ -35,20 +35,33 @@ import Foundation
 
 public extension Promise {
 	
-	/// Delay the executon of a Promise chain by some number of seconds from current time
+	/// Allows to perform an action in the middle of chain.
+	/// This operation does not effect the result value of the promise but it's able to reject the chain.
 	///
 	/// - Parameters:
-	///   - seconds: delay time in seconds; execution time is `.now()+seconds`
-	///   - result: the Promise to resolve to after the delay
-	/// - Returns: Promise
-	public func delay(_ seconds: TimeInterval) -> Promise<R> {
-		return self.then(context, { value in
-			return Promise<R> { resolve, _ in
-				let fireTime: DispatchTime = .now() + seconds
-				Context.background.queue.asyncAfter(deadline: fireTime) {
-					resolve(value)
-				}
-			}
+	///   - queue: queue in which the body is executed
+	///   - body: body to execute
+	/// - Returns: a promise
+	public func pass<A>(in context: Context? = nil, _ body: @escaping (Value) throws -> Promise<A>) -> Promise<Value> {
+		let ctx = context ?? .background
+		return self.then(in: ctx, { value in
+			try body(value).then(in: ctx, { _ in
+				return Promise(resolved: value)
+			})
 		})
 	}
+	
+	/// Allows to perform an action in the middle of chain.
+	/// This operation does not effect the result value of the promise but it's able to reject the chain.
+	///
+	/// - Parameters:
+	///   - queue: queue in which the body is executed
+	///   - body: body to execute
+	/// - Returns: a promise
+	public func pass(in context: Context? = nil, _ handler: @escaping (Value) throws -> Void) -> Promise<Value> {
+		return self.pass(in: context, { value in
+			try Promise<Void>(resolved: handler(value))
+		})
+	}
+	
 }

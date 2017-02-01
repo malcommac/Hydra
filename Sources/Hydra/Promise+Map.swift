@@ -51,8 +51,8 @@ public enum PromiseResolveType {
 ///   - items: items to transform
 ///   - transform: transform callback which return the promise
 /// - Returns: a Promise which resolve all created promises
-public func map<A, B, S: Sequence>(_ context: Context? = nil, type: PromiseResolveType, _ items: S, _ transform: @escaping (A) throws -> Promise<B>) -> Promise<[B]> where S.Iterator.Element == A {
-
+public func map<A, B, S: Sequence>(_ context: Context? = nil, as type: PromiseResolveType, _ items: S, _ transform: @escaping (A) throws -> Promise<B>) -> Promise<[B]> where S.Iterator.Element == A {
+	
 	let ctx = context ?? .background
 	switch type {
 	case .parallel:
@@ -62,27 +62,42 @@ public func map<A, B, S: Sequence>(_ context: Context? = nil, type: PromiseResol
 	}
 }
 
+
+/// Series version of the map operator
+///
+/// - Parameters:
+///   - context: context to run the handler on (if not specified `background` context is used)
+///   - items: items to transform
+///   - transform: transform callback which return the promise
+/// - Returns: a Promise which resolve all created promises
 public func map_series<A, B, S: Sequence>(context: Context, items: S, transform: @escaping (A) throws -> Promise<B>) -> Promise<[B]> where S.Iterator.Element == A {
-	let initial = Promise<[B]>(asFulfilled: [])
+	let initial = Promise<[B]>(resolved: [])
 	
 	return items.reduce(initial) { chain, item in
-		return chain.then(context) { results in
-			try transform(item).then(context) { results + [$0] }
+		return chain.then(in: context) { results in
+			try transform(item).then(in: context) { results + [$0] }
 		}
 	}
 }
 
+/// Parallel version of the map operator
+///
+/// - Parameters:
+///   - context: context to run the handler on (if not specified `background` context is used)
+///   - items: items to transform
+///   - transform: transform callback which return the promise
+/// - Returns: a Promise which resolve all created promises
 internal func map_parallel<A, B, S: Sequence>(context: Context, items: S, transform: @escaping (A) throws -> Promise<B>) -> Promise<[B]> where S.Iterator.Element == A {
 	
-	let transformPromise = Promise<Void>(asFulfilled: ())
-	return transformPromise.then(context) { (Void) -> Promise<[B]> in
+	let transformPromise = Promise<Void>(resolved: ())
+	return transformPromise.then(in: context) { (Void) -> Promise<[B]> in
 		do {
 			let mappedPromises: [Promise<B>] = try items.map({ item in
 				return try transform(item)
 			})
 			return all(mappedPromises)
 		} catch let error {
-			return Promise<[B]>(asRejected: error)
+			return Promise<[B]>(rejected: error)
 		}
 	}
 }

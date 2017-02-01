@@ -30,153 +30,197 @@
 *
 */
 
-
 import Foundation
 
-public class Promise<R> {
+public class Promise<Value> {
 	
-	/// This is a typealias which define the body of a promise.
-	public typealias Body =  ((_ fulfill: @escaping (R) -> (), _ reject: @escaping (Error) -> () ) throws -> ())
+	public typealias Resolved = (Value) -> ()
+	public typealias Rejector = (Error) -> ()
+	public typealias Body = ((_ resolve: @escaping (Value) -> (), _ reject: @escaping (Error) -> () ) throws -> ())
+
+	/// State of the Promise. Initially a promise has a `pending` state.
+	internal var state: State<Value> = .pending
 	
-	//MARK: Private Variables
+	/// This is the queue used to ensure thread safety on Promise's `state`.
+	private let stateQueue = DispatchQueue(label: "com.mokasw.promise")
 	
-	/// This define the state of the promise.
-	/// A promise can move only from a .pending state to .fulfilled or .rejected
-	/// Once modified no other changes are allowed
-	private(set) var state: State<R>
+	/// Body of the promise.
+	/// This define the real core of your async function.
+	/// Promise's `body` is not executed until you chain an operator to it (ex. `.then` or `.catch`)
+	private var body: Body?
 	
-	/// This is the lock queue used to manage thread-safe access to Promise's state and registered callbacks
-	private let lockQueue = DispatchQueue(label: "com.hydra.promiselock.queue", qos: .userInitiated)
+	/// Context (GCD queue) in which the body of the promise is executed
+	/// By default background queue is used.
+	private(set) var context: Context = Context.custom(queue: DispatchQueue.global(qos: .background))
 	
-	/// This is the list of registered observer for this promise.
-	/// Observer are fired when Promise state did change from .pending status or if it's already in a final state.
-	/// There are two kind of observers; one for fulfill and another for rejections.
-	private var observers: [Observer<R>] = []
+	/// Observers of the promise; define a callback called in specified context with the result of resolve/reject of the promise
+	private var observers: [Observer<Value>] = []
 	
-	/// Context in which the promise's body will be resolved
-	private(set) var context: Context = .background
+	/// Is body of the promise called
+	/// It's used to prevent multiple call of the body on operators chaining
+	private var initCalled: Bool = false
 	
-	//MARK: Initialization functions
+	/// Optional promise identifier
+	public var name: String?
 	
-	/// Initialize a new empty state promise
-	/// Each state is always initialized in pending state.
-	private init() {
-		self.state = .pending
+	/// Thread safe current result of the promise.
+	/// It contains a valid value only if promise is resolved, otherwise it's `nil`.
+	public var result: Value? {
+		return stateQueue.sync {
+			return self.state.value
+		}
 	}
 	
-	/// Initialize a new Promise and allows you to define the body of the function you want to execute inside it.
+	/// Thread safe current error of the promise.
+	/// It contains the error of the promise if it's currently in a `rejected` state, otherwise it's `nil`.
+	public var error: Error? {
+		return stateQueue.sync {
+			return self.state.error
+		}
+	}
+	
+	/// Thread safe property which return if the promise is currently in a `pending` state.
+	/// A pending promise it's a promise which is not resolved yet.
+	public var isPending: Bool {
+		return stateQueue.sync {
+			return self.state.isPending
+		}
+	}
+	
+	
+	/// Thread safe property which return if `body` of the promise is already called or not.
+	private var isInitCalled: Bool {
+		return stateQueue.sync {
+			return self.initCalled
+		}
+	}
+	
+	
+	/// Initialize a new Promise in a resolved state with given value.
+	///
+	/// - Parameter value: value to set
+	public init(resolved value: Value) {
+		self.state = .resolved(value)
+	}
+	
+	
+	/// Initialize a new Promise in a rejected state with a specified error
+	///
+	/// - Parameter error: error to set
+	public init(rejected error: Error) {
+		self.state = .rejected(error)
+	}
+	
+	
+	/// Initialize a new Promise which specify a `body` to execute in specified `context`.
+	/// A `context` is a Grand Central Dispatch queue which allows you to control the QoS of the execution
+	/// and the thread in which it must be executed in.
 	///
 	/// - Parameters:
-	///   - context: context represent the GCD queue in which the body of the promise is executed. If not specified background queue is used
-	///   - body:	this closure represent the container of your Promise's function. Here you will add your code and to mark the promise's
-	///				the status as `fullfiled` or `rejected` you will call one of the two functions defined by the closure signature.
-	public convenience init(_ context: Context? = nil, _ body: @escaping Body) {
-		self.init()
-		self.context = context ?? .background
-		self.context.queue.async(execute: {
-			// Do/catch statement allows you to reject a promises also using throw function
-			// (in addition to the classic reject() call)
-			do {
-				try body(self.fulfill, self.reject)
-			} catch let error {
-				// an exception will cause a rejection of the promise
-				self.reject(error)
-			}
-		})
+	///   - context: context in which the body of the promise is executed. If `nil` global background queue is used instead
+	///   - body: body of the promise, define the code executed by the promise itself.
+	public init(in context: Context? = nil, _ body: @escaping Body) {
+		self.state = .pending
+		self.context = context ?? Context.custom(queue: DispatchQueue.global(qos: .background))
+		self.body = body
 	}
 	
-	/// Initialize a new Promise without body and already fulfilled with given `value`.
-	/// Usually you don't need to use this initializer; it's used as helper function
-	/// by several Promise's function like `.then()` or `.catch()`.
-	///
-	/// - Parameter value: fulfill value of the Promise
-	public convenience init(asFulfilled value: R) {
-		self.init()
-		self.state = .fulfilled(value: value)
-	}
 	
-	/// Initialize a new Promise without body and already `rejected` with given `error`.
-	/// Usually you don't need to use this initializer; it's used as helper function
-	/// by several Promise's function like `.then()` or `.catch()`.
-	///
-	/// - Parameter value: reject error
-	public convenience init(asRejected error: Error) {
-		self.init()
-		self.state = .rejected(error: error)
-	}
-	
-	//MARK: Internal Promise Management
-	
-	/// This is the function passed as Promise's fulfill value in `body`'s closure function.
-	///
-	/// - Parameter value: `value` used to set fulfilled state for this Promise
-	private func fulfill(_ value: R) {
-		self.changeState(.fulfilled(value: value))
-	}
-	
-	/// This is the function passed as Promise's reject value in `body`'s closure function
-	///
-	/// - Parameter error: `error` used to set the rejected state for this Promise
-	private func reject(_ error: Error) {
-		self.changeState(.rejected(error: error))
-	}
-	
-	/// This function change the state of the Promise (it's thread safe).
-	/// Any change of the Promise's internal state fire appropriate registered callbacks (based upon the new state).
-	///
-	/// - Parameter state: new state to set
-	private func changeState(_ state: State<R>) {
-		guard case .pending = self.state else {
+	/// Run the body of the promise if necessary
+	/// In order to be runnable, the state of the promise must be pending and the body itself must not be called another time.
+	internal func runBody() {
+		// A promise must be in a pending state and the body should be never executed
+		guard let body = self.body, self.state.isPending == true, self.isInitCalled == false else {
 			return
 		}
-		lockQueue.sync(execute: {
-			self.state = state
-		})
-		self.fireObservers()
+		// mark as called
+		initCalled = true
+		// execute the body into given context's gcd queue
+		self.context.queue.async {
+			do {
+				// body can throws and fail. throwing a promise's body is equal to
+				// reject it with the same error.
+				try body( { value in
+					self.set(state: .resolved(value)) // resolved
+				}, { err in
+					self.set(state: .rejected(err)) // rejected
+				})
+			} catch let err {
+				self.set(state: .rejected(err)) // rejected (using throw)
+			}
+		}
+	}
+	
+	/// Thread safe Promise's state change function.
+	/// Once the state did change all involved registered observer will be called.
+	///
+	/// - Parameter newState: new state to set
+	private func set(state newState: State<Value>) {
+		self.stateQueue.sync {
+			// a promise state can be changed only if the current state is pending
+			// once resolved or rejected state cannot be change further.
+			guard self.state.isPending else {
+				return
+			}
+			self.state = newState // change state
+			self.executeObservers() // call any involved observer to notify state's change
+		}
 	}
 	
 	
-	/// Register a new fullfill and rejected observer for this promise.
-	/// While generally callbacks are registered as pair (on fulfill and on reject) you may register only a single event observer.
+	/// Allows to register two observers for resolve/reject.
+	/// A promise's observer is called when a promise's state did change.
+	/// If promise's state did change to `rejected` only observers registered for `rejection` are called; viceversa
+	/// if promise's state did change to `resolved` only observers registered for `resolve` are called.
 	///
 	/// - Parameters:
-	///   - context: context in which registered callbacks are called.
-	///   - fHandler: optional fulfill handler to call
-	///   - rHandler: optional reject handler to call
-	internal func addObserver(in context: Context, fulfill fHandler: ((R) -> (Void))?, reject rHandler: ((Error) -> (Void))? ) {
-		lockQueue.async(execute: {
-			if fHandler != nil {
-				let fulfillCallback = Observer<R>.whenFulfilled(context: context, handler: fHandler!)
-				self.observers.append(fulfillCallback)
-			}
-			if rHandler != nil {
-				let rejectCallback = Observer<R>.whenRejected(context: context, handler: rHandler!)
-				self.observers.append(rejectCallback)
-			}
-		})
-		self.fireObservers()
+	///   - context: context in which specified resolve/reject observers is called
+	///   - onResolve: observer to add for resolve
+	///   - onReject: observer to add for
+	internal func add(in context: Context? = nil, onResolve: @escaping Observer<Value>.ResolveObserver, onReject: @escaping Observer<Value>.RejectObserver) {
+		let ctx = context ?? .background
+		let onResolve = Observer<Value>.onResolve(ctx, onResolve)
+		let onReject = Observer<Value>.onReject(ctx, onReject)
+		self.add(observers: onResolve, onReject)
 	}
 	
-	/// Fire callbacks call (in thread safe manner) any registered callback which is compatible
-	/// with the current `state` of the Promise. So for example, if your promise is `.fulfilled` only
-	/// `.whenFulfilled` callbacks are called.
-	private func fireObservers() {
-		lockQueue.async(execute: {
-			guard !self.state.isPending else { return }
-			self.observers.forEach { callback in
-				switch self.state {
-				case let .fulfilled(result):
-					callback.fulfill(value: result)
-				case let .rejected(error):
-					callback.reject(error: error)
+	
+	/// Allows to register promise's observers.
+	/// A promise's observer is called when a promise's state did change.
+	/// You can create an observer called when promise did resolve (`Observer<Value>.ResolveObserver`) or reject
+	/// (`Observer<Value>.RejectObserver`).
+	/// Each registered observer can be called in a specified context.
+	///
+	/// - Parameter observers: observers to register
+	internal func add(observers: Observer<Value>...) {
+		self.stateQueue.async {
+			self.observers.append(contentsOf: observers)
+			self.executeObservers()
+		}
+	}
+	
+	
+	/// Execute observers
+	private func executeObservers() {
+		self.stateQueue.async {
+			guard case self.state.isPending = false else {
+				return
+			}
+			self.observers.forEach({ observer in
+				switch (self.state, observer) {
+				case (.rejected(let error), .onReject(_,_)) :
+					// promise state is rejected and observer is for rejection
+					observer.call(andReject: error)
+				case (.resolved(let value), .onResolve(_,_)):
+					// promise state is resolved and observer is for resolve
+					observer.call(andResolve: value)
 				default:
 					break
 				}
-			}
-			self.observers.removeAll()
-		})
+			})
+		}
 	}
-	
+
 	
 	/// Transform given promise to a void promise
 	///

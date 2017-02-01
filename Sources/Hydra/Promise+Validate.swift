@@ -35,16 +35,19 @@ import Foundation
 
 public extension Promise {
 	
-	/// ensure is a method that takes a predicate, and rejects the promise chain if that predicate fails.
+	/// This operator allows you to validate the result of `self` promise.
+	/// It exposes a block where you can return `true` or `false` (or `throw`).
+	/// If validation returns `true` promise is validated and the result is propagated over.
+	/// If validation returns `false` (or `throws`) promise is rejected and the error is propagated over.
 	///
 	/// - Parameters:
-	///   - context: context queue (if not specified `background` context is used instead)
-	///   - condition: predicate you should use to validation. return `false` to reject promise, true to `fulfill` and pass the value forward.
-	/// - Returns: Promise
-	public func ensure(_ context: Context? = nil, _ condition: @escaping (R) -> Bool) -> Promise<R> {
+	///   - queue: queue in which the validation is executed
+	///   - validate: validate block
+	/// - Returns: promise
+	public func validate(in context: Context? = nil, _ validate: @escaping ((Value) throws -> (Bool))) -> Promise<Value> {
 		let ctx = context ?? .background
-		return self.then(ctx, { (value: R) -> R in
-			guard condition(value) else {
+		return self.then(in: ctx, { (value: Value) -> Value in
+			guard try validate(value) else {
 				throw PromiseError.rejected
 			}
 			return value

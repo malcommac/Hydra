@@ -35,34 +35,40 @@ import Foundation
 
 public extension Promise {
 	
-	/// If added to the chain this function always run given handler regardless of the wether the chain resolves or rejects.
+	/// Always run given body at the end of a promise chain regardless of the whether the chain resolves or rejects.
 	///
 	/// - Parameters:
-	///   - context: handler to run the handler on (if not specified `background` queue is used instead)
-	///   - body: handler to run at the end of the promise chain
-	/// - Returns: a Promise to chain
+	///   - queue: queue in which the body is executed
+	///   - body: body to execute
+	/// - Returns: promise
 	@discardableResult
-	public func always(_ context: Context? = nil, _ body: @escaping () throws -> Void) -> Promise<R> {
+	public func always(in context: Context? = nil, body: @escaping () throws -> Void) -> Promise<Value> {
 		let ctx = context ?? .background
-		return Promise<R> { resolve, reject in
-			let onResolve: (R) -> (Void) = { value in
+		let nextPromise = Promise<Value>(in: ctx) { resolve, reject in
+			// Always call body both for reject and resolve
+			let onResolve = Observer<Value>.onResolve(ctx, { value in
 				do {
 					try body()
 					resolve(value)
-				} catch {
-					reject(error)
+				} catch let err {
+					reject(err)
 				}
-			}
-			let onReject: (Error) -> (Void) = { error in
+			})
+			
+			let onReject = Observer<Value>.onReject(ctx, { error in
 				do {
 					try body()
 					reject(error)
-				} catch {
-					reject(error)
+				} catch let err {
+					reject(err)
 				}
-			}
-			self.addObserver(in: ctx, fulfill: onResolve, reject: onReject)
+			})
+			
+			self.add(observers: onResolve,onReject)
 		}
+		nextPromise.runBody()
+		self.runBody()
+		return nextPromise
 	}
 	
 }

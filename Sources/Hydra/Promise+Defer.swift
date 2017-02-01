@@ -34,35 +34,23 @@
 import Foundation
 
 public extension Promise {
-	
-	/// Perform an operation in the middle of a chain that does not effect the resolved value.
-	/// However it may reject the chain.
+
+	/// Delay the executon of a Promise chain by some number of seconds from current time
 	///
 	/// - Parameters:
-	///   - context: dispatch queue to run the body on (if not specified `background` is used instead)
-	///   - body: block to run in the middle of the promise chain. Chain waits for the returned Promise to resolve
-	/// - Returns: Promise that resolves to the result of the previous Promise
-	public func forward<N>(_ context: Context? = nil, _ body: @escaping (R) throws -> Promise<N>) -> Promise<R> {
+	///   - seconds: delay time in seconds; execution time is `.now()+seconds`
+	///   - result: the Promise to resolve to after the delay
+	/// - Returns: Promise
+	public func `defer`(in context: Context? = nil, _ seconds: TimeInterval) -> Promise<Value> {
 		let ctx = context ?? .background
-		return self.then(ctx, { value in
-			try body(value).then(ctx, { _ in
-				Promise(asFulfilled: value)
-			})
+		return self.then(in: ctx, { value in
+			return Promise<Value> { resolve, _ in
+				let fireTime: DispatchTime = .now() + seconds
+				ctx.queue.asyncAfter(deadline: fireTime) {
+					resolve(value)
+				}
+			}
 		})
 	}
 	
-	/// Perform an operation in the middle of a chain that does not effect the resolved value.
-	/// However it may reject the chain.
-	///
-	/// - Parameters:
-	/// - context: dispatch queue to run the body on (if not specified `background` is used instead)
-	/// - body: block to run in the middle of the promise chain
-	/// - Returns: Promise that resolves to the result of the previous Promise
-	@discardableResult
-	public func forward(_ context: Context? = nil, _ body: @escaping (R) throws -> Void) -> Promise<R> {
-		let ctx = context ?? .background
-		return self.forward(ctx, { value in
-			try Promise<Void>(asFulfilled: body(value))
-		})
-	}
 }
