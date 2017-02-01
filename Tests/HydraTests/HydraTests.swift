@@ -1,10 +1,34 @@
-//
-//  HydraTestThen.swift
-//  Hydra
-//
-//  Created by Daniele Margutti on 08/01/2017.
-//  Copyright © 2017 Daniele Margutti. All rights reserved.
-//
+/*
+* Hydra
+* Fullfeatured lightweight Promise & Await Library for Swift
+*
+* Created by:	Daniele Margutti
+* Email:		hello@danielemargutti.com
+* Web:			http://www.danielemargutti.com
+* Twitter:		@danielemargutti
+*
+* Copyright © 2017 Daniele Margutti
+*
+*
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in
+* all copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+* THE SOFTWARE.
+*
+*/
 
 import Foundation
 import XCTest
@@ -77,6 +101,7 @@ class HydraTestThen: XCTestCase {
 			reject(rejectError)
 		}.then { result in
 			if result == fulfillResult {
+				print("chiamata")
 				exp.fulfill()
 			} else {
 				XCTFail()
@@ -195,6 +220,12 @@ class HydraTestThen: XCTestCase {
 	
 	//MARK: Recover tests
 	
+	
+	/// Test `recover` operator. When a promise is rejected is possible to add
+	/// a `recover` operator into the chain. This operator receive the error as input
+	/// and return another Promise with the same value of the previous promise as output.
+	// In this test we have tried to recover a bad call by executing a resolving promise.
+	// Test is passed if recover works and we get a valid result into the final `then`.
 	func test_recoverPromise() {
 		let exp = expectation(description: "test_recoverPromise")
 		let expResult = 5
@@ -213,18 +244,26 @@ class HydraTestThen: XCTestCase {
 	
 	//MARK: Pass tests
 	
+	
+	/// `pass` operator is used for performing an operation in the middle of a promise
+	/// chain without changing the type of the Promise.
+	/// In this test we simply print the value in the middle of the chain for logging purpose.
+	/// Test is passed if promise resolves correctly.
 	func test_pass() {
 		let exp = expectation(description: "test_pass")
 		let expResult = 5
 		intPromise(expResult).pass { value in
-			print("value is \(value)")
+			print("logging \(value)")
 		}.then { final in
-			print("final is \(final)")
 			exp.fulfill()
 		}
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
 	
+	
+	/// This is another test with `pass` operator. We have added `pass` in multiple points of a chain.
+	/// We expect that result of the caller promise will not change into pass block and the result is
+	/// passed over to the next promise.
 	func test_passSequence() {
 		let exp = expectation(description: "test_passSequence")
 		let expResult = 5
@@ -244,6 +283,9 @@ class HydraTestThen: XCTestCase {
 	
 	//MARK: Always
 	
+	/// `always` operator is used to perform a block of code always at the end of a promise regardless
+	/// the result is a valid value or an error.
+	/// In this test we put the always before a catch and we should continue to receive the final value.
 	func test_always() {
 		let exp = expectation(description: "test_always")
 		intPromise(5).always {
@@ -254,6 +296,9 @@ class HydraTestThen: XCTestCase {
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
 	
+	
+	/// Another test with `pass` operator a the end of the chain.
+	/// Test resolves if the block is executed for a valid resolved promise.
 	func test_alwaysSequence() {
 		let exp = expectation(description: "test_always")
 		intPromise(5).pass { value in
@@ -266,6 +311,8 @@ class HydraTestThen: XCTestCase {
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
 	
+	/// Another test with `pass` operator a the end of the chain.
+	/// Test resolves if the block is executed for a rejected resolved promise.
 	func test_alwaysError() {
 		let exp = expectation(description: "test_always")
 		intFailedPromise(TestErrors.anotherError).then { value in
@@ -280,6 +327,9 @@ class HydraTestThen: XCTestCase {
 	
 	//MARK Any Test
 	
+	
+	/// `any` operator resolve a promise when at least one of the input promises has been resolved or rejected
+	/// Test is resolved when the first promise is resolved (se second one is delayed and should be not resolved before).
 	func test_any() {
 		let exp = expectation(description: "test_any")
 		let promise1 = Promise<Int>(resolved: 1)
@@ -293,6 +343,7 @@ class HydraTestThen: XCTestCase {
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
 	
+	/// The same test with `any` operator which takes as input an array instead of variable list of arguments
 	func test_anyWithArray() {
 		let exp = expectation(description: "test_anyWithArray")
 		let promise1 = Promise<Int>(resolved: 1)
@@ -308,6 +359,10 @@ class HydraTestThen: XCTestCase {
 	
 	//MARK: All Tests
 	
+	
+	/// `all` operator resolve a promise which takes as input an array of promise
+	/// the all-promise resolves when all promises resolves correctly or one of them has been rejecged.
+	/// Test resolves when all promises has a valid result.
 	func test_all() {
 		let exp = expectation(description: "test_all")
 		let promise1 = Promise<Int>(resolved: 3)
@@ -322,6 +377,9 @@ class HydraTestThen: XCTestCase {
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
 
+	
+	/// This is another test with `all` operator.
+	/// This test it's okay if all-promise is rejected because one of the input promise rejects.
 	func test_allError() {
 		let exp = expectation(description: "test_allError")
 		let promise1 = Promise<Int>(resolved: 1)
@@ -337,10 +395,17 @@ class HydraTestThen: XCTestCase {
 	
 	//MARK: Map Tests
 	
+	
+	/// `map` operator transform an input array in an array of promises.
+	/// Test works using `map` by executing each transformation in parallel.
+	/// Result is done when all promises are resolved and the result should be ordered.
 	func test_mapConcurrent() {
 		executeMap(as: PromiseResolveType.parallel)
 	}
 	
+	/// `map` operator transform an input array in an array of promises.
+	/// Test works using `map` by executing each transformation in series.
+	/// Result is done when all promises are resolved (one after another).
 	func test_mapSeries() {
 		executeMap(as: PromiseResolveType.series)
 	}
@@ -364,6 +429,8 @@ class HydraTestThen: XCTestCase {
 	
 	//MARK: Defer Tests
 	
+	/// `defer` test defer the execution of the next promise of the chain by a specified interval expressed in seconds.
+	/// This test ensure the result arrives ~5seconds after the first promise is resolved.
 	func test_defer() {
 		let exp = expectation(description: "test_defer")
 		let started = Date()
@@ -380,6 +447,9 @@ class HydraTestThen: XCTestCase {
 	
 	//MARK: Timeout Tests
 	
+	/// `timeout` operator is used to reject a promise if it takes more than a specified interval to get resolved
+	/// This test ensure that the promise itself resolves because the operation, delayed by 0.5s, is fulfilled
+	/// into the range of 0.7 seconds.
 	func test_timeoutOK() {
 		let exp = expectation(description: "test_timeoutOK")
 		intPromiseDelay(5, delay: 0.5).timeout(timeout: 0.7).then { value in
@@ -390,6 +460,8 @@ class HydraTestThen: XCTestCase {
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
 	
+	/// The same test with `timeout` but here the delay is higher than timeout so we expect
+	/// promise fails with given error.
 	func test_timeoutFailed() {
 		let exp = expectation(description: "test_timeoutFailed")
 		intPromiseDelay(5, delay: 1.5).timeout(timeout: 0.7).then { value in
@@ -402,6 +474,9 @@ class HydraTestThen: XCTestCase {
 	
 	// Await Tests
 	
+	
+	/// `await` operator allows to execute async operation in sync fashion
+	/// This test passes if all operation are resolved one after another when the previous is finished
 	func test_await() {
 		let exp = expectation(description: "test_await")
 		do {
@@ -420,6 +495,7 @@ class HydraTestThen: XCTestCase {
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
 	
+	/// The same test with `async` but here we expect the entire async session fail
 	func test_awaitFailed() {
 		let exp = expectation(description: "test_awaitFailed")
 		do {
@@ -436,16 +512,70 @@ class HydraTestThen: XCTestCase {
 	
 	// Reduce Tests
 	
-//	func test_reduce() {
-//		let exp = expectation(description: "test_awaitFailed")
-//		let items = [1,5,10,40,2,5,7]
-//		reduce(items, 0) { (partial, current) in
-//			
-//		}.then { value in
-//			
-//		}
-//		waitForExpectations(timeout: expTimeout, handler: nil)
-//	}
+	
+	/// `reduce` operator allows to reduce an array of items to a single promise.
+	/// Test works if end value is resolved correctly.
+	func test_reduce() {
+		let exp = expectation(description: "test_reduce")
+		let items = [1,5,10,20,40,60,80]
+		reduce(items, 0) { (partial, current) in
+			return self.doubleAndSumImmediatePromise(partial: partial, value: current)
+		}.then { value in
+			if value == 432 {
+				exp.fulfill()
+			} else {
+				XCTFail()
+			}
+		}.catch { _ in
+			XCTFail()
+		}
+		waitForExpectations(timeout: expTimeout, handler: nil)
+	}
+	
+	/// The same test with `reduce` but here we expect it to fail
+	func test_reduceError() {
+		let exp = expectation(description: "test_reduceError")
+		let items = [1,5,10,20,40,60,80]
+		reduce(items, 0) { (partial, current) in
+			guard partial > 200 else {
+				return self.intFailedPromiseImmediate(TestErrors.anotherError)
+			}
+			return self.doubleAndSumImmediatePromise(partial: partial, value: current)
+		}.then { value in
+			XCTFail()
+		}.catch { _ in
+			exp.fulfill()
+		}
+		waitForExpectations(timeout: expTimeout, handler: nil)
+	}
+	
+	//MARK: Retry Test
+	
+	func test_retry() {
+		let exp = expectation(description: "test_retry")
+		
+		let retryAttempts = 3
+		let successOnAttempt = 3
+		var currentAttempt = 0
+		Promise<Int> { (resolve, reject) in
+			currentAttempt += 1
+			if currentAttempt < successOnAttempt {
+				print("attempt is \(currentAttempt)... reject")
+				reject(TestErrors.anotherError)
+			} else {
+				print("attempt is \(currentAttempt)... resolve")
+				resolve(5)
+			}
+		}.retry(retryAttempts).then { value in
+			print("value \(value) at attempt \(currentAttempt)")
+			exp.fulfill()
+		}.catch { err in
+			print("failed \(err) at attempt \(currentAttempt)")
+			XCTFail()
+		}
+		
+		waitForExpectations(timeout: expTimeout, handler: nil)
+	}
 	
 	//MARK: Helper
 	
@@ -454,6 +584,12 @@ class HydraTestThen: XCTestCase {
 			DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + self.delayResult, execute: {
 				reject(error)
 			})
+		}
+	}
+	
+	func intFailedPromiseImmediate(_ error: Error) -> Promise<Int> {
+		return Promise<Int> { _, reject in
+			reject(error)
 		}
 	}
 	
@@ -473,7 +609,7 @@ class HydraTestThen: XCTestCase {
 	
 	func intPromiseDelay(_ value: Int = 10, delay: TimeInterval) -> Promise<Int> {
 		return Promise<Int> { resolve, _ in
-			DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + self.delayResult, execute: {
+			DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + delay, execute: {
 				resolve(value)
 			})
 		}
@@ -484,6 +620,12 @@ class HydraTestThen: XCTestCase {
 			DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + self.delayResult, execute: {
 				resolve(input*2)
 			})
+		}
+	}
+	
+	func doubleAndSumImmediatePromise(partial: Int, value: Int) -> Promise<Int> {
+		return Promise<Int> { resolve, _ in
+			resolve( partial + (value * 2) )
 		}
 	}
 	

@@ -42,7 +42,7 @@ public class Promise<Value> {
 	internal var state: State<Value> = .pending
 	
 	/// This is the queue used to ensure thread safety on Promise's `state`.
-	private let stateQueue = DispatchQueue(label: "com.mokasw.promise")
+	internal let stateQueue = DispatchQueue(label: "com.mokasw.promise")
 	
 	/// Body of the promise.
 	/// This define the real core of your async function.
@@ -58,7 +58,7 @@ public class Promise<Value> {
 	
 	/// Is body of the promise called
 	/// It's used to prevent multiple call of the body on operators chaining
-	private var initCalled: Bool = false
+	internal var bodyCalled: Bool = false
 	
 	/// Optional promise identifier
 	public var name: String?
@@ -89,9 +89,9 @@ public class Promise<Value> {
 	
 	
 	/// Thread safe property which return if `body` of the promise is already called or not.
-	private var isInitCalled: Bool {
+	private var isBodyExecuted: Bool {
 		return stateQueue.sync {
-			return self.initCalled
+			return self.bodyCalled
 		}
 	}
 	
@@ -125,28 +125,35 @@ public class Promise<Value> {
 		self.body = body
 	}
 	
+	/// Deallocation cleanup
+	deinit {
+		stateQueue.sync {
+			self.observers.removeAll()
+		}
+	}
 	
 	/// Run the body of the promise if necessary
 	/// In order to be runnable, the state of the promise must be pending and the body itself must not be called another time.
 	internal func runBody() {
-		// A promise must be in a pending state and the body should be never executed
-		guard let body = self.body, self.state.isPending == true, self.isInitCalled == false else {
-			return
-		}
-		// mark as called
-		initCalled = true
-		// execute the body into given context's gcd queue
-		self.context.queue.async {
-			do {
-				// body can throws and fail. throwing a promise's body is equal to
-				// reject it with the same error.
-				try body( { value in
-					self.set(state: .resolved(value)) // resolved
-				}, { err in
-					self.set(state: .rejected(err)) // rejected
-				})
-			} catch let err {
-				self.set(state: .rejected(err)) // rejected (using throw)
+		self.stateQueue.sync {
+			if state.isPending == false || bodyCalled == true {
+				return
+			}
+			bodyCalled = true
+			
+			// execute the body into given context's gcd queue
+			self.context.queue.async {
+				do {
+					// body can throws and fail. throwing a promise's body is equal to
+					// reject it with the same error.
+					try self.body?( { value in
+						self.set(state: .resolved(value)) // resolved
+					}, { err in
+						self.set(state: .rejected(err)) // rejected
+					})
+				} catch let err {
+					self.set(state: .rejected(err)) // rejected (using throw)
+				}
 			}
 		}
 	}
@@ -163,7 +170,17 @@ public class Promise<Value> {
 				return
 			}
 			self.state = newState // change state
-			self.executeObservers() // call any involved observer to notify state's change
+			
+			self.observers.forEach { observer in
+				switch (state, observer) {
+				case (.resolved(let value), .onResolve(_,_)):
+					observer.call(andResolve: value)
+				case (.rejected(let error), .onReject(_,_)):
+					observer.call(andReject: error)
+				default:
+					break
+				}
+			}
 		}
 	}
 	
@@ -193,31 +210,23 @@ public class Promise<Value> {
 	///
 	/// - Parameter observers: observers to register
 	internal func add(observers: Observer<Value>...) {
-		self.stateQueue.async {
-			self.observers.append(contentsOf: observers)
-			self.executeObservers()
-		}
-	}
-	
-	
-	/// Execute observers
-	private func executeObservers() {
-		self.stateQueue.async {
-			guard case self.state.isPending = false else {
-				return
+		self.stateQueue.sync {
+			switch self.state {
+			case .pending:
+				self.observers.append(contentsOf: observers)
+			case .resolved(let value):
+				self.observers.forEach({ observer in
+					if case .onResolve(_,_) = observer {
+						observer.call(andResolve: value)
+					}
+				})
+			case .rejected(let err):
+				self.observers.forEach({ observer in
+					if case .onReject(_,_) = observer {
+						observer.call(andReject: err)
+					}
+				})
 			}
-			self.observers.forEach({ observer in
-				switch (self.state, observer) {
-				case (.rejected(let error), .onReject(_,_)) :
-					// promise state is rejected and observer is for rejection
-					observer.call(andReject: error)
-				case (.resolved(let value), .onResolve(_,_)):
-					// promise state is resolved and observer is for resolve
-					observer.call(andResolve: value)
-				default:
-					break
-				}
-			})
 		}
 	}
 
@@ -228,6 +237,13 @@ public class Promise<Value> {
 	internal func voidPromise() -> Promise<Void> {
 		return self.then { _ in
 			return ()
+		}
+	}
+	
+	internal func resetState() {
+		self.stateQueue.sync {
+			self.bodyCalled = false
+			self.state = .pending
 		}
 	}
 }

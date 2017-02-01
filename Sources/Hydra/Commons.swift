@@ -41,11 +41,13 @@ import Foundation
 /// - timeout: timeout reached
 /// - rejected: promise rejected
 /// - invalidContext: invalid context provided
+/// - attemptsFailed: number of attempts reached but the promise is rejected
 public enum PromiseError: Error {
 	case timeout
 	case rejected
 	case invalidInput
 	case invalidContext
+	case attemptsFailed
 }
 
 /// This represent the state of a Promise
