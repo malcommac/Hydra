@@ -1,4 +1,4 @@
-re<p align="center" >
+<p align="center" >
   <img src="https://raw.githubusercontent.com/malcommac/Hydra/develop/hydra-logo.png" width=210px height=204px alt="Hydra" title="Hydra">
 </p>
 
