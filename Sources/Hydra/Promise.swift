@@ -101,6 +101,7 @@ public class Promise<Value> {
 	/// - Parameter value: value to set
 	public init(resolved value: Value) {
 		self.state = .resolved(value)
+		self.bodyCalled = true
 	}
 	
 	
@@ -109,6 +110,7 @@ public class Promise<Value> {
 	/// - Parameter error: error to set
 	public init(rejected error: Error) {
 		self.state = .rejected(error)
+		self.bodyCalled = true
 	}
 	
 	
@@ -211,9 +213,10 @@ public class Promise<Value> {
 	/// - Parameter observers: observers to register
 	internal func add(observers: Observer<Value>...) {
 		self.stateQueue.sync {
+			self.observers.append(contentsOf: observers)
 			switch self.state {
 			case .pending:
-				self.observers.append(contentsOf: observers)
+				break
 			case .resolved(let value):
 				self.observers.forEach({ observer in
 					if case .onResolve(_,_) = observer {

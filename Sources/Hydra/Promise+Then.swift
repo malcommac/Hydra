@@ -144,8 +144,8 @@ public extension Promise {
 		// execute the body of nextPromise so we can register observer
 		// to this promise and get back value/error once its resolved/rejected.
 		nextPromise.runBody()
-		// run the body of the self promise. Body is executed only one time; if this
-		// promise is the main promise it simply execute the core of the promsie functions.
+//		// run the body of the self promise. Body is executed only one time; if this
+//		// promise is the main promise it simply execute the core of the promsie functions.
 		self.runBody()
 		return nextPromise
 	}

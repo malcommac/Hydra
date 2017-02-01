@@ -423,6 +423,8 @@ class HydraTestThen: XCTestCase {
 			} else {
 				XCTFail()
 			}
+		}.catch { _ in
+			XCTFail()
 		}
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}

@@ -32,26 +32,10 @@
 
 import Foundation
 
-/*
-let onResolve = Observer<Value>.onResolve(self.context, resolve)
-let onReject = Observer<Value>.onReject(self.context, { error in
-remainingAttempts -= 1
-guard remainingAttempts > 0 else {
-reject(error)
-return
-}
-self.resetState()
-})
-
-self.add(observers: onResolve, onReject)
-*/
-
 public extension Promise {
 
 	public func retry(_ attempts: Int = 3) -> Promise<Value> {
 		var remainingAttempts = attempts
-		self.name = "first"
-		
 		let nextPromise = Promise<Value>(in: self.context) { (resolve, reject) in
 			let onResolve = Observer<Value>.onResolve(self.context, { value in
 				resolve(value)
@@ -68,7 +52,6 @@ public extension Promise {
 			self.add(observers: onResolve,onReject)
 			self.runBody()
 		}
-		nextPromise.name = "next"
 		nextPromise.runBody()
 		return nextPromise
 	}
