@@ -26,11 +26,12 @@ Hydra is full-featured lightweight library which allows you to write better asyn
 	* **[timeout](#timeout)**
 	* **[all](#all)**
 	* **[any](#any)**
-	* **[forward](#forward)**
+	* **[pass](#pass)**
 	* **[recover](#recover)**
 	* **[map](#map)**
 	* **[zip](#zip)**
-	* **[delay](#delay)**
+	* **[defer](#defer)**
+	* **[retry](#retry)**
 * **[Installation (CocoaPods, SwiftPM and Carthage)](#installation)**
 * **[Requirements](#requirements)**
 * **[Credits](#credits)**
@@ -191,11 +192,11 @@ Hydra supports:
 - `timeout`: add a timeout timer to the Promise; if it does not fulfill or reject after given interval it will be marked as rejected.
 - `all`: create a Promise that resolved when the list of passed Promises resolves (promises are resolved in parallel). Promise also reject as soon as a promise reject for any reason.
 - `any`: create a Promise that resolves as soon as one passed from list resolves. It also reject as soon as a promise reject for any reason.
-- `forward`: Perform an operation in the middle of a chain that does not affect the resolved value but may reject the chain.
+- `pass`: Perform an operation in the middle of a chain that does not affect the resolved value but may reject the chain.
 - `recover`: Allows recovery of a Promise by returning another Promise if it fails.
 - `map`: Transform items to Promises and resolve them (in paralle or in series)
 - `zip`: Create a Promise tuple of a two promises
-- `delay`: delay the execution of a Promise by a given time interval.
+- `defer`: defer the execution of a Promise by a given time interval.
 
 <a name="always" />
 
@@ -279,15 +280,15 @@ any(getFile(mirror_1), getFile(mirror_2)).then { data in
 }
 ```
 
-<a name="forward" />
+<a name="pass" />
 
-### forward
-`forward` is useful for performing an operation in the middle of a promise chain without changing the type of the Promise.
+### pass
+`pass` is useful for performing an operation in the middle of a promise chain without changing the type of the Promise.
 You may also reject the entire chain.
 You can also return a Promise from the tap handler and the chain will wait for that promise to resolve (see the second `then` in the example below).
 
 ```swift
-loginUser(user,pass).tap { userObj in 
+loginUser(user,pass).pass { userObj in 
 	print("Fullname is \(user.fullname)")
 }.then { userObj in
 	updateLastActivity(userObj)
@@ -338,13 +339,27 @@ join(getUserProfile(user), getUserAvatar(user), getUserFriends(user))
 }
 ```
 
-<a name="delay" />
+<a name="defer" />
 
-### delay
-As name said, `delay` delays the executon of a Promise chain by some number of seconds from current time.
+### defer
+As name said, `defer` delays the executon of a Promise chain by some number of seconds from current time.
 
 ```swift
-asyncFunc1().delay(.main, 5).then...
+asyncFunc1().defer(.main, 5).then...
+```
+
+### retry
+`retry` operator allows you to execute source chained promise if it ends with a rejection.
+If reached the attempts the promise still rejected chained promise is also rejected along with the same source error.
+
+```swift
+Promise<Int> { (resolve, reject) in
+	// your async code
+}.retry(retryAttempts).then { value in
+	print("value \(value) at attempt \(currentAttempt)")
+}.catch { err in
+	print("failed \(err) at attempt \(currentAttempt)")
+}
 ```
 
 <a name="installation" />
