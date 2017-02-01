@@ -1,4 +1,4 @@
-<p align="center" >
+re<p align="center" >
   <img src="https://raw.githubusercontent.com/malcommac/Hydra/develop/hydra-logo.png" width=210px height=204px alt="Hydra" title="Hydra">
 </p>
 
@@ -353,12 +353,12 @@ asyncFunc1().defer(.main, 5).then...
 If reached the attempts the promise still rejected chained promise is also rejected along with the same source error.
 
 ```swift
-Promise<Int> { (resolve, reject) in
-	// your async code
-}.retry(retryAttempts).then { value in
-	print("value \(value) at attempt \(currentAttempt)")
+// try to execute myAsyncFunc(); if it fails the operator try two other times
+// If there is not luck for you the promise itself fails with the last catched error.
+myAsyncFunc(param).retry(3).then { value in
+	print("Value \(value) got at attempt #\(currentAttempt)")
 }.catch { err in
-	print("failed \(err) at attempt \(currentAttempt)")
+	print("Failed to get a value after \(currentAttempt) attempts with error: \(err)")
 }
 ```
 
