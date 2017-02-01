@@ -50,6 +50,8 @@ public enum PromiseError: Error {
 	case attemptsFailed
 }
 
+//MARK: Promise State
+
 /// This represent the state of a Promise
 ///
 /// - pending: pending state. Promise was not evaluated yet.
@@ -60,16 +62,19 @@ internal enum State<Value> {
 	case resolved(_: Value)
 	case rejected(_: Error)
 	
+	/// Resolved `value` associated with the state. `nil` if the state is not `resolved`.
 	var value: Value? {
 		guard case .resolved(let value) = self else { return nil }
 		return value
 	}
 	
+	/// Error associated with the state. `nil` if the state is not `rejected`.
 	var error: Error? {
 		guard case .rejected(let error) = self else { return nil }
 		return error
 	}
 	
+	/// Return `true` if the promise is in `pending` state, `false` otherwise.
 	var isPending: Bool {
 		guard case .pending = self else { return false }
 		return true

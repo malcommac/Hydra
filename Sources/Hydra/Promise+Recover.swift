@@ -35,6 +35,12 @@ import Foundation
 
 public extension Promise {
 	
+	/// Allows you to recover a failed promise by returning another promise with the same output
+	///
+	/// - Parameters:
+	///   - context: context in which the body is executed
+	///   - body: body to execute. It must return a new promise to evaluate (our recover promise)
+	/// - Returns: a promise
 	public func recover(in context: Context? = nil, _ body: @escaping (Error) throws -> Promise<Value>) -> Promise<Value> {
 		let ctx = context ?? .background
 		return Promise<Value>(in: ctx, { resolve, reject in

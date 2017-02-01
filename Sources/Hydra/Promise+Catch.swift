@@ -34,6 +34,13 @@ import Foundation
 
 public extension Promise {
 	
+	
+	/// Catches an error in a Promise chain.
+	///
+	/// - Parameters:
+	///   - context: context in which the body is executed
+	///   - body: body to execute
+	/// - Returns: a promise
 	@discardableResult
 	public func `catch`(in context: Context? = nil, _ body: @escaping ((Error) throws -> (Void))) -> Promise<Void> {
 		let ctx = context ?? .background

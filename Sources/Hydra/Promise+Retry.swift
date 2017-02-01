@@ -33,22 +33,42 @@
 import Foundation
 
 public extension Promise {
-
+	
+	/// `retry` operator allows you to execute source chained promise if it ends with a rejection.
+	/// If reached the attempts the promise still rejected chained promise is also rejected along with
+	/// the same source error.
+	///
+	/// - Parameter attempts: number of retry attempts for source promise (must be a number > 1, otherwise promise is rejected with `PromiseError.invalidInput` error.
+	/// - Returns: a promise which resolves when the first attempt to resolve source promise is succeded, rejects if none of the attempts ends with a success.
 	public func retry(_ attempts: Int = 3) -> Promise<Value> {
+		guard attempts > 2 else {
+			// Must be a valid attempts number
+			return Promise<Value>(rejected: PromiseError.invalidInput)
+		}
+		
 		var remainingAttempts = attempts
+		// We'll create a next promise which will be resolved when attempts to resolve self (source promise)
+		// is reached (with a fulfill or a rejection).
 		let nextPromise = Promise<Value>(in: self.context) { (resolve, reject) in
-			let onResolve = Observer<Value>.onResolve(self.context, { value in
-				resolve(value)
-			})
+			// If promise resolves nothing else to do, resolve the nextPromise!
+			let onResolve = Observer<Value>.onResolve(self.context, resolve)
 			let onReject = Observer<Value>.onReject(self.context, { error in
+				// If promise is rejected we'll decrement the attempts counter
 				remainingAttempts -= 1
 				guard remainingAttempts > 0 else {
+					// if the max number of attempts is reached
+					// we will end nextPromise with the last seen error
 					reject(error)
 					return
 				}
+				// Reset the state of the promise
+				// (okay it's true, a Promise cannot change state as you know...this
+				// is a bit trick which will remain absolutely internal to the library itself)
 				self.resetState()
+				// Re-execute the body of the source promise to re-execute the async operation
 				self.runBody()
 			})
+			// Observe changes from source promise
 			self.add(observers: onResolve,onReject)
 			self.runBody()
 		}
