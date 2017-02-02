@@ -41,7 +41,7 @@ public extension Promise {
 	/// - Parameter attempts: number of retry attempts for source promise (must be a number > 1, otherwise promise is rejected with `PromiseError.invalidInput` error.
 	/// - Returns: a promise which resolves when the first attempt to resolve source promise is succeded, rejects if none of the attempts ends with a success.
 	public func retry(_ attempts: Int = 3) -> Promise<Value> {
-		guard attempts > 2 else {
+		guard attempts >= 1 else {
 			// Must be a valid attempts number
 			return Promise<Value>(rejected: PromiseError.invalidInput)
 		}
@@ -55,7 +55,7 @@ public extension Promise {
 			let onReject = Observer<Value>.onReject(self.context, { error in
 				// If promise is rejected we'll decrement the attempts counter
 				remainingAttempts -= 1
-				guard remainingAttempts > 0 else {
+				guard remainingAttempts >= 0 else {
 					// if the max number of attempts is reached
 					// we will end nextPromise with the last seen error
 					reject(error)

@@ -243,6 +243,7 @@ public class Promise<Value> {
 		}
 	}
 	
+	/// Reset the state of the promise
 	internal func resetState() {
 		self.stateQueue.sync {
 			self.bodyCalled = false
