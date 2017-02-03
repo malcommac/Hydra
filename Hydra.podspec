@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name = 'Hydra'
-  spec.version = '0.8.0'
+  spec.version = '0.9.0'
   spec.summary = 'Promises & Await in Swift: Write better async code!'
   spec.homepage = 'https://github.com/malcommac/Hydra'
   spec.license = { :type => 'MIT', :file => 'LICENSE' }
