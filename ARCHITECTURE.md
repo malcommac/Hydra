@@ -332,4 +332,40 @@ If `currentPromise` fail we want to abort the entire chain and forward the error
 If `currentPromise` resolves we decrement the number of remaining promises; if all promises are settled we use a simple `map` operator to get the result of all promises and resolve `allPromise` with that array.
 
 ### `map()`
-`map` operator transform an array of objects into Promises and execute them; execution could be parallel or serial; it resolves when all promises resolves, fail if at least one promise fail. Behaviour is pretty similar to  
+`map` operator transform an array of objects into Promises and execute them; execution could be parallel or serial; it resolves when all promises resolves, fail if at least one promise fail. As you can easily guess parallel behaviour is pretty similar to `all` and, in fact, I've implemented it with it:
+
+```swift
+internal func map_parallel<A, B, S: Sequence>(context: Context, items: S, transform: @escaping (A) throws -> Promise<B>) -> Promise<[B]> where S.Iterator.Element == A {
+	let transformPromise = Promise<Void>(resolved: ())
+	return transformPromise.then(in: context) { (Void) -> Promise<[B]> in
+		do {
+			let mappedPromises: [Promise<B>] = try items.map({ item in
+				return try transform(item)
+			})
+			return all(mappedPromises)
+		} catch let error {
+			return Promise<[B]>(rejected: error)
+		}
+	}
+}
+```
+
+First of all, as output of the `map` we return a `transformPromise` which will be resolved when all input promises are fulfilled.
+
+Using standard Swift's `map` function we iterate over all input items and call `transform`; as output from this closure we expect a Promise (which, at least ideally, it's based upon the input item).
+At the end of the map we got `mappedPromise`, an array of Promises we can resolve using `all` operator which also resolve the `transformPromise`.
+
+Serial version is easier to implement:
+
+```swift
+public func map_series<A, B, S: Sequence>(context: Context, items: S, transform: @escaping (A) throws -> Promise<B>) -> Promise<[B]> where S.Iterator.Element == A {
+	let initial = Promise<[B]>(resolved: [])
+	
+	return items.reduce(initial) { chain, item in
+		return chain.then(in: context) { results in
+			try transform(item).then(in: context) { results + [$0] }
+		}
+	}
+}
+```
+
