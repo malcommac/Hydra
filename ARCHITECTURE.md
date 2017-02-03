@@ -148,17 +148,12 @@ The same iteration must be done also after a new observer is added to the queue 
 This is the basic architecture of the Promise: in the next chapter we'll look about how some interested operators are implemented.
 
 ## Looking inside operators
-Before looking into the internals we need to define some elements:
-
 - `sourcePromise` is the promise on the left of an operator
 - `nextPromise` is the promise returned by the operator as the result of its transformation (if any).
 
 ### `.then()`
-`.then` operator is used to get the fulfilled value of a source promise. There are three different `.then` variant based upon the type of `next promise` you will get.
-
-#### `.then` to get resolve a promise and get its fulfilled value
-It's the simplest form of `then`: it does not make any transformation to the output and it can be used only to resolve and get fulfilled value of the `sourcePromise`.
-
+In its simplest form `then` is used to resolve a chain and get the value if it fullfill: it simply defines a closure you can execute for this event but not transformations of the Promise's output are allowed.
+Get a look at implementation:
 
 ```swift
 @discardableResult
@@ -183,22 +178,24 @@ It's the simplest form of `then`: it does not make any transformation to the out
 	}
 ```
 
-Few notes:
+As you can see the behaviour is pretty straightforward.
+`nextPromise` is returned as the output and it has the same type of `sourcePromise`.
 
-- `@discardableResult` is necessary to silent the compiler while you can safely ignore nextPromise as output of the operator.
-- `context` parameter is optional and if not specified we'll use the `main thread` to execute the `body` specified by `then`.
-- the output of `then` is another Promise with the same value; while you can't change it you are still able to reject the chain (this is the reason of `throws` in body signature).
+First of all we need to watch the result of `sourcePromise` inside `nextPromise`: this is done by calling `nextPromise.runBody()` and adding observers via `self.add(...)`).
 
-`.then` behaviour is pretty straightforward: it creates `nextPromise` of the same output type of chained promise. `nextPromise` also needs to get notified about the completion of `sourcePromise`: this is done by adding observers into `sourcePromise`; then if it fails, also `nextPromise` fails with the same error. Instead, if it resolves correctly, `body` is executed: however the code inside may thrown and reject the entire chain.
+The next step is to resolve `sourcePromise` (by calling `self.runBody()`):
 
-Finally `runBody()` is called both on `nextPromise` (to register observer for `sourcePromise` into `nextPromise`) and on `sourcePromise/self` (to resolve it lazily if not executed yet).
+- if successful `body` is executed and it may have the opportunity to reject the chain or accept it (body is throwable).
+- If fail `body` is skipped and the error is simply forwarded to the `nextPromise`.
+
+`@discardableResult` in signature is necessary to silent the compiler while you can safely ignore `nextPromise` as output of the operator.
+`context` parameter is optional and if not specified we'll use the `main thread` to execute the `body` specified by `then`.
 
 #### `then()` to chain with another promise by passing its first argument
 
-Another use of `then` is to resolve `sourcePromise` with a value, then pass it as first argument of another promise. This allows you to do:
-`myAsyncFunc1().then(myAsyncFunc2)`. Resolved value of `myAsyncFunc1` is passed as first arg of `myAsyncFunc2`. This variant is pretty similar to the previous one: the only difference is inside the `onResolve` observer of the `sourcePromise`.
-
-In this case the execution of `body` may fail or return another promise, called `chainedPromise`; the next step is to observe completion of it and forward it t
+Another use of `then` is to resolve `sourcePromise` with a value, then pass it as first argument of another promise (`myAsyncFunc1().then(myAsyncFunc2)`).
+Implementation is pretty similar to the previous one: the big difference is with `onResolve` observer. In this case we expect a Promise as output for `body`; `chainedPromise` must be also resolved by passing the value obtained by `sourcePromise` and the result is forwarded to the `nextPromise`.
+The final output of the operation is a Promise which takes the result of `sourcePromise` and transform it to another type by executing another promise defined into the `body`.
 
 ```swift
 let onResolve = Observer<Value>.onResolve(ctx, { value in
