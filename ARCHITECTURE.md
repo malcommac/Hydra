@@ -1,3 +1,6 @@
+# Architecture of Hydra
+
+
 Asynchronous programming in Objective-C was never been a truly exciting experience.
 We have used delegates for years (I can still remember the first time I’ve seen it, it was around 2001 and I was having fun with Cocoa on my Mac OS X) and not so long ago we have also joined the party of completion handlers.
 However both of these processes does not scale well and does not provide a solid error handling mechanism, especially due to some limitations of the language itself (yeah you can do practically  anything in C but...).
@@ -369,3 +372,50 @@ public func map_series<A, B, S: Sequence>(context: Context, items: S, transform:
 }
 ```
 
+...
+...
+
+## `await`
+The last operator worth to analize is `await`. Using `await` you can write async code in a sync manner:
+
+Due to its closer relationship with GCD queue it's natural to express `await` as function of `Context`: this enable us to say "execute this promise in this queue".
+The implementation of await uses GCD Semaphores which are more performant than traditional semaphores ([Apple docs does an eccellent job describing it](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/OperationQueues.html#//apple_ref/doc/uid/TP40008091-CH102-SW24)).
+We create a `DispatchSemaphore` which has zero initial resources available, then we call `wait` to block the current queue execution. Meanwhile in another queue we have started resolving the target promise; once settled we can store get the result and return it as output of the function.
+If promise fails `await` will throw an exception and report failure reason.
+
+```swift
+public extension Context {
+
+	internal func await<T>(_ promise: Promise<T>) throws -> T {
+		guard self.queue != DispatchQueue.main else {
+			// execute a promise on main context does not make sense
+			throw PromiseError.invalidContext
+		}
+		
+		var result: T?
+		var error: Error?
+		
+		// Create a semaphore to block the execution of the flow until
+		// the promise is fulfilled or rejected
+		let semaphore = DispatchSemaphore(value: 0)
+		
+		promise.then(in: self) { value -> Void in
+			// promise is fulfilled, fillup error and resume code execution
+			result = value
+			semaphore.signal()
+		}.catch(in: self) { err in
+			// promise is rejected, fillup error and resume code execution
+			error = err
+			semaphore.signal()
+		}
+	
+		// Wait and block code execution until promise is fullfilled or rejected
+		_ = semaphore.wait(timeout: DispatchTime(uptimeNanoseconds: UINT64_MAX))
+		
+		guard let promiseValue = result else {
+			throw error!
+		}
+		return promiseValue
+	}
+}
+```

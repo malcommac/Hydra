@@ -119,7 +119,7 @@ public extension Context {
 		}
 	
 		// Wait and block code execution until promise is fullfilled or rejected
-		_ = semaphore.wait(timeout: DispatchTime(uptimeNanoseconds: UINT64_MAX))
+		_ = semaphore.wait(timeout: DispatchTime(uptimeNanoseconds: UInt64.max))
 		
 		guard let promiseValue = result else {
 			throw error!
