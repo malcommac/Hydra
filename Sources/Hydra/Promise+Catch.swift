@@ -38,12 +38,12 @@ public extension Promise {
 	/// Catches an error in a Promise chain.
 	///
 	/// - Parameters:
-	///   - context: context in which the body is executed
+	///   - context: context in which the body is executed (if not specified `.main` is used)
 	///   - body: body to execute
 	/// - Returns: a promise
 	@discardableResult
 	public func `catch`(in context: Context? = nil, _ body: @escaping ((Error) throws -> (Void))) -> Promise<Void> {
-		let ctx = context ?? .background
+		let ctx = context ?? .main
 		let nextPromise = Promise<Void>(in: ctx) { resolve, reject in
 			let onResolve = Observer<Value>.onResolve(ctx, { _ in
 				resolve(())

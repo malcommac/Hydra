@@ -148,6 +148,10 @@ The same iteration must be done also after a new observer is added to the queue 
 This is the basic architecture of the Promise: in the next chapter we'll look about how some interested operators are implemented.
 
 ## Looking inside operators
+It's time to look at how the operators are implemented. For obvious reasons we cannot see all the operators available in Hydra but only a specified interesting subset (you can however get a deep look at the code because it's pretty well documented).
+
+Before starting these are two important definitions:
+
 - `sourcePromise` is the promise on the left of an operator
 - `nextPromise` is the promise returned by the operator as the result of its transformation (if any).
 
@@ -185,17 +189,21 @@ First of all we need to watch the result of `sourcePromise` inside `nextPromise`
 
 The next step is to resolve `sourcePromise` (by calling `self.runBody()`):
 
-- if successful `body` is executed and it may have the opportunity to reject the chain or accept it (body is throwable).
-- If fail `body` is skipped and the error is simply forwarded to the `nextPromise`.
+- if successful, `body` is executed and it may have the opportunity to reject the chain or accept it (this is the reason for throwable `body`).
+- If fail, `body` is skipped and the error is simply forwarded to the `nextPromise`.
 
 `@discardableResult` in signature is necessary to silent the compiler while you can safely ignore `nextPromise` as output of the operator.
-`context` parameter is optional and if not specified we'll use the `main thread` to execute the `body` specified by `then`.
+`context` parameter is optional and if not specified we'll use the `main thread` to execute the `body`.
 
 #### `then()` to chain with another promise by passing its first argument
 
-Another use of `then` is to resolve `sourcePromise` with a value, then pass it as first argument of another promise (`myAsyncFunc1().then(myAsyncFunc2)`).
-Implementation is pretty similar to the previous one: the big difference is with `onResolve` observer. In this case we expect a Promise as output for `body`; `chainedPromise` must be also resolved by passing the value obtained by `sourcePromise` and the result is forwarded to the `nextPromise`.
-The final output of the operation is a Promise which takes the result of `sourcePromise` and transform it to another type by executing another promise defined into the `body`.
+Another use of `then` is to resolve `sourcePromise` with a value, then pass it as first argument of another promise.
+Basically it allows you to do:
+
+(`myAsyncFunc1().then(myAsyncFunc2)`).
+
+Implementation is pretty similar to the previous one: the big difference is inside the `onResolve` observer. In this case we expect a Promise as output for `body`; `chainedPromise` must be also resolved by passing the value obtained by `sourcePromise` as argument while the final result will be forwarded to the `nextPromise`.
+According to it the output of this operator is Promise which takes the result of `sourcePromise`, (optionally) transform it to another type and execute another promise defined into the `body`.
 
 ```swift
 let onResolve = Observer<Value>.onResolve(ctx, { value in
@@ -211,3 +219,37 @@ let onResolve = Observer<Value>.onResolve(ctx, { value in
 })
 ```
 
+### `catch()`
+`catch` is another fundamental operator: it's used to handle the rejection of a `sourcePromise`.
+Take a look at the implmentation:
+
+```swift
+@discardableResult
+public func `catch`(in context: Context? = nil, _ body: @escaping ((Error) throws -> (Void))) -> Promise<Void> {
+	let ctx = context ?? .main
+	let nextPromise = Promise<Void>(in: ctx) { resolve, reject in
+	let onResolve = Observer<Value>.onResolve(ctx, { _ in
+		resolve(())
+	})
+	let onReject = Observer<Value>.onReject(ctx, { error in
+		do {
+			try body(error)
+		} catch let error {
+			reject(error)
+		}
+		resolve(())
+	})
+	self.add(observers: onResolve,onReject)
+}
+nextPromise.runBody()
+self.runBody()
+return nextPromise
+}
+```
+
+Concept is very similar to `then` but in this case we are interested in in handling the rejected state.
+While `onResolve` implementation simply forward the result to the `nextPromise` and along the chain, `onReject` must execute `catch`'s `body`; as like we've seen with `then` even this may reject the chain (in fact it's not a real reject because the chain was already rejected, we can call it a change in output error).
+
+### `retry()`
+`retry` allows you to repeat a failed promise for a number of specified attempts; you can, for example, use it to repeat network connection attempts or failable operations.
+The implementation of this operator introduce a dirty secret: at the beginning we have said which a settled Promise cannot be unsettled; however, in order to make a coincise implementation we have added an internal method which allows us to reset the state of a Promise and re-execute it.
