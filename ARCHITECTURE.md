@@ -1,5 +1,6 @@
 # Architecture of Hydra
 
+<a name="top"/>
 ## Index
 - [Introduction](#introduction)
 - [What's a Promise?](#whatspromise)
@@ -26,12 +27,16 @@ Back in November 2016 I've decided to work on a Promise library just to learn mo
 In this article I would to give a deeper look inside the architecture of my Promise library: [Hydra](https://github.com/malcommac/Hydra) is currently available on GitHub and it's pretty stable to be used in production (along with Unit Tests).
 In this article you will not learn about how to use Hydra in your next killer app but you will learn how it works behind the scenes (by the way a complete documentation for Hydra is available in Github along with the library itself).
 
+[Index](#top)
+
 <a name="whatspromise"/>
 ## What's a Promise?
 A promise is an object that may produce a single value sometime in the future; this value can be the object you are expecting for (ie. a JSON response) or the reason of failure (ie. a networking error).
 A promise may be in one of the following states: `resolved` (or fulfilled), `rejected` or `pending`. A promise starts in pending state and can transit to another of the two states; once settled it cannot be resettled.
 
 Promise's users can attach callbacks (or observers) to get notified about any state change. The most common operators for a Promise are `then` or `catch`, used to get the value of a promise or catch any occurred error. However there are several other operators which simplify a lot how networking code is written, but we'll look at them later.
+
+[Index](#top)
 
 <a name="history"/>
 ## A bit of history
@@ -45,6 +50,8 @@ Main rules for a compliant Promise/A+ implementation are:
 - A pending promise may transition into a fulfilled or rejected state.
 - A fulfilled or rejected is settled, and must not transition into any other state.
 - Once a promise is settled, it must have a value. This value must not change.
+
+[Index](#top)
 
 <a name="internals"/>
 ## Promise class internals
@@ -167,6 +174,8 @@ The next step after setting the `state` is to iterate over all interested observ
 The same iteration must be done also after a new observer is added to the queue (it's implemented in the same way so we don't look at it here).
 This is the basic architecture of the Promise: in the next chapter we'll look about how some interested operators are implemented.
 
+[Index](#top)
+
 <a name="operators"/>
 ## Inside (some) operators
 It's time to look at how the operators are implemented. For obvious reasons we cannot see all the operators available in Hydra but only a specified interesting subset (you can however get a deep look at the code because it's pretty well documented).
@@ -175,6 +184,8 @@ Before starting these are two important definitions:
 
 - `sourcePromise` is the promise on the left of an operator
 - `nextPromise` is the promise returned by the operator as the result of its transformation (if any).
+
+[Index](#top)
 
 <a name="then"/>
 ### `.then()`
@@ -217,6 +228,8 @@ The next step is to resolve `sourcePromise` (by calling `self.runBody()`):
 `@discardableResult` in signature is necessary to silent the compiler while you can safely ignore `nextPromise` as output of the operator.
 `context` parameter is optional and if not specified we'll use the `main thread` to execute the `body`.
 
+[Index](#top)
+
 ### `then()` to chain with another promise by passing its first argument
 
 Another use of `then` is to resolve `sourcePromise` with a value, then pass it as first argument of another promise.
@@ -240,6 +253,8 @@ let onResolve = Observer<Value>.onResolve(ctx, { value in
 	}
 })
 ```
+
+[Index](#top)
 
 <a name="catch"/>
 ### `catch()`
@@ -272,6 +287,8 @@ return nextPromise
 
 Concept is very similar to `then` but in this case we are interested in in handling the rejected state.
 While `onResolve` implementation simply forward the result to the `nextPromise` and along the chain, `onReject` must execute `catch`'s `body`; as like we've seen with `then` even this may reject the chain (in fact it's not a real reject because the chain was already rejected, we can call it a change in output error).
+
+[Index](#top)
 
 <a name="retry"/>
 ### `retry()`
@@ -317,6 +334,8 @@ public func retry(_ attempts: Int = 3) -> Promise<Value> {
 `retry` accepts an `Int` as number of attempts in case `sourcePromise` fails. The key point here is to observe the rejection event; once rejected we need to decrement the number of `remainingAttempts`; if value reaches zero we will forward the rejection along with the last occurred error to `nextPromise` and from that all along the chain.
 If another attempt is possible `sourcePromise` will be resetted (`resetState`) and re-executed (`runBody`).
 
+[Index](#top)
+
 <a name="all"/>
 ### `all()`
 Another interesting operator is `all`; using `all` you can execute a sequence of promises and get the final results along with the ordered array of fulfilled values.
@@ -355,6 +374,8 @@ The first step is to iterate over all promises and register for each an observer
 
 If `currentPromise` fail we want to abort the entire chain and forward the error by calling `reject(err)`; thanks to the nature of Promise is sufficient to abort the entire chain (even if, at least for now, we don't support cancel of a running promise).
 If `currentPromise` resolves we decrement the number of remaining promises; if all promises are settled we use a simple `map` operator to get the result of all promises and resolve `allPromise` with that array.
+
+[Index](#top)
 
 <a name="map"/>
 ### `map()`
@@ -397,6 +418,7 @@ public func map_series<A, B, S: Sequence>(context: Context, items: S, transform:
 
 ...
 ...
+[Index](#top)
 
 <a name="await"/>
 ## `await`
@@ -454,3 +476,5 @@ The flow is:
 - decrement semaphore via `wait`: with a negative value system block the execution of the queue until `signal`.
 - once the promise is settled (in another queue) result or error is saved and a `signal` is sent to the await queue
 - await queue resumes and the value is reported as output (if it's an error a throw is sent)
+
+[Index](#top)
