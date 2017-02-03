@@ -98,6 +98,8 @@ public extension Context {
 	internal func await<T>(_ promise: Promise<T>) throws -> T {
 		guard self.queue != DispatchQueue.main else {
 			// execute a promise on main context does not make sense
+			// dispatch_semaphore_wait should NOT be called on the main thread.
+			// more here: https://medium.com/@valentinkalchev/how-to-pause-and-resume-a-sequence-of-mutating-swift-structs-using-dispatch-semaphore-fc98eca55c0#.ipbujy4k2
 			throw PromiseError.invalidContext
 		}
 		

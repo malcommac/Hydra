@@ -1,6 +1,20 @@
 # Architecture of Hydra
 
+## Index
+- [Introduction](#introduction)
+- [What's a Promise?](#whatspromise)
+- [A bit of history](#history)
+- [Promise class internals](#internals)
+- [Inside (some) operators](#operators)
+	- [then](#then)
+	- [catch](#catch)
+	- [retry](#retry)
+	- [all](#all)
+	- [map](#map)
+	- [await](#await)
 
+<a name="introduction"/>
+### Introduction
 Asynchronous programming in Objective-C was never been a truly exciting experience.
 We have used delegates for years (I can still remember the first time I’ve seen it, it was around 2001 and I was having fun with Cocoa on my Mac OS X) and not so long ago we have also joined the party of completion handlers.
 However both of these processes does not scale well and does not provide a solid error handling mechanism, especially due to some limitations of the language itself (yeah you can do practically  anything in C but...).
@@ -12,13 +26,15 @@ Back in November 2016 I've decided to work on a Promise library just to learn mo
 In this article I would to give a deeper look inside the architecture of my Promise library: [Hydra](https://github.com/malcommac/Hydra) is currently available on GitHub and it's pretty stable to be used in production (along with Unit Tests).
 In this article you will not learn about how to use Hydra in your next killer app but you will learn how it works behind the scenes (by the way a complete documentation for Hydra is available in Github along with the library itself).
 
+<a name="whatspromise"/>
 ## What's a Promise?
 A promise is an object that may produce a single value sometime in the future; this value can be the object you are expecting for (ie. a JSON response) or the reason of failure (ie. a networking error).
 A promise may be in one of the following states: `resolved` (or fulfilled), `rejected` or `pending`. A promise starts in pending state and can transit to another of the two states; once settled it cannot be resettled.
 
 Promise's users can attach callbacks (or observers) to get notified about any state change. The most common operators for a Promise are `then` or `catch`, used to get the value of a promise or catch any occurred error. However there are several other operators which simplify a lot how networking code is written, but we'll look at them later.
 
-## A little bit of history
+<a name="history"/>
+## A bit of history
 The history of Promise starts a long time ago, in early 1980's; first implementations began to appear in languages such as Prolog and MultiLisp as early as the 1980's. The word "Promise" was conied by Barbara Liskov and Liuba Shrira in an academic paper called ["Promises: linguistic support for efficient asynchronous procedure calls in distributed systems"](http://dl.acm.org/citation.cfm?doid=53990.54016) (1988).
 
 As promise interest grew, a new specification for Promise was redcated by the ECMAScript standard: [Promise/A+](https://promisesaplus.com/implementations) was written to define the boundaries and behaviour of a Promise.
@@ -30,7 +46,8 @@ Main rules for a compliant Promise/A+ implementation are:
 - A fulfilled or rejected is settled, and must not transition into any other state.
 - Once a promise is settled, it must have a value. This value must not change.
 
-## How a Promise object is made
+<a name="internals"/>
+## Promise class internals
 Due to the [type-safe](https://www.quora.com/What-does-it-mean-if-a-language-is-type-safe) nature of Swift, it's easy to think to a promise which can return a well defined type of output; with Generics we can easily specify what kind of object we are expecting on promise's settle.
 
 Promise can be initialized in two different ways:
@@ -150,7 +167,8 @@ The next step after setting the `state` is to iterate over all interested observ
 The same iteration must be done also after a new observer is added to the queue (it's implemented in the same way so we don't look at it here).
 This is the basic architecture of the Promise: in the next chapter we'll look about how some interested operators are implemented.
 
-## Looking inside operators
+<a name="operators"/>
+## Inside (some) operators
 It's time to look at how the operators are implemented. For obvious reasons we cannot see all the operators available in Hydra but only a specified interesting subset (you can however get a deep look at the code because it's pretty well documented).
 
 Before starting these are two important definitions:
@@ -158,6 +176,7 @@ Before starting these are two important definitions:
 - `sourcePromise` is the promise on the left of an operator
 - `nextPromise` is the promise returned by the operator as the result of its transformation (if any).
 
+<a name="then"/>
 ### `.then()`
 In its simplest form `then` is used to resolve a chain and get the value if it fullfill: it simply defines a closure you can execute for this event but not transformations of the Promise's output are allowed.
 Get a look at implementation:
@@ -222,6 +241,7 @@ let onResolve = Observer<Value>.onResolve(ctx, { value in
 })
 ```
 
+<a name="catch"/>
 ### `catch()`
 `catch` is another fundamental operator: it's used to handle the rejection of a `sourcePromise`.
 Take a look at the implmentation:
@@ -253,6 +273,7 @@ return nextPromise
 Concept is very similar to `then` but in this case we are interested in in handling the rejected state.
 While `onResolve` implementation simply forward the result to the `nextPromise` and along the chain, `onReject` must execute `catch`'s `body`; as like we've seen with `then` even this may reject the chain (in fact it's not a real reject because the chain was already rejected, we can call it a change in output error).
 
+<a name="retry"/>
 ### `retry()`
 `retry` allows you to repeat a failed promise for a number of specified attempts; you can, for example, use it to repeat network connection attempts or failable operations.
 The implementation of this operator introduce a dirty secret: at the beginning we have said which a settled Promise cannot be unsettled; however, in order to make a coincise implementation we have added an internal method which allows us to reset the state of a Promise and re-execute it.
@@ -296,6 +317,7 @@ public func retry(_ attempts: Int = 3) -> Promise<Value> {
 `retry` accepts an `Int` as number of attempts in case `sourcePromise` fails. The key point here is to observe the rejection event; once rejected we need to decrement the number of `remainingAttempts`; if value reaches zero we will forward the rejection along with the last occurred error to `nextPromise` and from that all along the chain.
 If another attempt is possible `sourcePromise` will be resetted (`resetState`) and re-executed (`runBody`).
 
+<a name="all"/>
 ### `all()`
 Another interesting operator is `all`; using `all` you can execute a sequence of promises and get the final results along with the ordered array of fulfilled values.
 All the promises will be executed in parallel and if one of them fails the entire chain also fail.
@@ -334,6 +356,7 @@ The first step is to iterate over all promises and register for each an observer
 If `currentPromise` fail we want to abort the entire chain and forward the error by calling `reject(err)`; thanks to the nature of Promise is sufficient to abort the entire chain (even if, at least for now, we don't support cancel of a running promise).
 If `currentPromise` resolves we decrement the number of remaining promises; if all promises are settled we use a simple `map` operator to get the result of all promises and resolve `allPromise` with that array.
 
+<a name="map"/>
 ### `map()`
 `map` operator transform an array of objects into Promises and execute them; execution could be parallel or serial; it resolves when all promises resolves, fail if at least one promise fail. As you can easily guess parallel behaviour is pretty similar to `all` and, in fact, I've implemented it with it:
 
@@ -375,41 +398,45 @@ public func map_series<A, B, S: Sequence>(context: Context, items: S, transform:
 ...
 ...
 
+<a name="await"/>
 ## `await`
-The last operator worth to analize is `await`. Using `await` you can write async code in a sync manner:
+The last operator which worth to analyze is `await`. Using `await` you can write async code in a sync manner:
 
-Due to its closer relationship with GCD queue it's natural to express `await` as function of `Context`: this enable us to say "execute this promise in this queue".
-The implementation of await uses GCD Semaphores which are more performant than traditional semaphores ([Apple docs does an eccellent job describing it](https://developer.apple.com/library/content/documentation/General/Conceptual/ConcurrencyProgrammingGuide/OperationQueues/OperationQueues.html#//apple_ref/doc/uid/TP40008091-CH102-SW24)).
-We create a `DispatchSemaphore` which has zero initial resources available, then we call `wait` to block the current queue execution. Meanwhile in another queue we have started resolving the target promise; once settled we can store get the result and return it as output of the function.
-If promise fails `await` will throw an exception and report failure reason.
+```swift
+do {
+	let result = await { asyncFunc1() }
+	let result2 = await { asyncFunc1(result) }
+} catch {
+	// handle error
+}
+```
+
+Due to its closer relationship with GCD queue it's natural to express `await` as extension of `Context`.
+
+If we want any execution to wait or pause until a block of code finishes its execution and frees up the resources, the most logical way to do it is using GCD's dispatch semaphores. A dispatch semaphore works same as regular semaphore. Only one exception is, it takes a lesser amount of time to obtain a dispatch semaphore than it takes with traditional system semaphore when resources are available.
+
+A detailed article about this topic can be [found here](http://www.technetexperts.com/mobile/how-to-pause-or-wait-execution-until-block-executes-with-semaphore-in-ios/) (if you are interested in semaphore theory check out [this article](http://greenteapress.com/semaphores/)).
 
 ```swift
 public extension Context {
 
 	internal func await<T>(_ promise: Promise<T>) throws -> T {
 		guard self.queue != DispatchQueue.main else {
-			// execute a promise on main context does not make sense
 			throw PromiseError.invalidContext
 		}
 		
 		var result: T?
-		var error: Error?
-		
-		// Create a semaphore to block the execution of the flow until
-		// the promise is fulfilled or rejected
+		var error: Error?		
 		let semaphore = DispatchSemaphore(value: 0)
 		
 		promise.then(in: self) { value -> Void in
-			// promise is fulfilled, fillup error and resume code execution
 			result = value
 			semaphore.signal()
 		}.catch(in: self) { err in
-			// promise is rejected, fillup error and resume code execution
 			error = err
 			semaphore.signal()
 		}
 	
-		// Wait and block code execution until promise is fullfilled or rejected
 		_ = semaphore.wait(timeout: DispatchTime(uptimeNanoseconds: UINT64_MAX))
 		
 		guard let promiseValue = result else {
@@ -419,3 +446,11 @@ public extension Context {
 	}
 }
 ```
+
+The flow is:
+
+- create a new semaphore with one resource available
+- start resolving the promise
+- decrement semaphore via `wait`: with a negative value system block the execution of the queue until `signal`.
+- once the promise is settled (in another queue) result or error is saved and a `signal` is sent to the await queue
+- await queue resumes and the value is reported as output (if it's an error a throw is sent)
