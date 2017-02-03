@@ -46,7 +46,7 @@ public extension Promise {
 	/// - Returns: a chainable promise
 	@discardableResult
 	public func then<N>(in context: Context? = nil, _ body: @escaping ( (Value) throws -> N) ) -> Promise<N> {
-		let ctx = context ?? .background
+		let ctx = context ?? .main
 		return self.then(in: ctx, { value in
 			do {
 				// get the value from body (or throws) and
@@ -69,12 +69,12 @@ public extension Promise {
 	/// Executed body can also reject the chain if throws.
 	///
 	/// - Parameters:
-	///   - queue: context in which the queue is executed
+	///   - queue: queue in which the context is executed (if not specified `.main` is used)
 	///   - body: body to execute
 	/// - Returns: chainable promise
 	@discardableResult
 	public func then<N>(in context: Context? = nil, _ body: @escaping ( (Value) throws -> (Promise<N>) )) -> Promise<N> {
-		let ctx = context ?? .background
+		let ctx = context ?? .main
 		let nextPromise = Promise<N>(in: ctx, { resolve, reject in
 			
 			// Observe the resolve of the self promise
@@ -82,21 +82,19 @@ public extension Promise {
 				do {
 					// Pass the value to the body and get back a new promise
 					// with another value
-					let promise = try body(value)
+					let chainedPromise = try body(value)
 					// execute the promise's body and get the result of it
 					let pResolve = Observer<N>.onResolve(ctx, resolve)
 					let pReject = Observer<N>.onReject(ctx, reject)
-					promise.add(observers: pResolve,pReject)
-					promise.runBody()
+					chainedPromise.add(observers: pResolve,pReject)
+					chainedPromise.runBody()
 				} catch let error {
 					reject(error)
 				}
 			})
 			
 			// Observe the reject of the self promise
-			let onReject = Observer<Value>.onReject(ctx, { error in
-				reject(error)
-			})
+			let onReject = Observer<Value>.onReject(ctx, reject)
 			
 			self.add(observers: onResolve,onReject)
 		})
@@ -112,12 +110,12 @@ public extension Promise {
 	/// Returned object is a promise which is able to dispatch both error or resolved value of the promise.
 	///
 	/// - Parameters:
-	///   - queue: queue in which the context is executed
+	///   - queue: queue in which the context is executed (if not specified `.main` is used)
 	///   - body: code block to execute
 	/// - Returns: a chainable promise
 	@discardableResult
 	public func then(in context: Context? = nil, _ body: @escaping ( (Value) throws -> () ) ) -> Promise<Value> {
-		let ctx = context ?? .background
+		let ctx = context ?? .main
 		// This is the simplest `then` is possible to create; it simply execute the body of the
 		// promise, get the value and allows to execute a body. Body can also throw and reject
 		// next chained promise.
@@ -134,18 +132,16 @@ public extension Promise {
 					reject(error)
 				}
 			})
-			
-			let onReject = Observer<Value>.onReject(ctx, { error in
-				// this promise rejects so nextPromise also rejects with the error
-				reject(error)
-			})
+
+			// this promise rejects so nextPromise also rejects with the error
+			let onReject = Observer<Value>.onReject(ctx, reject)
 			self.add(observers: onResolve, onReject)
 		})
 		// execute the body of nextPromise so we can register observer
 		// to this promise and get back value/error once its resolved/rejected.
 		nextPromise.runBody()
-//		// run the body of the self promise. Body is executed only one time; if this
-//		// promise is the main promise it simply execute the core of the promsie functions.
+		// run the body of the self promise. Body is executed only one time; if this
+		// promise is the main promise it simply execute the core of the promsie functions.
 		self.runBody()
 		return nextPromise
 	}
