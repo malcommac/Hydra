@@ -195,7 +195,7 @@ The next step is to resolve `sourcePromise` (by calling `self.runBody()`):
 `@discardableResult` in signature is necessary to silent the compiler while you can safely ignore `nextPromise` as output of the operator.
 `context` parameter is optional and if not specified we'll use the `main thread` to execute the `body`.
 
-#### `then()` to chain with another promise by passing its first argument
+### `then()` to chain with another promise by passing its first argument
 
 Another use of `then` is to resolve `sourcePromise` with a value, then pass it as first argument of another promise.
 Basically it allows you to do:
@@ -253,3 +253,83 @@ While `onResolve` implementation simply forward the result to the `nextPromise` 
 ### `retry()`
 `retry` allows you to repeat a failed promise for a number of specified attempts; you can, for example, use it to repeat network connection attempts or failable operations.
 The implementation of this operator introduce a dirty secret: at the beginning we have said which a settled Promise cannot be unsettled; however, in order to make a coincise implementation we have added an internal method which allows us to reset the state of a Promise and re-execute it.
+
+`resetState()` scope is to set the state to `pending` state and allows `runBody()` to be executed once time again. Both these operation must be done by preserving thread-safe binding, so we will encapsulate it in a sync session of `stateQueue`.
+
+```swift
+internal func resetState() {
+	self.stateQueue.sync {
+		self.bodyCalled = false
+		self.state = .pending
+	}
+}
+```
+
+```swift
+public func retry(_ attempts: Int = 3) -> Promise<Value> {
+	guard attempts >= 1 else {
+		return Promise<Value>(rejected: PromiseError.invalidInput)
+	}
+	var remainingAttempts = attempts
+	let nextPromise = Promise<Value>(in: self.context) { (resolve, reject) in
+	let onResolve = Observer<Value>.onResolve(self.context, resolve)
+	let onReject = Observer<Value>.onReject(self.context, { error in
+		remainingAttempts -= 1
+		guard remainingAttempts >= 0 else {
+			reject(error)
+			return
+		}
+		self.resetState()
+		self.runBody()
+	})
+	self.add(observers: onResolve,onReject)
+		self.runBody()
+	}
+	nextPromise.runBody()
+	return nextPromise
+}
+```
+
+`retry` accepts an `Int` as number of attempts in case `sourcePromise` fails. The key point here is to observe the rejection event; once rejected we need to decrement the number of `remainingAttempts`; if value reaches zero we will forward the rejection along with the last occurred error to `nextPromise` and from that all along the chain.
+If another attempt is possible `sourcePromise` will be resetted (`resetState`) and re-executed (`runBody`).
+
+### `all()`
+Another interesting operator is `all`; using `all` you can execute a sequence of promises and get the final results along with the ordered array of fulfilled values.
+All the promises will be executed in parallel and if one of them fails the entire chain also fail.
+
+```swift
+func all<L, S: Sequence>(_ promises: S) -> Promise<[L]> where S.Iterator.Element == Promise<L> {
+	guard Array(promises).count > 0 else {
+		return Promise<[L]>(resolved: []);
+	}
+	let allPromise = Promise<[L]> { (resolve, reject) in
+		var countRemaining = Array(promises).count
+		let allPromiseContext = Context.custom(queue: DispatchQueue(label: "com.hydra.queue.all"))
+		
+		for currentPromise in promises {
+			currentPromise.add(in: allPromiseContext, onResolve: { value in
+				countRemaining -= 1
+				if countRemaining == 0 {
+					let allResults = promises.map({ return $0.state.value! })
+					resolve(allResults)
+				}
+			}, onReject: { err in
+				reject(err)
+			})
+			currentPromise.runBody()
+		}
+	}
+	return allPromise
+}
+```
+
+By default all promises will be executed in a background parallel queue (`allPromiseContext`); output of the operator is a promise - called `allPromise` - which will be resolved when all input promises succeded or at least one fails.
+`allPromise` has as output an array which, once resolved, contains a list of resolved values in the same order of the input promises.
+
+The first step is to iterate over all promises and register for each an observer for success and failure (done using `currentPromise.add(in:onResolve:onReject:)`).
+
+If `currentPromise` fail we want to abort the entire chain and forward the error by calling `reject(err)`; thanks to the nature of Promise is sufficient to abort the entire chain (even if, at least for now, we don't support cancel of a running promise).
+If `currentPromise` resolves we decrement the number of remaining promises; if all promises are settled we use a simple `map` operator to get the result of all promises and resolve `allPromise` with that array.
+
+### `map()`
+`map` operator transform an array of objects into Promises and execute them; execution could be parallel or serial; it resolves when all promises resolves, fail if at least one promise fail. Behaviour is pretty similar to  

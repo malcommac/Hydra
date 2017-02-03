@@ -65,7 +65,6 @@ func all<L, S: Sequence>(_ promises: S) -> Promise<[L]> where S.Iterator.Element
 				// if currentPromise fulfill
 				// decrement remaining promise to fulfill
 				countRemaining -= 1
-				print("\(countRemaining), \(value)")
 				if countRemaining == 0 {
 					// if all promises are fullfilled we can resolve our chain Promise
 					// with an array of all values results of our input promises (in the same order)
