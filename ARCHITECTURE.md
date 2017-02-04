@@ -1,4 +1,6 @@
-# Architecture of Hydra
+<p align="center" >
+  <img src="https://raw.githubusercontent.com/malcommac/Hydra/develop/architecture.png" width=600px height=320px alt="Hydra" title="Hydra">
+</p>
 
 <a name="top"/>
 ## Index
