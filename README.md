@@ -2,7 +2,7 @@
   <img src="https://raw.githubusercontent.com/malcommac/Hydra/develop/hydra-logo.png" width=210px height=204px alt="Hydra" title="Hydra">
 </p>
 
-[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage) [![CI Status](https://travis-ci.org/malcommac/Hydra.svg)](https://travis-ci.org/malcommac/Hydra) [![Version](https://img.shields.io/cocoapods/v/Hydra.svg?style=flat)](http://cocoadocs.org/docsets/Hydra) [![License](https://img.shields.io/cocoapods/l/Hydra.svg?style=flat)](http://cocoadocs.org/docsets/Hydra) [![Platform](https://img.shields.io/cocoapods/p/Hydra.svg?style=flat)](http://cocoadocs.org/docsets/Hydra)
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage) [![CI Status](https://travis-ci.org/malcommac/HydraAsync.svg)](https://travis-ci.org/malcommac/HydraAsync) [![Version](https://img.shields.io/cocoapods/v/HydraAsync.svg?style=flat)](http://cocoadocs.org/docsets/HydraAsync) [![License](https://img.shields.io/cocoapods/l/HydraAsync.svg?style=flat)](http://cocoadocs.org/docsets/HydraAsync) [![Platform](https://img.shields.io/cocoapods/p/HydraAsync.svg?style=flat)](http://cocoadocs.org/docsets/HydraAsync)
 
 <p align="center" >Love your async code again with Hydra <br/>
 Made with ♥ in pure Swift 3+, no dependencies, lightweight & fully portable
@@ -372,7 +372,7 @@ You can install Swiftline using CocoaPods, carthage and Swift package manager
 
 ### CocoaPods
     use_frameworks!
-    pod 'Hydra'
+    pod 'HydraAsync'
 
 ### Carthage
     github 'malcommac/Hydra'
