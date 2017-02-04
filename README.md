@@ -15,6 +15,9 @@ Hydra is full-featured lightweight library which allows you to write better asyn
 Hydra supports all sexiest operatorsa as like `always`, `validate`, `timeout`, `retry`, `all`, `any`, `pass`, `recover`, `map`, `zip`, `defer` and `retry`.
 Starts writing better async code with Hydra!
 
+## Internals
+A more detailed look at how Hydra works can be found in [ARCHITECTURE](https://github.com/malcommac/Hydra/blob/master/ARCHITECTURE.md) file or on [Medium](https://medium.com/@danielemargutti/hydra-promises-swift-c6319f6a6209).
+
 *With Hydra your code will be cleaner, easy to mantain and sexy as never.*
 
 ## Index
@@ -42,7 +45,7 @@ Starts writing better async code with Hydra!
 <a name="whatspromise" />
 
 ## What's a Promise?
-A Promise is a way to represent a value that will exists, or will fail with an error, at some point in the future. You can think about it as a Swift's `Optional`: it may or may not be a value. A more detailed article which explain how Hydra was implemented can be found here.
+A Promise is a way to represent a value that will exists, or will fail with an error, at some point in the future. You can think about it as a Swift's `Optional`: it may or may not be a value. A more detailed article which explain how Hydra was implemented can be [found here](https://github.com/malcommac/Hydra/blob/master/ARCHITECTURE.md).
 
 Each Promise is strong-typed: this mean you create it with the value's type you are expecting for and you will be sure to receive it when Promise will be resolved (the exact term is `fulfilled`).
 
