@@ -2,6 +2,9 @@
   <img src="https://raw.githubusercontent.com/malcommac/Hydra/develop/architecture.png" width=600px height=320px alt="Hydra" title="Hydra">
 </p>
 
+- *Last Update*: 2017-01-04
+- *Based upon*: Hydra 0.9.0
+
 <a name="top"/>
 ## Index
 - [Introduction](#introduction)
@@ -19,14 +22,14 @@
 <a name="introduction"/>
 ### Introduction
 Asynchronous programming in Objective-C was never been a truly exciting experience.
-We have used delegates for years (I can still remember the first time I’ve seen it, it was around 2001 and I was having fun with Cocoa on my Mac OS X) and not so long ago we have also joined the party of completion handlers.
-However both of these processes does not scale well and does not provide a solid error handling mechanism, especially due to some limitations of the language itself (yeah you can do practically  anything in C but...).
+We have used delegates for years *(I can still remember the first time I’ve seen it, it was around 2001 and I was having fun with Cocoa on my Mac OS X)* and not so long ago we have also joined the party of completion handlers.
+However both of these processes **does not scale well and does not provide a solid error handling mechanism**, especially due to some limitations of the language itself *(yeah you can do practically anything in C but this is out of the scope of this article)*.
 
 It’s damn easy to lost yourself in a callback pyramid of doom and generally your code ends up being not so elegant and not so straightforward to read and maintain.
 
 Promises can help us to write better code and, with the help of constructs like `await/async` it's really a joy to deal with asynchronous programming.
 Back in November 2016 I've decided to work on a Promise library just to learn more about how this concept is implemented and how can I do it with a modern language like Swift.
-In this article I would to give a deeper look inside the architecture of my Promise library: [Hydra](https://github.com/malcommac/Hydra) is currently available on GitHub and it's pretty stable to be used in production (along with Unit Tests).
+In this article I would to give a deeper look inside the architecture of my Promise library: [Hydra](https://github.com/malcommac/Hydra).
 In this article you will not learn about how to use Hydra in your next killer app but you will learn how it works behind the scenes (by the way a complete documentation for Hydra is available in Github along with the library itself).
 
 [Index](#top)
@@ -36,12 +39,12 @@ In this article you will not learn about how to use Hydra in your next killer ap
 A promise is an object that may produce a single value sometime in the future; this value can be the object you are expecting for (ie. a JSON response) or the reason of failure (ie. a networking error).
 A promise may be in one of the following states: `resolved` (or fulfilled), `rejected` or `pending`. A promise starts in pending state and can transit to another of the two states; once settled it cannot be resettled.
 
-Promise's users can attach callbacks (or observers) to get notified about any state change. The most common operators for a Promise are `then` or `catch`, used to get the value of a promise or catch any occurred error. However there are several other operators which simplify a lot how networking code is written, but we'll look at them later.
+Promise's users can attach callbacks (or observers) to get notified about any state change. The most common operators for a Promise are `then` and `catch`, used to get the value of a promise or catch any occurred error. However there are several other operators which simplify a lot how networking code is written, but we'll look at them later.
 
 [Index](#top)
 
 <a name="history"/>
-## A bit of history
+## A little bit of history
 The history of Promise starts a long time ago, in early 1980's; first implementations began to appear in languages such as Prolog and MultiLisp as early as the 1980's. The word "Promise" was conied by Barbara Liskov and Liuba Shrira in an academic paper called ["Promises: linguistic support for efficient asynchronous procedure calls in distributed systems"](http://dl.acm.org/citation.cfm?doid=53990.54016) (1988).
 
 As promise interest grew, a new specification for Promise was redcated by the ECMAScript standard: [Promise/A+](https://promisesaplus.com/implementations) was written to define the boundaries and behaviour of a Promise.
@@ -62,7 +65,7 @@ Due to the [type-safe](https://www.quora.com/What-does-it-mean-if-a-language-is-
 Promise can be initialized in two different ways:
 
 - in `pending` state along with a `context` and a `body`. The `body` of a promise define the async action you want to accomplish; the `context` allows you to set a Grand Central Dispatch queue in which the body is executed.
-- in a settled state (`resolved` or `rejected`) along with a value or an error. Generally you don't need to init a settled promise but it's useful to implements specific behaviour for some custom operators (we'll look at this later).
+- in a `settled` state (`resolved` or `rejected`) along with a value or an error. Generally you don't need to init a settled promise but it's useful to implements specific behaviour for some custom operators (we'll look at this later).
 
 The first case is fairly more interesting to look. First of all: a pending promise is not resolved immediately just after user initialize a new instance but in a lazy way; it simply retain a reference to the `body` closure and the `context` received.
 The `body` closure will be executed only when you attach an operator to the instance (while lots of implementations avoid lazy running Hydra fully supports it).
@@ -184,7 +187,7 @@ It's time to look at how the operators are implemented. For obvious reasons we c
 
 Before starting these are two important definitions:
 
-- `sourcePromise` is the promise on the left of an operator
+- `sourcePromise` is the promise on the left side of the operator
 - `nextPromise` is the promise returned by the operator as the result of its transformation (if any).
 
 [Index](#top)
@@ -237,7 +240,7 @@ The next step is to resolve `sourcePromise` (by calling `self.runBody()`):
 Another use of `then` is to resolve `sourcePromise` with a value, then pass it as first argument of another promise.
 Basically it allows you to do:
 
-(`myAsyncFunc1().then(myAsyncFunc2)`).
+`myAsyncFunc1().then(myAsyncFunc2)`.
 
 Implementation is pretty similar to the previous one: the big difference is inside the `onResolve` observer. In this case we expect a Promise as output for `body`; `chainedPromise` must be also resolved by passing the value obtained by `sourcePromise` as argument while the final result will be forwarded to the `nextPromise`.
 According to it the output of this operator is Promise which takes the result of `sourcePromise`, (optionally) transform it to another type and execute another promise defined into the `body`.
@@ -261,7 +264,7 @@ let onResolve = Observer<Value>.onResolve(ctx, { value in
 <a name="catch"/>
 ### `catch()`
 `catch` is another fundamental operator: it's used to handle the rejection of a `sourcePromise`.
-Take a look at the implmentation:
+Take a look at the implementation:
 
 ```swift
 @discardableResult
@@ -297,7 +300,7 @@ While `onResolve` implementation simply forward the result to the `nextPromise` 
 `retry` allows you to repeat a failed promise for a number of specified attempts; you can, for example, use it to repeat network connection attempts or failable operations.
 The implementation of this operator introduce a dirty secret: at the beginning we have said which a settled Promise cannot be unsettled; however, in order to make a coincise implementation we have added an internal method which allows us to reset the state of a Promise and re-execute it.
 
-`resetState()` scope is to set the state to `pending` state and allows `runBody()` to be executed once time again. Both these operation must be done by preserving thread-safe binding, so we will encapsulate it in a sync session of `stateQueue`.
+`resetState()` scope is to set the state to `pending` and allows `runBody()` to be executed once time again. Both these operation must be done by preserving thread-safe binding, so we will encapsulate it in a sync session of `stateQueue`.
 
 ```swift
 internal func resetState() {
@@ -404,7 +407,7 @@ First of all, as output of the `map` we return a `transformPromise` which will b
 Using standard Swift's `map` function we iterate over all input items and call `transform`; as output from this closure we expect a Promise (which, at least ideally, it's based upon the input item).
 At the end of the map we got `mappedPromise`, an array of Promises we can resolve using `all` operator which also resolve the `transformPromise`.
 
-Serial version is easier to implement:
+Serial version differ a bit: we want to use the then operator to chain returned promise from each trasnformation and put them as result of a single Promise which return an array:
 
 ```swift
 public func map_series<A, B, S: Sequence>(context: Context, items: S, transform: @escaping (A) throws -> Promise<B>) -> Promise<[B]> where S.Iterator.Element == A {
@@ -418,13 +421,11 @@ public func map_series<A, B, S: Sequence>(context: Context, items: S, transform:
 }
 ```
 
-...
-...
 [Index](#top)
 
 <a name="await"/>
 ## `await`
-The last operator which worth to analyze is `await`. Using `await` you can write async code in a sync manner:
+The last operator which worth to be analysed is `await`. Using `await` you can write async code in a sync manner:
 
 ```swift
 do {
