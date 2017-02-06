@@ -18,7 +18,17 @@ Starts writing better async code with Hydra!
 ## Internals
 A more detailed look at how Hydra works can be found in [ARCHITECTURE](https://github.com/malcommac/Hydra/blob/master/ARCHITECTURE.md) file or on [Medium](https://medium.com/@danielemargutti/hydra-promises-swift-c6319f6a6209).
 
-*With Hydra your code will be cleaner, easy to mantain and sexy as never.*
+## You also may like
+
+Do you like `Hydra`? I'm also working on several other opensource libraries.
+
+Take a look here:
+
+* **[SwiftDate](https://github.com/malcommac/SwiftDate)** - Date & Timezone management in Swift
+* **[SwiftLocation](https://github.com/malcommac/SwiftLocation)** - CoreLocation and Beacon Monitoring on steroid!
+* **[SwiftRichString](https://github.com/malcommac/SwiftRichString)** - Elegant and painless attributed string in Swift
+* **[SwiftScanner](https://github.com/malcommac/SwiftScanner)** - String scanner in pure Swift with full unicode support
+* **[SwiftSimplify](https://github.com/malcommac/SwiftSimplify)** - Tiny high-performance Swift Polyline Simplification Library
 
 ## Index
 * **[What's a Promise](#whatspromise)**
