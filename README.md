@@ -150,7 +150,7 @@ Easy uh? (Please note: in this example context is not specified so the default `
 ## Await: async code in sync manner
 Have you ever dream to write asynchronous code like its synchronous counterpart? Hydra was heavily inspired by [Async/Await specification in ES8 (ECMAScript 2017) ](https://github.com/tc39/ecmascript-asyncawait) which provides a powerful way to write async doe in a sequential manner.
 
-Using `await` with Hydraw's Promises is pretty simple: for example the code above can be rewritten directly as:
+Using `await` with Hydra's Promises is pretty simple: for example the code above can be rewritten directly as:
 
 ```swift
 do {
@@ -180,7 +180,7 @@ print("The result is \(result)")
 
 There is also an await operator:
 * **await with throw**: `..` followed by a Promise instance: this operator must be prefixed by `try` and should use `do/catch` statement in order to handle rejection of the Promise.
-* **await without throw**: `..!` followed by a Promise instance: this operator does not throws exceptions; in case of promise's rejection result is nil instead.
+* **await without throw**: `..!` followed by a Promise instance: this operator does not throw exceptions; in case of promise's rejection result is nil instead.
 
 Examples:
 ```swift
