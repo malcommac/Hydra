@@ -180,7 +180,7 @@ print("The result is \(result)")
 
 There is also an await operator:
 * **await with throw**: `..` followed by a Promise instance: this operator must be prefixed by `try` and should use `do/catch` statement in order to handle rejection of the Promise.
-* **await without throw**: `..!` followed by a Promise instance: this operator does not throws exceptions; in case of promise's rejection result is nil instead.
+* **await without throw**: `..!` followed by a Promise instance: this operator does not throw exceptions; in case of promise's rejection result is nil instead.
 
 Examples:
 ```swift
