@@ -77,17 +77,17 @@ This is a simple async image downloader:
 
 ```swift
 func getImage(url: String) -> Promise<UIImage> {
-	return Promise<UIImage>(.background, { resolve, reject in
-		self.dataTask(with: request, completionHandler: { data, response, error in
-        if let error = error {
-            reject(error)
-        } else if let data = data, let response = response as? HTTPURLResponse {
-            fulfill((data, response))
-        } else {
-            reject("Image cannot be decoded")
-        }
-    }).resume()
-	}
+    return Promise<UIImage>(in: .background, { resolve, reject in
+        self.dataTask(with: request, completionHandler: { data, response, error in
+            if let error = error {
+                reject(error)
+            } else if let data = data, let response = response as? HTTPURLResponse {
+                resolve((data, response))
+            } else {
+                reject("Image cannot be decoded")
+            }
+        }).resume()
+    })
 }
 ```
 
