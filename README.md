@@ -412,8 +412,8 @@ Current version is compatible with:
 * Swift 3.0+
 * iOS 8.0 or later
 * tvOS 9.0 or later
-* macOS 10.0 or later
-* watchOS 3.0 or later
+* macOS 10.10 or later
+* watchOS 2.0 or later
 * Linux compatible environments
 
 <a name="credits" />
