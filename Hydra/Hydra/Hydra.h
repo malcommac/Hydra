@@ -6,7 +6,9 @@
 //  Copyright © 2017 Daniele Margutti. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/NSObject.h>
+#import <Foundation/NSDate.h>
+#import <dispatch/dispatch.h>
 
 //! Project version number for Hydra.
 FOUNDATION_EXPORT double HydraVersionNumber;
