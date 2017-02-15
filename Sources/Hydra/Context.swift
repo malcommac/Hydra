@@ -53,14 +53,14 @@ public enum Context {
 	case background
 	case custom(queue: DispatchQueue)
 	
-	var queue: DispatchQueue {
+	public var queue: DispatchQueue {
 		switch self {
-			case .main:					return .main
-			case .userInteractive:		return .global(qos: .userInteractive)
-			case .userInitiated:		return .global(qos: .userInitiated)
-			case .utility:				return .global(qos: .utility)
-			case .background:			return .global(qos: .background)
-			case .custom(let queue):	return queue
+			case .main: return .main
+			case .userInteractive: return .global(qos: .userInteractive)
+			case .userInitiated: return .global(qos: .userInitiated)
+			case .utility: return .global(qos: .utility)
+			case .background: return .global(qos: .background)
+			case .custom(let queue): return queue
 		}
 	}
 	

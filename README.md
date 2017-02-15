@@ -12,13 +12,23 @@ Made with ♥ in pure Swift 3+, no dependencies, lightweight & fully portable
 
 # Hydra
 Hydra is full-featured lightweight library which allows you to write better async code in Swift 3+. It's partially based on [JavaScript A+](https://promisesaplus.com) specs and also implements modern construct like `await` (as seen in [Async/Await specification in ES8 (ECMAScript 2017)](https://github.com/tc39/ecmascript-asyncawait) or C#) which allows you to write async code in sync manner.
-Hydra supports all sexiest operatorsa as like `always`, `validate`, `timeout`, `retry`, `all`, `any`, `pass`, `recover`, `map`, `zip`, `defer` and `retry`.
+Hydra supports all sexiest operators like `always`, `validate`, `timeout`, `retry`, `all`, `any`, `pass`, `recover`, `map`, `zip`, `defer` and `retry`.
 Starts writing better async code with Hydra!
 
 ## Internals
 A more detailed look at how Hydra works can be found in [ARCHITECTURE](https://github.com/malcommac/Hydra/blob/master/ARCHITECTURE.md) file or on [Medium](https://medium.com/@danielemargutti/hydra-promises-swift-c6319f6a6209).
 
-*With Hydra your code will be cleaner, easy to mantain and sexy as never.*
+## You also may like
+
+Do you like `Hydra`? I'm also working on several other opensource libraries.
+
+Take a look here:
+
+* **[SwiftDate](https://github.com/malcommac/SwiftDate)** - Date & Timezone management in Swift
+* **[SwiftLocation](https://github.com/malcommac/SwiftLocation)** - CoreLocation and Beacon Monitoring on steroid!
+* **[SwiftRichString](https://github.com/malcommac/SwiftRichString)** - Elegant and painless attributed string in Swift
+* **[SwiftScanner](https://github.com/malcommac/SwiftScanner)** - String scanner in pure Swift with full unicode support
+* **[SwiftSimplify](https://github.com/malcommac/SwiftSimplify)** - Tiny high-performance Swift Polyline Simplification Library
 
 ## Index
 * **[What's a Promise](#whatspromise)**
@@ -67,17 +77,17 @@ This is a simple async image downloader:
 
 ```swift
 func getImage(url: String) -> Promise<UIImage> {
-	return Promise<UIImage>(.background, { resolve, reject in
-		self.dataTask(with: request, completionHandler: { data, response, error in
-        if let error = error {
-            reject(error)
-        } else if let data = data, let response = response as? HTTPURLResponse {
-            fulfill((data, response))
-        } else {
-            reject("Image cannot be decoded")
-        }
-    }).resume()
-	}
+    return Promise<UIImage>(in: .background, { resolve, reject in
+        self.dataTask(with: request, completionHandler: { data, response, error in
+            if let error = error {
+                reject(error)
+            } else if let data = data, let response = response as? HTTPURLResponse {
+                resolve((data, response))
+            } else {
+                reject("Image cannot be decoded")
+            }
+        }).resume()
+    })
 }
 ```
 
@@ -140,7 +150,7 @@ Easy uh? (Please note: in this example context is not specified so the default `
 ## Await: async code in sync manner
 Have you ever dream to write asynchronous code like its synchronous counterpart? Hydra was heavily inspired by [Async/Await specification in ES8 (ECMAScript 2017) ](https://github.com/tc39/ecmascript-asyncawait) which provides a powerful way to write async doe in a sequential manner.
 
-Using `await` with Hydraw's Promises is pretty simple: for example the code above can be rewritten directly as:
+Using `await` with Hydra's Promises is pretty simple: for example the code above can be rewritten directly as:
 
 ```swift
 do {
@@ -170,7 +180,7 @@ print("The result is \(result)")
 
 There is also an await operator:
 * **await with throw**: `..` followed by a Promise instance: this operator must be prefixed by `try` and should use `do/catch` statement in order to handle rejection of the Promise.
-* **await without throw**: `..!` followed by a Promise instance: this operator does not throws exceptions; in case of promise's rejection result is nil instead.
+* **await without throw**: `..!` followed by a Promise instance: this operator does not throw exceptions; in case of promise's rejection result is nil instead.
 
 Examples:
 ```swift
