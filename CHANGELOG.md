@@ -4,7 +4,16 @@
 
 ## CHANGELOG
 
+* Version **[0.9.2](#092)**
 * Version **[0.9.1](#091)**
+
+<a name="092" />
+
+## Hydra 0.9.2
+---
+- **Release Date**: -
+- **Zipped Version**: [Download 0.9.2](https://github.com/malcommac/Hydra/releases/tag/0.9.2)
+
 
 <a name="091" />
 
