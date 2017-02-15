@@ -30,6 +30,12 @@ Take a look here:
 * **[SwiftScanner](https://github.com/malcommac/SwiftScanner)** - String scanner in pure Swift with full unicode support
 * **[SwiftSimplify](https://github.com/malcommac/SwiftSimplify)** - Tiny high-performance Swift Polyline Simplification Library
 
+## Current Release
+
+Latest release is: 0.9.1 [Download here](https://github.com/malcommac/Hydra/releases/tag/0.9.1).
+
+A complete list of changes for each release is available in the [CHANGELOG](CHANGELOG.md) file.
+
 ## Index
 * **[What's a Promise](#whatspromise)**
 * **[Create a Promise](#createpromise)**
