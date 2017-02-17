@@ -48,3 +48,22 @@ public func async<T>(in context: Context? = nil, _ body: @escaping ( (Void) thro
 		}
 	})
 }
+
+/// This is another variant of `async` which is a simple shortcut to create a new dispatch queue and
+/// execute something in it. It can be used without the concept of the Promises.
+///
+/// - Parameters:
+///   - context: context in which the block will be executed
+///	  - after: allows you to specify a delay interval before executing the block itself.
+///   - block: block to execute
+public func async(in context: Context, after: TimeInterval? = nil, _ block: @escaping (Void) -> (Void)) -> Void {
+	guard let delay = after else {
+		context.queue.async {
+			block()
+		}
+		return
+	}
+	context.queue.asyncAfter(deadline: .now() + delay) { 
+		block()
+	}
+}
