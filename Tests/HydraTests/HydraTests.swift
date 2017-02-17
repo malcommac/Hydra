@@ -474,6 +474,24 @@ class HydraTestThen: XCTestCase {
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
 	
+	// Async Tests
+	
+	func test_async() {
+		let exp = expectation(description: "test_async")
+		let returnValue = 5
+		async { _ -> Int in
+			Thread.sleep(forTimeInterval: 2.0)
+			return returnValue
+		}.then { value in
+			if value == returnValue {
+				exp.fulfill()
+			} else {
+				XCTFail()
+			}
+		}
+		waitForExpectations(timeout: expTimeout, handler: nil)
+	}
+	
 	// Await Tests
 	
 	
