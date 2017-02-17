@@ -156,30 +156,34 @@ Easy uh? (Please note: in this example context is not specified so the default `
 ## Await & Async: async code in sync manner
 Have you ever dream to write asynchronous code like its synchronous counterpart? Hydra was heavily inspired by [Async/Await specification in ES8 (ECMAScript 2017) ](https://github.com/tc39/ecmascript-asyncawait) which provides a powerful way to write async doe in a sequential manner.
 
-Using `await` with Hydra's Promises is pretty simple: for example the code above can be rewritten directly as:
+Using `async` and `await` is pretty simple.
+For example the code above can be rewritten directly as:
 
 ```swift
 // With `async` we have just defined a Promise which will be executed in a given
 // context (if omitted `background` thread is used) and return an Int value.
-let asyncFunc = async({ _ -> Int
+let asyncFunc = async({ _ -> Int // you must specify the return of the Promise, here an Int
 	// With `await` the async code is resolved in a sync manner
 	let loggedUser = try await(loginUser(username,pass))
+	// one promise...
 	let followersList = try await(getFollowers(loggedUser))
+	// after another...
 	let countUnfollowed = try await(unfollow(followersList))
+	// ... linearly
+	// Then our async promise will be resolved with the end value
 	return countUnfollowed
-}).then({ value in
+}).then({ value in // ... and, like a promise, the value is returned
 	print("Unfollowed \(value) users")
 })
 ```
 
 Like magic! Your code will run in `.background` thread and you will get the result of each call only when it will be fulfilled. Async code in sync sauce!
-(You can however pick your custom GCD queue).
 
 **Important Note**: `await` is a blocking/synchronous function implemented using semaphore. Therefore, it should never be called in main thread; this is the reason we have used `async` to encapsulate it. Doing it in main thread will also block the UI.
 
-`async` func is available in two different options:
+`async` func can be used in two different options:
 - it can create and return a promise (as you have seen above)
-- it can be used to execute a block of code (as you will see below)
+- it can be used to simply execute a block of code (as you will see below)
 
 As we said we can also use `async` with your own block (without using promises); `async` accepts the context (a GCD queue) and optionally a start delay interval.
 Below an example of the async function which will be executed without delay in background:
