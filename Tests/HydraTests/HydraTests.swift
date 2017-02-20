@@ -502,7 +502,8 @@ class HydraTestThen: XCTestCase {
 		async(in: .background) {
 			do {
 				let startValue = 5
-				let result1 = try ..self.intPromise(startValue)
+//				let result1 = try ..self.intPromise(startValue)
+				let result1 = try await(self.intPromise(startValue))
 				let result2 = try ..self.intPromiseDelay(result1 * 2, delay: 0.5)
 				let result3 = try ..self.intPromiseDelay(result2 * 2, delay: 0.5)
 				if result3 == startValue * 4 {
