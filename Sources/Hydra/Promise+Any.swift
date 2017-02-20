@@ -39,7 +39,7 @@ import Foundation
 ///   - context: dispatch queue to run the handler on (if not specified `background` context is used)
 ///   - promises: promises to resolve
 /// - Returns: Promise that resolves to first resolved Promise
-func any<L>(in context: Context? = nil, _ promises: Promise<L>...) -> Promise<L> {
+public func any<L>(in context: Context? = nil, _ promises: Promise<L>...) -> Promise<L> {
 	return any(promises)
 }
 
@@ -49,7 +49,7 @@ func any<L>(in context: Context? = nil, _ promises: Promise<L>...) -> Promise<L>
 ///   - context: dispatch queue to run the handler on (if not specified `background` context is used)
 ///   - promises: array of Promises to resolve
 /// - Returns: Promise that resolves to first resolved Promise
-func any<L>(in context: Context? = nil, _ promises: [Promise<L>]) -> Promise<L> {
+public func any<L>(in context: Context? = nil, _ promises: [Promise<L>]) -> Promise<L> {
 	guard Array(promises).count > 0 else {
 		// if number of passed promises is zero a rejected promises is returned
 		return Promise<L>(rejected: PromiseError.invalidInput)
