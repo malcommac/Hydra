@@ -474,6 +474,24 @@ class HydraTestThen: XCTestCase {
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
 	
+	// Async Tests
+	
+	func test_async() {
+		let exp = expectation(description: "test_async")
+		let returnValue = 5
+		async { _ -> Int in
+			Thread.sleep(forTimeInterval: 2.0)
+			return returnValue
+		}.then { value in
+			if value == returnValue {
+				exp.fulfill()
+			} else {
+				XCTFail()
+			}
+		}
+		waitForExpectations(timeout: expTimeout, handler: nil)
+	}
+	
 	// Await Tests
 	
 	
@@ -481,18 +499,21 @@ class HydraTestThen: XCTestCase {
 	/// This test passes if all operation are resolved one after another when the previous is finished
 	func test_await() {
 		let exp = expectation(description: "test_await")
-		do {
-			let startValue = 5
-			let result1 = try ..intPromise(startValue)
-			let result2 = try ..intPromiseDelay(result1 * 2, delay: 0.5)
-			let result3 = try ..intPromiseDelay(result2 * 2, delay: 0.5)
-			if result3 == startValue * 4 {
-				exp.fulfill()
-			} else {
+		async(in: .background) {
+			do {
+				let startValue = 5
+//				let result1 = try ..self.intPromise(startValue)
+				let result1 = try await(self.intPromise(startValue))
+				let result2 = try ..self.intPromiseDelay(result1 * 2, delay: 0.5)
+				let result3 = try ..self.intPromiseDelay(result2 * 2, delay: 0.5)
+				if result3 == startValue * 4 {
+					exp.fulfill()
+				} else {
+					XCTFail()
+				}
+			} catch {
 				XCTFail()
 			}
-		} catch {
-			XCTFail()
 		}
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
@@ -500,14 +521,16 @@ class HydraTestThen: XCTestCase {
 	/// The same test with `async` but here we expect the entire async session fail
 	func test_awaitFailed() {
 		let exp = expectation(description: "test_awaitFailed")
-		do {
-			let startValue = 5
-			let _ = try ..intPromise(startValue)
-			let result2 = try ..intFailedPromise(TestErrors.anotherError)
-			let _ = try ..intPromiseDelay(result2 * 2, delay: 0.5)
-			XCTFail()
-		} catch {
-			exp.fulfill()
+		async(in: .background) {
+			do {
+				let startValue = 5
+				let _ = try ..self.intPromise(startValue)
+				let result2 = try ..self.intFailedPromise(TestErrors.anotherError)
+				let _ = try ..self.intPromiseDelay(result2 * 2, delay: 0.5)
+				XCTFail()
+			} catch {
+				exp.fulfill()
+			}
 		}
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}

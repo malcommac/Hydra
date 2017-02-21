@@ -30,36 +30,40 @@
 *
 */
 
-
 import Foundation
 
-/// Returns a Promise that resolves as soon as one passed in Promise resolves
+/// This method is a shortcut to create a new Promise which, by default, will execute passed body
+/// in a `background` queue (at least if you don't specify a `context`).
 ///
 /// - Parameters:
-///   - context: dispatch queue to run the handler on (if not specified `background` context is used)
-///   - promises: promises to resolve
-/// - Returns: Promise that resolves to first resolved Promise
-public func any<L>(in context: Context? = nil, _ promises: Promise<L>...) -> Promise<L> {
-	return any(promises)
-}
-
-/// Returns a Promise that resolves as soon as one passed in Promise resolves
-///
-/// - Parameters:
-///   - context: dispatch queue to run the handler on (if not specified `background` context is used)
-///   - promises: array of Promises to resolve
-/// - Returns: Promise that resolves to first resolved Promise
-public func any<L>(in context: Context? = nil, _ promises: [Promise<L>]) -> Promise<L> {
-	guard Array(promises).count > 0 else {
-		// if number of passed promises is zero a rejected promises is returned
-		return Promise<L>(rejected: PromiseError.invalidInput)
-	}
-	let anyPromise = Promise<L> { (resolve, reject) in
-		for currentPromise in promises {
-			// first promises which resolve is returned
-			currentPromise.add(in: context, onResolve: resolve, onReject: reject)
+///   - context: context in which the body should be execute
+///   - body: body to execute. To fulfill the promise it should 
+/// - Returns: a new promise
+public func async<T>(in context: Context? = nil, _ body: @escaping ( (Void) throws -> (T)) ) -> Promise<T> {
+	return Promise<T>(in: context, { resolve, reject in
+		do {
+			try resolve(body())
+		} catch {
+			reject(error)
 		}
-	}
-	return anyPromise
+	})
 }
 
+/// This is another variant of `async` which is a simple shortcut to create a new dispatch queue and
+/// execute something in it. It can be used without the concept of the Promises.
+///
+/// - Parameters:
+///   - context: context in which the block will be executed
+///	  - after: allows you to specify a delay interval before executing the block itself.
+///   - block: block to execute
+public func async(in context: Context, after: TimeInterval? = nil, _ block: @escaping (Void) -> (Void)) -> Void {
+	guard let delay = after else {
+		context.queue.async {
+			block()
+		}
+		return
+	}
+	context.queue.asyncAfter(deadline: .now() + delay) { 
+		block()
+	}
+}

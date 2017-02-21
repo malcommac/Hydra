@@ -17,7 +17,8 @@
 		08295D0F1E1E57F0009D32C3 /* Hydra.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08295CC91E1E4ED3009D32C3 /* Hydra.framework */; };
 		086DE7AC1E22473E00B07D59 /* HydraTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086DE7AB1E22473E00B07D59 /* HydraTests.swift */; };
 		0893C5A31E42486200F0029C /* Promise+Retry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0893C5A21E42486200F0029C /* Promise+Retry.swift */; };
-		08E253BB1E4201FA00432D2C /* Await.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E253AA1E4201FA00432D2C /* Await.swift */; };
+		08B8AA911E57629C00205002 /* Promise+Async.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B8AA901E57629C00205002 /* Promise+Async.swift */; };
+		08E253BB1E4201FA00432D2C /* Promise+Await.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E253AA1E4201FA00432D2C /* Promise+Await.swift */; };
 		08E253BC1E4201FA00432D2C /* Commons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E253AB1E4201FA00432D2C /* Commons.swift */; };
 		08E253BD1E4201FA00432D2C /* Context.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E253AC1E4201FA00432D2C /* Context.swift */; };
 		08E253BE1E4201FA00432D2C /* Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E253AD1E4201FA00432D2C /* Promise.swift */; };
@@ -68,7 +69,8 @@
 		08295D091E1E57E5009D32C3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		086DE7AB1E22473E00B07D59 /* HydraTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HydraTests.swift; path = ../../Tests/HydraTests/HydraTests.swift; sourceTree = "<group>"; };
 		0893C5A21E42486200F0029C /* Promise+Retry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Retry.swift"; path = "../Sources/Hydra/Promise+Retry.swift"; sourceTree = "<group>"; };
-		08E253AA1E4201FA00432D2C /* Await.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Await.swift; path = ../Sources/Hydra/Await.swift; sourceTree = "<group>"; };
+		08B8AA901E57629C00205002 /* Promise+Async.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Async.swift"; path = "../Sources/Hydra/Promise+Async.swift"; sourceTree = "<group>"; };
+		08E253AA1E4201FA00432D2C /* Promise+Await.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Await.swift"; path = "../Sources/Hydra/Promise+Await.swift"; sourceTree = "<group>"; };
 		08E253AB1E4201FA00432D2C /* Commons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Commons.swift; path = ../Sources/Hydra/Commons.swift; sourceTree = "<group>"; };
 		08E253AC1E4201FA00432D2C /* Context.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Context.swift; path = ../Sources/Hydra/Context.swift; sourceTree = "<group>"; };
 		08E253AD1E4201FA00432D2C /* Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Promise.swift; path = ../Sources/Hydra/Promise.swift; sourceTree = "<group>"; };
@@ -171,7 +173,6 @@
 			isa = PBXGroup;
 			children = (
 				08E253AD1E4201FA00432D2C /* Promise.swift */,
-				08E253AA1E4201FA00432D2C /* Await.swift */,
 				08E253AB1E4201FA00432D2C /* Commons.swift */,
 				08E253AC1E4201FA00432D2C /* Context.swift */,
 				08E253CC1E4205CD00432D2C /* Operators */,
@@ -197,6 +198,8 @@
 				08E253B81E4201FA00432D2C /* Promise+Timeout.swift */,
 				08E253B91E4201FA00432D2C /* Promise+Validate.swift */,
 				08E253BA1E4201FA00432D2C /* Promise+Zip.swift */,
+				08E253AA1E4201FA00432D2C /* Promise+Await.swift */,
+				08B8AA901E57629C00205002 /* Promise+Async.swift */,
 			);
 			name = Operators;
 			sourceTree = "<group>";
@@ -364,7 +367,8 @@
 				0893C5A31E42486200F0029C /* Promise+Retry.swift in Sources */,
 				08E253C71E4201FA00432D2C /* Promise+Reduce.swift in Sources */,
 				08E253C81E4201FA00432D2C /* Promise+Then.swift in Sources */,
-				08E253BB1E4201FA00432D2C /* Await.swift in Sources */,
+				08B8AA911E57629C00205002 /* Promise+Async.swift in Sources */,
+				08E253BB1E4201FA00432D2C /* Promise+Await.swift in Sources */,
 				08E253BE1E4201FA00432D2C /* Promise.swift in Sources */,
 				08E253C31E4201FA00432D2C /* Promise+Defer.swift in Sources */,
 			);
@@ -530,8 +534,8 @@
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = E5DU3FA699;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_COMPATIBILITY_VERSION = 2;
+				DYLIB_CURRENT_VERSION = 2;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Hydra/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -555,8 +559,8 @@
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = E5DU3FA699;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_COMPATIBILITY_VERSION = 2;
+				DYLIB_CURRENT_VERSION = 2;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Hydra/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";

@@ -41,11 +41,11 @@ import Foundation
 ///   - context: handler queue to run the handler on
 ///   - promises: list of promises to resolve in parallel
 /// - Returns: resolved promise which contains all resolved values from input promises (value are reported in the same order of input promises)
-func all<L>(_ promises: Promise<L>...) -> Promise<[L]> {
+public func all<L>(_ promises: Promise<L>...) -> Promise<[L]> {
 	return all(promises)
 }
 
-func all<L, S: Sequence>(_ promises: S) -> Promise<[L]> where S.Iterator.Element == Promise<L> {
+public func all<L, S: Sequence>(_ promises: S) -> Promise<[L]> where S.Iterator.Element == Promise<L> {
 	guard Array(promises).count > 0 else {
 		// If number of passed promises is zero we want to return a resolved promises with an empty array as result
 		return Promise<[L]>(resolved: []);
