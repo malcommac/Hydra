@@ -11,9 +11,13 @@
 
 ## Hydra 0.9.2
 ---
-- **Release Date**: -
+- **Release Date**: 2017-02-21
 - **Zipped Version**: [Download 0.9.2](https://github.com/malcommac/Hydra/releases/tag/0.9.2)
 
+- [#1](https://github.com/malcommac/Hydra/pull/1) Added `async` function to create new promises or execute a block of code in another context.
+- [#12](https://github.com/malcommac/Hydra/pull/12) `all()` is now visible outside the library.
+- [#10](https://github.com/malcommac/Hydra/pull/10) Fixed an issue while using `await()` due to a constraint with non labeled Swift params.
+- [#13](https://github.com/malcommac/Hydra/pull/13) `any()` is now visible outside the library
 
 <a name="091" />
 
