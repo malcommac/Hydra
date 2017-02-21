@@ -66,7 +66,7 @@ public prefix func ..!<T> (_ promise: Promise<T>) -> T? {
 /// - Returns: fufilled value of the promise
 /// - Throws: throws an exception if promise fails due to an error
 @discardableResult
-public func await<T>(_ context: Context? = nil, _ promise: Promise<T>) throws -> T {
+public func await<T>(in context: Context? = nil, _ promise: Promise<T>) throws -> T {
 	return try (context ?? awaitContext).await(promise)
 }
 
@@ -79,9 +79,9 @@ public func await<T>(_ context: Context? = nil, _ promise: Promise<T>) throws ->
 /// - Returns: the value of the promise
 /// - Throws: an exception if operation fails
 @discardableResult
-public func await<T>(_ context: Context = .background, _ body: @escaping ((_ fulfill: @escaping (T) -> (), _ reject: @escaping (Error) -> () ) throws -> ())) throws -> T {
+public func await<T>(in context: Context = .background, _ body: @escaping ((_ fulfill: @escaping (T) -> (), _ reject: @escaping (Error) -> () ) throws -> ())) throws -> T {
 	let promise = Promise<T>(in: context, body)
-	return try await(context, promise)
+	return try await(in: context, promise)
 }
 
 

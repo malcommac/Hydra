@@ -32,7 +32,7 @@ Take a look here:
 
 ## Current Release
 
-Latest release is: 0.9.1 [Download here](https://github.com/malcommac/Hydra/releases/tag/0.9.1).
+Latest release is: 0.9.2 [Download here](https://github.com/malcommac/Hydra/releases/tag/0.9.2).
 
 A complete list of changes for each release is available in the [CHANGELOG](CHANGELOG.md) file.
 
@@ -41,7 +41,7 @@ A complete list of changes for each release is available in the [CHANGELOG](CHAN
 * **[Create a Promise](#createpromise)**
 * **[How to use a Promise](#howtousepromise)**
 * **[Chaining Multiple Promises](#chaining)**
-* **[Await: async code in sync manner](#await)**
+* **[Await & Async: async code in sync manner](#awaitasync)**
 * **[All Features](#allfeatures)**
 	* **[always](#always)**
 	* **[validate](#validate)**
@@ -151,37 +151,53 @@ loginUser(username,pass).then(getFollowers).then(unfollow).then { count in
 
 Easy uh? (Please note: in this example context is not specified so the default `.main` is used instead).
 
-<a name="await" />
+<a name="awaitasync" />
 
-## Await: async code in sync manner
+## Await & Async: async code in sync manner
 Have you ever dream to write asynchronous code like its synchronous counterpart? Hydra was heavily inspired by [Async/Await specification in ES8 (ECMAScript 2017) ](https://github.com/tc39/ecmascript-asyncawait) which provides a powerful way to write async doe in a sequential manner.
 
-Using `await` with Hydra's Promises is pretty simple: for example the code above can be rewritten directly as:
+Using `async` and `await` is pretty simple.
+For example the code above can be rewritten directly as:
 
 ```swift
-do {
+// With `async` we have just defined a Promise which will be executed in a given
+// context (if omitted `background` thread is used) and return an Int value.
+let asyncFunc = async({ _ -> Int // you must specify the return of the Promise, here an Int
+	// With `await` the async code is resolved in a sync manner
 	let loggedUser = try await(loginUser(username,pass))
+	// one promise...
 	let followersList = try await(getFollowers(loggedUser))
+	// after another...
 	let countUnfollowed = try await(unfollow(followersList))
-	print("Unfollowed \(count) users")
-} catch {
-	print("Something bad has occurred \(error)")
-}
+	// ... linearly
+	// Then our async promise will be resolved with the end value
+	return countUnfollowed
+}).then({ value in // ... and, like a promise, the value is returned
+	print("Unfollowed \(value) users")
+})
 ```
 
 Like magic! Your code will run in `.background` thread and you will get the result of each call only when it will be fulfilled. Async code in sync sauce!
-(You can however pick your custom GCD queue).
 
-You can also use `await` with your own block:
+**Important Note**: `await` is a blocking/synchronous function implemented using semaphore. Therefore, it should never be called in main thread; this is the reason we have used `async` to encapsulate it. Doing it in main thread will also block the UI.
+
+`async` func can be used in two different options:
+- it can create and return a promise (as you have seen above)
+- it can be used to simply execute a block of code (as you will see below)
+
+As we said we can also use `async` with your own block (without using promises); `async` accepts the context (a GCD queue) and optionally a start delay interval.
+Below an example of the async function which will be executed without delay in background:
 
 ```swift
-print("And now some intensive task...")
-let result = try! await(.background, { resolve,reject in
-	delay(10, context: .background, closure: { // jut a trick for our example
-		resolve(5)
+async({
+	print("And now some intensive task...")
+	let result = try! await(.background, { resolve,reject in
+		delay(10, context: .background, closure: { // jut a trick for our example
+			resolve(5)
+		})
 	})
+	print("The result is \(result)")
 })
-print("The result is \(result)")
 ```
 
 There is also an await operator:
@@ -190,18 +206,23 @@ There is also an await operator:
 
 Examples:
 ```swift
-// AWAIT OPERATOR WITH DO/CATCH: `..`
-do {
-	let result_1 = try ..asyncOperation1()
-	let result_2 = try ..asyncOperation2(result_1) // result_1 is always valid
-} catch {
-	// something goes bad with one of these async operations
-}
+async({
+	// AWAIT OPERATOR WITH DO/CATCH: `..`
+	do {
+		let result_1 = try ..asyncOperation1()
+		let result_2 = try ..asyncOperation2(result_1) // result_1 is always valid
+	} catch {
+		// something goes bad with one of these async operations
+	}
+})
 
 // AWAIT OPERATOR WITH NIL-RESULT: `..!`
-let result_1 = ..!asyncOperation1() // may return nil if promise fail. does not throw!
-let result_2 = ..!asyncOperation2(result_1) // you must handle nil case manually
+async({
+	let result_1 = ..!asyncOperation1() // may return nil if promise fail. does not throw!
+	let result_2 = ..!asyncOperation2(result_1) // you must handle nil case manually
+})
 ```
+When you use these methods and you are doing asynchronous, be careful to do nothing in the main thread, otherwise you risk to enter in a deadlock situation.
 
 <a name="allfeature" />
 
