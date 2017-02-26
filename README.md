@@ -299,7 +299,7 @@ Execution of all promises is done in parallel.
 
 ```swift
 let promises = usernameList.map { return getAvatar(username: $0) }
-Promise.all(promises).then { usersAvatars in
+all(promises).then { usersAvatars in
 	// you will get an array of UIImage with the avatars of input
 	// usernames, all in the same order of the input.
 	// Download of the avatar is done in parallel in background!
@@ -374,7 +374,7 @@ Map is used to transform a list of items into promises and resolve them in paral
 `zip` allows you to join different promises (2,3 or 4) and return a tuple with the result of them. Promises are resolved in parallel.
 
 ```swift
-join(getUserProfile(user), getUserAvatar(user), getUserFriends(user))
+Promise<Void>.zip(a: getUserProfile(user), b: getUserAvatar(user), c: getUserFriends(user))
   .then { profile, avatar, friends in
 	// ... let's do something
 }.catch {
