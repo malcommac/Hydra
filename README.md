@@ -406,6 +406,20 @@ myAsyncFunc(param).retry(3).then { value in
 }
 ```
 
+Conditional retry allows you to control retryable if it ends with a rejection.
+
+```swift
+// If myAsyncFunc() fails the operator execute the condition block to check retryable.
+// If return false in condition block, promise state rejected with last catched error.
+myAsyncFunc(param).retry(3) { (remainAttempts, error) -> Bool in
+  return error.isRetryable
+}.then { value in
+	print("Value \(value) got at attempt #\(currentAttempt)")
+}.catch { err in
+	print("Failed to get a value after \(currentAttempt) attempts with error: \(err)")
+}
+```
+
 <a name="installation" />
 
 ## Installation
