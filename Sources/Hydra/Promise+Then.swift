@@ -86,7 +86,7 @@ public extension Promise {
 					// execute the promise's body and get the result of it
 					let pResolve = Observer<N>.onResolve(ctx, resolve)
 					let pReject = Observer<N>.onReject(ctx, reject)
-					chainedPromise.add(observers: pResolve,pReject)
+					chainedPromise.add(observers: pResolve, pReject)
 					chainedPromise.runBody()
 				} catch let error {
 					reject(error)
@@ -96,7 +96,7 @@ public extension Promise {
 			// Observe the reject of the self promise
 			let onReject = Observer<Value>.onReject(ctx, reject)
 			
-			self.add(observers: onResolve,onReject)
+			self.add(observers: onResolve, onReject)
 		})
 		nextPromise.runBody()
 		self.runBody()
