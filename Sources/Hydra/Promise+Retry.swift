@@ -38,9 +38,11 @@ public extension Promise {
 	/// If reached the attempts the promise still rejected chained promise is also rejected along with
 	/// the same source error.
 	///
-	/// - Parameter attempts: number of retry attempts for source promise (must be a number > 1, otherwise promise is rejected with `PromiseError.invalidInput` error.
+	/// - Parameters:
+	///   - attempts: number of retry attempts for source promise (must be a number > 1, otherwise promise is rejected with `PromiseError.invalidInput` error.
+	///   - condition: code block to check retryable source promise
 	/// - Returns: a promise which resolves when the first attempt to resolve source promise is succeded, rejects if none of the attempts ends with a success.
-	public func retry(_ attempts: Int = 3) -> Promise<Value> {
+    public func retry(_ attempts: Int = 3, _ condition: @escaping ((Int, Error) throws -> Bool) = { _ in true }) -> Promise<Value> {
 		guard attempts >= 1 else {
 			// Must be a valid attempts number
 			return Promise<Value>(rejected: PromiseError.invalidInput)
@@ -61,6 +63,17 @@ public extension Promise {
 					reject(error)
 					return
 				}
+				// If promise is rejected we will check condition that is retryable
+				do {
+					guard try condition(remainingAttempts, error) else {
+						reject(error)
+						return
+					}
+				} catch(_) {
+					// reject soruce promise error
+					reject(error)
+					return
+				}
 				// Reset the state of the promise
 				// (okay it's true, a Promise cannot change state as you know...this
 				// is a bit trick which will remain absolutely internal to the library itself)
@@ -69,7 +82,7 @@ public extension Promise {
 				self.runBody()
 			})
 			// Observe changes from source promise
-			self.add(observers: onResolve,onReject)
+			self.add(observers: onResolve, onReject)
 			self.runBody()
 		}
 		nextPromise.runBody()
