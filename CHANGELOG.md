@@ -16,6 +16,7 @@
 - **Zipped Version**: [Download 0.9.3](https://github.com/malcommac/Hydra/releases/tag/0.9.3)
 
 - [#15](https://github.com/malcommac/Hydra/pull/15) Added conditional block to retry operator to determine whether retry is possible
+- [#14](https://github.com/malcommac/Hydra/pull/14) Minor fixes for documentation (`zip` and `all` funcs)
 
 <a name="092" />
 
