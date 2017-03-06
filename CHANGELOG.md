@@ -12,7 +12,7 @@
 
 ## Hydra 0.9.3
 ---
-- **Release Date**: 2017-03-xx
+- **Release Date**: 2017-03-06
 - **Zipped Version**: [Download 0.9.3](https://github.com/malcommac/Hydra/releases/tag/0.9.3)
 
 - [#15](https://github.com/malcommac/Hydra/pull/15) Added conditional block to retry operator to determine whether retry is possible
