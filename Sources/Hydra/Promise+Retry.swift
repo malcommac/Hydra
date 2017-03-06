@@ -69,7 +69,7 @@ public extension Promise {
 				self.runBody()
 			})
 			// Observe changes from source promise
-			self.add(observers: onResolve,onReject)
+			self.add(observers: onResolve, onReject)
 			self.runBody()
 		}
 		nextPromise.runBody()
