@@ -4,8 +4,18 @@
 
 ## CHANGELOG
 
+* Version **[0.9.3](#093)**
 * Version **[0.9.2](#092)**
 * Version **[0.9.1](#091)**
+
+<a name="093" />
+
+## Hydra 0.9.3
+---
+- **Release Date**: 2017-03-xx
+- **Zipped Version**: [Download 0.9.3](https://github.com/malcommac/Hydra/releases/tag/0.9.3)
+
+- [#15](https://github.com/malcommac/Hydra/pull/15) Added conditional block to retry operator to determine whether retry is possible
 
 <a name="092" />
 
