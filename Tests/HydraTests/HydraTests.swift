@@ -602,6 +602,42 @@ class HydraTestThen: XCTestCase {
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
 	
+	func test_retry_condition() {
+		let exp = expectation(description: "test_retry_condition")
+		
+		let retryAttempts = 5
+		let successOnAttempt = 5
+		let retryableRemainAttempt = 2
+		var currentAttempt = 0
+		Promise<Int> { (resolve, reject) in
+			currentAttempt += 1
+			if currentAttempt < successOnAttempt {
+				print("attempt is \(currentAttempt)... reject")
+				reject(TestErrors.anotherError)
+			} else {
+				print("attempt is \(currentAttempt)... resolve")
+				resolve(5)
+			}
+		}.retry(retryAttempts) { (remainAttempts, error) -> Bool in
+			if remainAttempts > retryableRemainAttempt {
+				print("retry remainAttempts is \(remainAttempts)... true")
+				return true
+			} else {
+				print("retry remainAttempts is \(remainAttempts)... false")
+				return false
+			}
+		}.then { value in
+			print("value \(value) at attempt \(currentAttempt)")
+			XCTFail()
+		}.catch { err in
+			print("failed \(err) at attempt \(currentAttempt)")
+    		XCTAssertEqual(currentAttempt, 3)
+			exp.fulfill()
+		}
+		
+		waitForExpectations(timeout: expTimeout, handler: nil)
+	}
+	
 	//MARK: Helper
 	
 	func intFailedPromise(_ error: Error) -> Promise<Int> {

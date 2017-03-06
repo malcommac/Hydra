@@ -56,7 +56,7 @@ public extension Promise {
 				}
 				resolve(())
 			})
-			self.add(observers: onResolve,onReject)
+			self.add(observers: onResolve, onReject)
 		}
 		nextPromise.runBody()
 		self.runBody()

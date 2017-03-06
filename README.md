@@ -300,7 +300,7 @@ Execution of all promises is done in parallel.
 
 ```swift
 let promises = usernameList.map { return getAvatar(username: $0) }
-Promise.all(promises).then { usersAvatars in
+all(promises).then { usersAvatars in
 	// you will get an array of UIImage with the avatars of input
 	// usernames, all in the same order of the input.
 	// Download of the avatar is done in parallel in background!
@@ -375,7 +375,7 @@ Map is used to transform a list of items into promises and resolve them in paral
 `zip` allows you to join different promises (2,3 or 4) and return a tuple with the result of them. Promises are resolved in parallel.
 
 ```swift
-join(getUserProfile(user), getUserAvatar(user), getUserFriends(user))
+Promise<Void>.zip(a: getUserProfile(user), b: getUserAvatar(user), c: getUserFriends(user))
   .then { profile, avatar, friends in
 	// ... let's do something
 }.catch {
@@ -400,6 +400,20 @@ If reached the attempts the promise still rejected chained promise is also rejec
 // try to execute myAsyncFunc(); if it fails the operator try two other times
 // If there is not luck for you the promise itself fails with the last catched error.
 myAsyncFunc(param).retry(3).then { value in
+	print("Value \(value) got at attempt #\(currentAttempt)")
+}.catch { err in
+	print("Failed to get a value after \(currentAttempt) attempts with error: \(err)")
+}
+```
+
+Conditional retry allows you to control retryable if it ends with a rejection.
+
+```swift
+// If myAsyncFunc() fails the operator execute the condition block to check retryable.
+// If return false in condition block, promise state rejected with last catched error.
+myAsyncFunc(param).retry(3) { (remainAttempts, error) -> Bool in
+  return error.isRetryable
+}.then { value in
 	print("Value \(value) got at attempt #\(currentAttempt)")
 }.catch { err in
 	print("Failed to get a value after \(currentAttempt) attempts with error: \(err)")
