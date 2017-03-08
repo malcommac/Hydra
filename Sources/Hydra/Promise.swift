@@ -138,7 +138,7 @@ public class Promise<Value> {
 	/// In order to be runnable, the state of the promise must be pending and the body itself must not be called another time.
 	internal func runBody() {
 		self.stateQueue.sync {
-			if state.isPending == false || bodyCalled == true {
+			if !state.isPending || bodyCalled {
 				return
 			}
 			bodyCalled = true
