@@ -48,7 +48,7 @@ public func all<L>(_ promises: Promise<L>...) -> Promise<[L]> {
 public func all<L, S: Sequence>(_ promises: S) -> Promise<[L]> where S.Iterator.Element == Promise<L> {
 	guard Array(promises).count > 0 else {
 		// If number of passed promises is zero we want to return a resolved promises with an empty array as result
-		return Promise<[L]>(resolved: []);
+		return Promise<[L]>(resolved: [])
 	}
 	
 	// We want to create a Promise which groups all input Promises and return only

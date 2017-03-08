@@ -36,7 +36,7 @@ public class Promise<Value> {
 	
 	public typealias Resolved = (Value) -> ()
 	public typealias Rejector = (Error) -> ()
-	public typealias Body = ((_ resolve: @escaping (Value) -> (), _ reject: @escaping (Error) -> () ) throws -> ())
+	public typealias Body = ((_ resolve: @escaping Resolved, _ reject: @escaping Rejector) throws -> ())
 
 	/// State of the Promise. Initially a promise has a `pending` state.
 	internal var state: State<Value> = .pending
