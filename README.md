@@ -309,6 +309,17 @@ all(promises).then { usersAvatars in
 }
 ```
 
+If you add promise execution concurrency restriction to `all` operator  to avoid many usage of resource, `concurrency` option is it.
+
+```swift
+let promises = usernameList.map { return getAvatar(username: $0) }
+all(promises, concurrency: 4).then { usersAvatars in
+	// results of usersAvatars is same as `all` without concurrency.
+}.catch { err in
+	// something bad has occurred
+}
+```
+
 <a name="any" />
 
 ### any
