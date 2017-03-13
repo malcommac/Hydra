@@ -357,6 +357,21 @@ class HydraTestThen: XCTestCase {
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
 	
+	/// Alternative test for `any`
+	func test_anyAlternative() {
+		let exp = expectation(description: "test_anyWithArray")
+		let promise1 = Promise { resolve, reject in
+			resolve("aaaa")
+		}
+		let promise2 = Promise { resolve, reject in
+			resolve("bbbb")
+		}
+		any(promise1, promise2).then { str in
+			exp.fulfill()
+		}
+		waitForExpectations(timeout: expTimeout, handler: nil)
+	}
+	
 	//MARK: All Tests
 	
 	
