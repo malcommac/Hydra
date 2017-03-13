@@ -402,7 +402,25 @@ class HydraTestThen: XCTestCase {
 		}
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
-
+	
+	/// `all` operator with comcurrency argument test.
+	/// body executable timing will restricted by concurrency.
+	func test_all_with_concurrency() {
+		let exp = expectation(description: "test_all_with_concurrency")
+		var timebasedResults = [Int]()
+		let promise1 = intPromiseDelayWithCompletion(3, delay: 0.5, completion: { timebasedResults.append($0) })
+		let promise2 = intPromiseDelayWithCompletion(12, delay: 0, completion: { timebasedResults.append($0) })
+		all([promise1, promise2], concurrency: 1).then { results in
+			XCTAssertEqual(results[0], 3)
+			XCTAssertEqual(results[1], 12)
+			XCTAssertEqual(timebasedResults[0], promise1.result!)
+			XCTAssertEqual(timebasedResults[1], promise2.result!)
+			exp.fulfill()
+		}.catch { _ in
+			XCTFail()
+		}
+		waitForExpectations(timeout: expTimeout, handler: nil)
+	}
 	
 	/// This is another test with `all` operator.
 	/// This test it's okay if all-promise is rejected because one of the input promise rejects.
@@ -697,6 +715,15 @@ class HydraTestThen: XCTestCase {
 	func intPromiseDelay(_ value: Int = 10, delay: TimeInterval) -> Promise<Int> {
 		return Promise<Int> { resolve, _ in
 			DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + delay, execute: {
+				resolve(value)
+			})
+		}
+	}
+	
+	func intPromiseDelayWithCompletion(_ value: Int = 10, delay: TimeInterval, completion: ((Int) -> Void)? = nil) -> Promise<Int> {
+		return Promise<Int> { resolve, _ in
+			DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + delay, execute: {
+				completion?(value)
 				resolve(value)
 			})
 		}
