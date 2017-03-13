@@ -242,6 +242,20 @@ class HydraTestThen: XCTestCase {
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
 	
+	/// If return rejected promise in `recover` operator, chain to next as its error.
+	func test_recover_failure() {
+		let exp = expectation(description: "test_recover_failure")
+		
+		let errPromise = intFailedPromiseImmediate(TestErrors.anotherError)
+		errPromise.recover { (err) -> Promise<Int> in
+			return Promise<Int>(rejected: TestErrors.someError)
+		}.catch { (e) -> (Void) in
+			XCTAssertEqual(e as! TestErrors, TestErrors.someError)
+			exp.fulfill()
+		}
+		waitForExpectations(timeout: expTimeout, handler: nil)
+	}
+	
 	//MARK: Pass tests
 	
 	
