@@ -200,7 +200,7 @@ Get a look at implementation:
 ```swift
 @discardableResult
 	public func then(in context: Context? = nil, _ body: @escaping ( (Value) throws -> () ) ) -> Promise<Value> {
-		let ctx = context ?? .background
+		let ctx = context ?? .main
 		let nextPromise = Promise<Value>(in: ctx, { resolve, reject in
 			let onResolve = Observer<Value>.onResolve(ctx, { value in
 				do {
