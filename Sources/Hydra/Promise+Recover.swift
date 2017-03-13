@@ -52,7 +52,7 @@ public extension Promise {
 				// Body could return a new valid Promise of the same type or
 				// throws and reject the attempt.
 				do {
-					try body(error).then(in: ctx, resolve)
+					try body(error).then(in: ctx, resolve).catch(in: ctx, reject)
 				} catch (let error) {
 					reject(error)
 				}
