@@ -40,8 +40,8 @@ import Foundation
 /// - Parameters:
 ///   - promises: list of promises to resolve in parallel
 /// - Returns: resolved promise which contains all resolved values from input promises (value are reported in the same order of input promises)
-public func all<L>(_ promises: Promise<L>...) -> Promise<[L]> {
-	return all(promises)
+public func all<L>(_ promises: Promise<L>..., concurrency: UInt = UInt.max) -> Promise<[L]> {
+	return all(promises, concurrency: concurrency)
 }
 
 public func all<L, S: Sequence>(_ promises: S, concurrency: UInt = UInt.max) -> Promise<[L]> where S.Iterator.Element == Promise<L> {

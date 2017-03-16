@@ -424,7 +424,7 @@ class HydraTestThen: XCTestCase {
 		var timebasedResults = [Int]()
 		let promise1 = intPromiseDelayWithCompletion(3, delay: 0.5, completion: { timebasedResults.append($0) })
 		let promise2 = intPromiseDelayWithCompletion(12, delay: 0, completion: { timebasedResults.append($0) })
-		all([promise1, promise2], concurrency: 1).then { results in
+		all(promise1, promise2, concurrency: 1).then { results in
 			XCTAssertEqual(results[0], 3)
 			XCTAssertEqual(results[1], 12)
 			XCTAssertEqual(timebasedResults[0], promise1.result!)
