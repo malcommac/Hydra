@@ -651,6 +651,7 @@ class HydraTestThen: XCTestCase {
 			}
 		}.retry(retryAttempts).then { value in
 			print("value \(value) at attempt \(currentAttempt)")
+			XCTAssertEqual(currentAttempt, 3)
 			exp.fulfill()
 		}.catch { err in
 			print("failed \(err) at attempt \(currentAttempt)")

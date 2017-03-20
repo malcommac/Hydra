@@ -52,27 +52,22 @@ public extension Promise {
 		// We'll create a next promise which will be resolved when attempts to resolve self (source promise)
 		// is reached (with a fulfill or a rejection).
 		let nextPromise = Promise<Value>(in: self.context) { (resolve, reject) in
-			// If promise resolves nothing else to do, resolve the nextPromise!
-			let onResolve = Observer<Value>.onResolve(self.context, resolve)
-			let onReject = Observer<Value>.onReject(self.context, { error in
+			let innerPromise = self.recover(in: self.context) { [unowned self] (error) -> (Promise<Value>) in
 				// If promise is rejected we'll decrement the attempts counter
 				remainingAttempts -= 1
 				guard remainingAttempts >= 0 else {
 					// if the max number of attempts is reached
 					// we will end nextPromise with the last seen error
-					reject(error)
-					return
+					throw error
 				}
 				// If promise is rejected we will check condition that is retryable
 				do {
 					guard try condition(remainingAttempts, error) else {
-						reject(error)
-						return
+						throw error
 					}
 				} catch(_) {
 					// reject soruce promise error
-					reject(error)
-					return
+					throw error
 				}
 				// Reset the state of the promise
 				// (okay it's true, a Promise cannot change state as you know...this
@@ -80,10 +75,14 @@ public extension Promise {
 				self.resetState()
 				// Re-execute the body of the source promise to re-execute the async operation
 				self.runBody()
-			})
+				return self.retry(remainingAttempts, condition)
+			}
+			// If promise resolves nothing else to do, resolve the nextPromise!
+			let onResolve = Observer<Value>.onResolve(self.context, resolve)
+			let onReject = Observer<Value>.onReject(self.context, reject)
 			// Observe changes from source promise
-			self.add(observers: onResolve, onReject)
-			self.runBody()
+			innerPromise.add(observers: onResolve, onReject)
+			innerPromise.runBody()
 		}
 		nextPromise.runBody()
 		return nextPromise
