@@ -713,7 +713,8 @@ class HydraTestThen: XCTestCase {
 			XCTFail()
 		}.catch { err in
 			print("failed \(err) at attempt \(currentAttempt)")
-    		XCTAssertEqual(currentAttempt, 3)
+			XCTAssertEqual(err as! TestErrors, .anotherError)
+			XCTAssertEqual(currentAttempt, 3)
 			exp.fulfill()
 		}
 		
