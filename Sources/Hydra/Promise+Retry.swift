@@ -55,7 +55,7 @@ public extension Promise {
 			let innerPromise = self.recover(in: self.context) { [unowned self] (error) -> (Promise<Value>) in
 				// If promise is rejected we'll decrement the attempts counter
 				remainingAttempts -= 1
-				guard remainingAttempts >= 0 else {
+				guard remainingAttempts >= 1 else {
 					// if the max number of attempts is reached
 					// we will end nextPromise with the last seen error
 					throw error
