@@ -45,7 +45,7 @@ Promise's users can attach callbacks (or observers) to get notified about any st
 
 <a name="history"/>
 ## A little bit of history
-The history of Promise starts a long time ago, in early 1980's; first implementations began to appear in languages such as Prolog and MultiLisp as early as the 1980's. The word "Promise" was conied by Barbara Liskov and Liuba Shrira in an academic paper called ["Promises: linguistic support for efficient asynchronous procedure calls in distributed systems"](http://dl.acm.org/citation.cfm?doid=53990.54016) (1988).
+The history of Promise starts a long time ago, in early 1980's; first implementations began to appear in languages such as Prolog and MultiLisp as early as the 1980's. The word "Promise" was coined by Barbara Liskov and Liuba Shrira in an academic paper called ["Promises: linguistic support for efficient asynchronous procedure calls in distributed systems"](http://dl.acm.org/citation.cfm?doid=53990.54016) (1988).
 
 As promise interest grew, a new specification for Promise was redcated by the ECMAScript standard: [Promise/A+](https://promisesaplus.com/implementations) was written to define the boundaries and behaviour of a Promise.
 
@@ -113,7 +113,7 @@ As you can see we define the following properties:
 - `stateQueue`: this is a GCD internal queue used to keep Promise class thread safe: as we said Promise cannot change from a settled state. Any change to `state` property must be done synchronously and this queue is used to ensure this binding.
 - `body`: this is a reference to the closure with the async code we want to execute.
 - `context`: GCD queue in which the `body` will be executed.
-- `observers`: this is an array of registered closures used to receive notifications about any change in Promise's current state. `Observer<Value>` is an enum with two types: first is used to get notification about fulfill events (`.onResolve(ctx: Context, body: (Value -> Void))`); the other is used for rejection (`.onReject(ctx: Context, (Error -> Void))`). Operators register obsever to get notified about promise's events; each observer's body is executed into specified context.
+- `observers`: this is an array of registered closures used to receive notifications about any change in Promise's current state. `Observer<Value>` is an enum with two types: first is used to get notification about fulfill events (`.onResolve(ctx: Context, body: (Value -> Void))`); the other is used for rejection (`.onReject(ctx: Context, (Error -> Void))`). Operators register observer to get notified about promise's events; each observer's body is executed into specified context.
 - `bodyCalled`: we need to ensure Promise's `body` is called once and once time only. As with `state`, also this property is set synchronously using `stateQueue`.
 
 The signature of the `body` exposes two input arguments (`... { resolve, reject in `); when async code return a value or throws an error it must be signal it to the parent Promise by calling one of these functions: once done promise did change the internal state and call any related registered observer (ie. if fulfilled only `.onResolve` observer will be called).
@@ -194,13 +194,13 @@ Before starting these are two important definitions:
 
 <a name="then"/>
 ### `.then()`
-In its simplest form `then` is used to resolve a chain and get the value if it fullfill: it simply defines a closure you can execute for this event but not transformations of the Promise's output are allowed.
+In its simplest form `then` is used to resolve a chain and get the value if it fulfill: it simply defines a closure you can execute for this event but not transformations of the Promise's output are allowed.
 Get a look at implementation:
 
 ```swift
 @discardableResult
 	public func then(in context: Context? = nil, _ body: @escaping ( (Value) throws -> () ) ) -> Promise<Value> {
-		let ctx = context ?? .background
+		let ctx = context ?? .main
 		let nextPromise = Promise<Value>(in: ctx, { resolve, reject in
 			let onResolve = Observer<Value>.onResolve(ctx, { value in
 				do {
@@ -372,7 +372,7 @@ func all<L, S: Sequence>(_ promises: S) -> Promise<[L]> where S.Iterator.Element
 }
 ```
 
-By default all promises will be executed in a background parallel queue (`allPromiseContext`); output of the operator is a promise - called `allPromise` - which will be resolved when all input promises succeded or at least one fails.
+By default all promises will be executed in a background parallel queue (`allPromiseContext`); output of the operator is a promise - called `allPromise` - which will be resolved when all input promises succeeded or at least one fails.
 `allPromise` has as output an array which, once resolved, contains a list of resolved values in the same order of the input promises.
 
 The first step is to iterate over all promises and register for each an observer for success and failure (done using `currentPromise.add(in:onResolve:onReject:)`).
@@ -407,7 +407,7 @@ First of all, as output of the `map` we return a `transformPromise` which will b
 Using standard Swift's `map` function we iterate over all input items and call `transform`; as output from this closure we expect a Promise (which, at least ideally, it's based upon the input item).
 At the end of the map we got `mappedPromise`, an array of Promises we can resolve using `all` operator which also resolve the `transformPromise`.
 
-Serial version differ a bit: we want to use the then operator to chain returned promise from each trasnformation and put them as result of a single Promise which return an array:
+Serial version differ a bit: we want to use the then operator to chain returned promise from each transformation and put them as result of a single Promise which return an array:
 
 ```swift
 public func map_series<A, B, S: Sequence>(context: Context, items: S, transform: @escaping (A) throws -> Promise<B>) -> Promise<[B]> where S.Iterator.Element == A {

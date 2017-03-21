@@ -58,6 +58,7 @@ public func any<L>(in context: Context? = nil, _ promises: [Promise<L>]) -> Prom
 		for currentPromise in promises {
 			// first promises which resolve is returned
 			currentPromise.add(in: context, onResolve: resolve, onReject: reject)
+			currentPromise.runBody()
 		}
 	}
 	return anyPromise
