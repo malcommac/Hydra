@@ -183,6 +183,7 @@ public class Promise<Value> {
 					break
 				}
 			}
+			self.observers.removeAll()
 		}
 	}
 	
@@ -223,12 +224,14 @@ public class Promise<Value> {
 						observer.call(andResolve: value)
 					}
 				})
+				self.observers.removeAll()
 			case .rejected(let err):
 				self.observers.forEach({ observer in
 					if case .onReject(_,_) = observer {
 						observer.call(andReject: err)
 					}
 				})
+				self.observers.removeAll()
 			}
 		}
 	}

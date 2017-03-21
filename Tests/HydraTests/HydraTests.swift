@@ -651,6 +651,7 @@ class HydraTestThen: XCTestCase {
 			}
 		}.retry(retryAttempts).then { value in
 			print("value \(value) at attempt \(currentAttempt)")
+			XCTAssertEqual(currentAttempt, 3)
 			exp.fulfill()
 		}.catch { err in
 			print("failed \(err) at attempt \(currentAttempt)")
@@ -658,6 +659,29 @@ class HydraTestThen: XCTestCase {
 		}
 		
 		waitForExpectations(timeout: expTimeout, handler: nil)
+	}
+	
+	func test_retry_allFailure() {
+		let exp = expectation(description: "test_retry_allFailure")
+		
+		let retryAttempts = 3
+		var currentAttempt = 0
+		Promise<Int> { (resolve, reject) in
+			currentAttempt += 1
+			print("attempt is \(currentAttempt)... reject")
+			reject(TestErrors.anotherError)
+		}.retry(retryAttempts).then { value in
+			print("value \(value) at attempt \(currentAttempt)")
+			XCTFail()
+		}.catch { err in
+			print("failed \(err) at attempt \(currentAttempt)")
+			XCTAssertEqual(err as! TestErrors, .anotherError)
+			XCTAssertEqual(currentAttempt, 3)
+			exp.fulfill()
+		}
+		
+		waitForExpectations(timeout: expTimeout, handler: nil)
+		
 	}
 	
 	func test_retry_condition() {
@@ -689,7 +713,8 @@ class HydraTestThen: XCTestCase {
 			XCTFail()
 		}.catch { err in
 			print("failed \(err) at attempt \(currentAttempt)")
-    		XCTAssertEqual(currentAttempt, 3)
+			XCTAssertEqual(err as! TestErrors, .anotherError)
+			XCTAssertEqual(currentAttempt, 3)
 			exp.fulfill()
 		}
 		
