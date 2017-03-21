@@ -29,7 +29,7 @@ Take a look here:
 * **[SwiftRichString](https://github.com/malcommac/SwiftRichString)** - Elegant and painless attributed string in Swift
 * **[SwiftScanner](https://github.com/malcommac/SwiftScanner)** - String scanner in pure Swift with full unicode support
 * **[SwiftSimplify](https://github.com/malcommac/SwiftSimplify)** - Tiny high-performance Swift Polyline Simplification Library
-* **[SwiftMsgPack](https://github.com/malcommac/SwiftMsgPack)** - MsgPack Encoder/Decoder in Swit
+* **[SwiftMsgPack](https://github.com/malcommac/SwiftMsgPack)** - MsgPack Encoder/Decoder in Swift
 
 ## Current Release
 
@@ -309,6 +309,17 @@ all(promises).then { usersAvatars in
 }
 ```
 
+If you add promise execution concurrency restriction to `all` operator  to avoid many usage of resource, `concurrency` option is it.
+
+```swift
+let promises = usernameList.map { return getAvatar(username: $0) }
+all(promises, concurrency: 4).then { usersAvatars in
+	// results of usersAvatars is same as `all` without concurrency.
+}.catch { err in
+	// something bad has occurred
+}
+```
+
 <a name="any" />
 
 ### any
@@ -386,7 +397,7 @@ Promise<Void>.zip(a: getUserProfile(user), b: getUserAvatar(user), c: getUserFri
 <a name="defer" />
 
 ### defer
-As name said, `defer` delays the executon of a Promise chain by some number of seconds from current time.
+As name said, `defer` delays the execution of a Promise chain by some number of seconds from current time.
 
 ```swift
 asyncFunc1().defer(.main, 5).then...

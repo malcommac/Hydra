@@ -36,7 +36,7 @@ public class Promise<Value> {
 	
 	public typealias Resolved = (Value) -> ()
 	public typealias Rejector = (Error) -> ()
-	public typealias Body = ((_ resolve: @escaping (Value) -> (), _ reject: @escaping (Error) -> () ) throws -> ())
+	public typealias Body = ((_ resolve: @escaping Resolved, _ reject: @escaping Rejector) throws -> ())
 
 	/// State of the Promise. Initially a promise has a `pending` state.
 	internal var state: State<Value> = .pending
@@ -138,7 +138,7 @@ public class Promise<Value> {
 	/// In order to be runnable, the state of the promise must be pending and the body itself must not be called another time.
 	internal func runBody() {
 		self.stateQueue.sync {
-			if state.isPending == false || bodyCalled == true {
+			if !state.isPending || bodyCalled {
 				return
 			}
 			bodyCalled = true
@@ -174,15 +174,9 @@ public class Promise<Value> {
 			self.state = newState // change state
 			
 			self.observers.forEach { observer in
-				switch (state, observer) {
-				case (.resolved(let value), .onResolve(_,_)):
-					observer.call(andResolve: value)
-				case (.rejected(let error), .onReject(_,_)):
-					observer.call(andReject: error)
-				default:
-					break
-				}
+				observer.call(self.state)
 			}
+			self.observers.removeAll()
 		}
 	}
 	
@@ -214,22 +208,13 @@ public class Promise<Value> {
 	internal func add(observers: Observer<Value>...) {
 		self.stateQueue.sync {
 			self.observers.append(contentsOf: observers)
-			switch self.state {
-			case .pending:
-				break
-			case .resolved(let value):
-				self.observers.forEach({ observer in
-					if case .onResolve(_,_) = observer {
-						observer.call(andResolve: value)
-					}
-				})
-			case .rejected(let err):
-				self.observers.forEach({ observer in
-					if case .onReject(_,_) = observer {
-						observer.call(andReject: err)
-					}
-				})
+			if self.state.isPending {
+				return
 			}
+			self.observers.forEach { observer in
+				observer.call(self.state)
+			}
+			self.observers.removeAll()
 		}
 	}
 

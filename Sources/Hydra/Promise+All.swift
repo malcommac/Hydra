@@ -38,17 +38,16 @@ import Foundation
 /// It rejects as soon as a promises reject for any reason; result reject with returned error.
 ///
 /// - Parameters:
-///   - context: handler queue to run the handler on
 ///   - promises: list of promises to resolve in parallel
 /// - Returns: resolved promise which contains all resolved values from input promises (value are reported in the same order of input promises)
-public func all<L>(_ promises: Promise<L>...) -> Promise<[L]> {
-	return all(promises)
+public func all<L>(_ promises: Promise<L>..., concurrency: UInt = UInt.max) -> Promise<[L]> {
+	return all(promises, concurrency: concurrency)
 }
 
-public func all<L, S: Sequence>(_ promises: S) -> Promise<[L]> where S.Iterator.Element == Promise<L> {
-	guard Array(promises).count > 0 else {
+public func all<L, S: Sequence>(_ promises: S, concurrency: UInt = UInt.max) -> Promise<[L]> where S.Iterator.Element == Promise<L> {
+	guard Array(promises).count > 0, concurrency > 0 else {
 		// If number of passed promises is zero we want to return a resolved promises with an empty array as result
-		return Promise<[L]>(resolved: []);
+		return Promise<[L]>(resolved: [])
 	}
 	
 	// We want to create a Promise which groups all input Promises and return only
@@ -57,6 +56,7 @@ public func all<L, S: Sequence>(_ promises: S) -> Promise<[L]> where S.Iterator.
 	// in the same order of the input promises.
 	let allPromise = Promise<[L]> { (resolve, reject) in
 		var countRemaining = Array(promises).count
+		var countRunningPromises: UInt = 0
 		let allPromiseContext = Context.custom(queue: DispatchQueue(label: "com.hydra.queue.all"))
 		
 		for currentPromise in promises {
@@ -70,12 +70,18 @@ public func all<L, S: Sequence>(_ promises: S) -> Promise<[L]> where S.Iterator.
 					// with an array of all values results of our input promises (in the same order)
 					let allResults = promises.map({ return $0.state.value! })
 					resolve(allResults)
+				} else {
+					let nextPromise = promises.first(where: { $0.state.isPending && !$0.bodyCalled })
+					nextPromise?.runBody()
 				}
 				// if currentPromise reject the entire chain is broken and we reject the group Promise itself
 			}, onReject: { err in
 				reject(err)
 			})
-			currentPromise.runBody()
+			if concurrency > countRunningPromises {
+				currentPromise.runBody()
+				countRunningPromises += 1
+			}
 		}
 	}
 	return allPromise

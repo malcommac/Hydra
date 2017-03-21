@@ -93,29 +93,22 @@ internal enum Observer<Value> {
 	case onResolve(_: Context, _: ResolveObserver)
 	case onReject(_: Context, _: RejectObserver)
 	
-	
-	/// Call the observer by passing the resolved value
+	/// Call the observer by state
 	///
-	/// - Parameter value: value
-	func call(andResolve value: Value) {
-		guard case .onResolve(let context, let handler) = self else {
+	/// - Parameter state: State<Value>
+	func call(_ state: State<Value>) {
+		switch (self, state) {
+		case (.onResolve(let context, let handler), .resolved(let value)):
+			context.queue.async {
+				handler(value)
+			}
+		case (.onReject(let context, let handler), .rejected(let error)):
+			context.queue.async {
+				handler(error)
+			}
+		default:
 			return
-		}
-		context.queue.async {
-			handler(value)
 		}
 	}
 	
-	
-	/// Call the observer by passing the error
-	///
-	/// - Parameter error: error
-	func call(andReject error: Error) {
-		guard case .onReject(let context, let handler) = self else {
-			return
-		}
-		context.queue.async {
-			handler(error)
-		}
-	}
 }
