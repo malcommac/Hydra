@@ -174,14 +174,7 @@ public class Promise<Value> {
 			self.state = newState // change state
 			
 			self.observers.forEach { observer in
-				switch (state, observer) {
-				case (.resolved(let value), .onResolve(_,_)):
-					observer.call(andResolve: value)
-				case (.rejected(let error), .onReject(_,_)):
-					observer.call(andReject: error)
-				default:
-					break
-				}
+				observer.call(self.state)
 			}
 			self.observers.removeAll()
 		}
@@ -215,24 +208,13 @@ public class Promise<Value> {
 	internal func add(observers: Observer<Value>...) {
 		self.stateQueue.sync {
 			self.observers.append(contentsOf: observers)
-			switch self.state {
-			case .pending:
-				break
-			case .resolved(let value):
-				self.observers.forEach({ observer in
-					if case .onResolve(_,_) = observer {
-						observer.call(andResolve: value)
-					}
-				})
-				self.observers.removeAll()
-			case .rejected(let err):
-				self.observers.forEach({ observer in
-					if case .onReject(_,_) = observer {
-						observer.call(andReject: err)
-					}
-				})
-				self.observers.removeAll()
+			if self.state.isPending {
+				return
 			}
+			self.observers.forEach { observer in
+				observer.call(self.state)
+			}
+			self.observers.removeAll()
 		}
 	}
 
