@@ -71,7 +71,7 @@ public func all<L, S: Sequence>(_ promises: S, concurrency: UInt = UInt.max) -> 
 					let allResults = promises.map({ return $0.state.value! })
 					resolve(allResults)
 				} else {
-					let nextPromise = promises.first(where: { $0.state.isPending && !$0.bodyCalled })
+					let nextPromise = promises.first(where: { $0.state.isPending })
 					nextPromise?.runBody()
 				}
 				// if currentPromise reject the entire chain is broken and we reject the group Promise itself

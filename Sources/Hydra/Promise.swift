@@ -56,10 +56,6 @@ public class Promise<Value> {
 	/// Observers of the promise; define a callback called in specified context with the result of resolve/reject of the promise
 	private var observers: [Observer<Value>] = []
 	
-	/// Is body of the promise called
-	/// It's used to prevent multiple call of the body on operators chaining
-	internal var bodyCalled: Bool = false
-	
 	/// Optional promise identifier
 	public var name: String?
 	
@@ -79,6 +75,14 @@ public class Promise<Value> {
 		}
 	}
 	
+	/// Thread safe property which return if the promise is currently in a `running` state.
+	/// The running promise it's a promise is executing.
+	public var isRunning: Bool {
+		return stateQueue.sync {
+			return self.state.isRunning
+		}
+	}
+	
 	/// Thread safe property which return if the promise is currently in a `pending` state.
 	/// A pending promise it's a promise which is not resolved yet.
 	public var isPending: Bool {
@@ -87,21 +91,18 @@ public class Promise<Value> {
 		}
 	}
 	
-	
-	/// Thread safe property which return if `body` of the promise is already called or not.
-	private var isBodyExecuted: Bool {
+	/// Thread safe property which return if the promise is currently in a `resolved` or `rejected` state.
+	public var isSettled: Bool {
 		return stateQueue.sync {
-			return self.bodyCalled
+			return self.state.isSettled
 		}
 	}
-	
 	
 	/// Initialize a new Promise in a resolved state with given value.
 	///
 	/// - Parameter value: value to set
 	public init(resolved value: Value) {
 		self.state = .resolved(value)
-		self.bodyCalled = true
 	}
 	
 	
@@ -110,7 +111,6 @@ public class Promise<Value> {
 	/// - Parameter error: error to set
 	public init(rejected error: Error) {
 		self.state = .rejected(error)
-		self.bodyCalled = true
 	}
 	
 	
@@ -135,13 +135,13 @@ public class Promise<Value> {
 	}
 	
 	/// Run the body of the promise if necessary
-	/// In order to be runnable, the state of the promise must be pending and the body itself must not be called another time.
+	/// In order to be runnable, the state of the promise must be pending or running and the body itself must not be called another time.
 	internal func runBody() {
 		self.stateQueue.sync {
-			if !state.isPending || bodyCalled {
+			guard state.isPending else {
 				return
 			}
-			bodyCalled = true
+			state = .running
 			
 			// execute the body into given context's gcd queue
 			self.context.queue.async {
@@ -166,9 +166,9 @@ public class Promise<Value> {
 	/// - Parameter newState: new state to set
 	private func set(state newState: State<Value>) {
 		self.stateQueue.sync {
-			// a promise state can be changed only if the current state is pending
+			// a promise state can be changed only if the current state is pending or running
 			// once resolved or rejected state cannot be change further.
-			guard self.state.isPending else {
+			if self.state.isSettled {
 				return
 			}
 			self.state = newState // change state
@@ -208,7 +208,7 @@ public class Promise<Value> {
 	internal func add(observers: Observer<Value>...) {
 		self.stateQueue.sync {
 			self.observers.append(contentsOf: observers)
-			if self.state.isPending {
+			guard self.state.isSettled else {
 				return
 			}
 			self.observers.forEach { observer in
@@ -231,7 +231,6 @@ public class Promise<Value> {
 	/// Reset the state of the promise
 	internal func resetState() {
 		self.stateQueue.sync {
-			self.bodyCalled = false
 			self.state = .pending
 		}
 	}
