@@ -41,7 +41,7 @@ public extension Promise {
 	/// If validation returns `false` (or `throws`) promise is rejected and the error is propagated over.
 	///
 	/// - Parameters:
-	///   - queue: queue in which the validation is executed
+	///   - context: context in which the validate is executed (if not specified `background` is used)
 	///   - validate: validate block
 	/// - Returns: promise
 	public func validate(in context: Context? = nil, _ validate: @escaping ((Value) throws -> (Bool))) -> Promise<Value> {

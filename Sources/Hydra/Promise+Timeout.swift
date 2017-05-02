@@ -37,7 +37,7 @@ public extension Promise {
 	/// Reject the receiving Promise if it does not resolve or reject after a given number of seconds
 	///
 	/// - Parameters:
-	///   - queue: queue in which the reject is made
+	///   - context: context in which the nextPromise will be executed (if not specified `background` is used)
 	///   - timeout: timeout expressed in seconds
 	///   - error: error to report, if nil `PromiseError.timeout` is used instead
 	/// - Returns: promise

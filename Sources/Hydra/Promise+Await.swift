@@ -74,7 +74,7 @@ public func await<T>(in context: Context? = nil, _ promise: Promise<T>) throws -
 /// call `resolve` or `reject` in order to complete it.
 ///
 /// - Parameters:
-///   - context: context in which the body will be executed in
+///   - context: context in which the body is executed (if not specified `background` is used)
 ///   - body: closure to execute
 /// - Returns: the value of the promise
 /// - Throws: an exception if operation fails

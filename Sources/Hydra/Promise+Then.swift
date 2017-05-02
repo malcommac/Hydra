@@ -41,7 +41,7 @@ public extension Promise {
 	/// Executed body can also reject the chain if throws.
 	///
 	/// - Parameters:
-	///   - queue: context in which the queue is executed
+	///   - context: context in which the body is executed (if not specified `main` is used)
 	///   - body: block to execute
 	/// - Returns: a chainable promise
 	@discardableResult
@@ -69,7 +69,7 @@ public extension Promise {
 	/// Executed body can also reject the chain if throws.
 	///
 	/// - Parameters:
-	///   - queue: queue in which the context is executed (if not specified `.main` is used)
+	///   - context: context in which the body is executed (if not specified `main` is used)
 	///   - body: body to execute
 	/// - Returns: chainable promise
 	@discardableResult
@@ -110,7 +110,7 @@ public extension Promise {
 	/// Returned object is a promise which is able to dispatch both error or resolved value of the promise.
 	///
 	/// - Parameters:
-	///   - queue: queue in which the context is executed (if not specified `.main` is used)
+	///   - context: context in which the body is executed (if not specified `main` is used)
 	///   - body: code block to execute
 	/// - Returns: a chainable promise
 	@discardableResult

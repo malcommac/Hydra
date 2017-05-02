@@ -39,7 +39,7 @@ public extension Promise {
 	/// This operation does not effect the result value of the promise but it's able to reject the chain.
 	///
 	/// - Parameters:
-	///   - queue: queue in which the body is executed
+	///   - context: context in which the body is executed (if not specified `background` is used)
 	///   - body: body to execute
 	/// - Returns: a promise
 	public func pass<A>(in context: Context? = nil, _ body: @escaping (Value) throws -> Promise<A>) -> Promise<Value> {
@@ -55,7 +55,7 @@ public extension Promise {
 	/// This operation does not effect the result value of the promise but it's able to reject the chain.
 	///
 	/// - Parameters:
-	///   - queue: queue in which the body is executed
+	///   - context: context in which the body is executed (if not specified `background` is used)
 	///   - body: body to execute
 	/// - Returns: a promise
 	public func pass(in context: Context? = nil, _ handler: @escaping (Value) throws -> Void) -> Promise<Value> {
