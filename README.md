@@ -163,7 +163,7 @@ For example the code above can be rewritten directly as:
 ```swift
 // With `async` we have just defined a Promise which will be executed in a given
 // context (if omitted `background` thread is used) and return an Int value.
-let asyncFunc = async({ _ -> Int // you must specify the return of the Promise, here an Int
+let asyncFunc = async({ _ -> Int in // you must specify the return of the Promise, here an Int
 	// With `await` the async code is resolved in a sync manner
 	let loggedUser = try await(loginUser(username,pass))
 	// one promise...
