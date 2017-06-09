@@ -78,8 +78,8 @@ public extension Promise {
 				return self.retry(remainingAttempts, condition)
 			}
 			// If promise resolves nothing else to do, resolve the nextPromise!
-			let onResolve = Observer<Value>.onResolve(self.context, resolve)
-			let onReject = Observer<Value>.onReject(self.context, reject)
+			let onResolve = Observer.onResolve(self.context, resolve)
+			let onReject = Observer.onReject(self.context, reject)
 			// Observe changes from source promise
 			innerPromise.add(observers: onResolve, onReject)
 			innerPromise.runBody()
