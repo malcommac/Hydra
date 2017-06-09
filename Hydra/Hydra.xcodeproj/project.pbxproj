@@ -35,6 +35,8 @@
 		08E253C91E4201FA00432D2C /* Promise+Timeout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E253B81E4201FA00432D2C /* Promise+Timeout.swift */; };
 		08E253CA1E4201FA00432D2C /* Promise+Validate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E253B91E4201FA00432D2C /* Promise+Validate.swift */; };
 		08E253CB1E4201FA00432D2C /* Promise+Zip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E253BA1E4201FA00432D2C /* Promise+Zip.swift */; };
+		C227188D1EDCFE3200AB10CF /* Promise+State.swift in Sources */ = {isa = PBXBuildFile; fileRef = C227188C1EDCFE3200AB10CF /* Promise+State.swift */; };
+		C227188F1EDCFE6900AB10CF /* Promise+Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C227188E1EDCFE6900AB10CF /* Promise+Observer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,6 +89,8 @@
 		08E253B81E4201FA00432D2C /* Promise+Timeout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Timeout.swift"; path = "../Sources/Hydra/Promise+Timeout.swift"; sourceTree = "<group>"; };
 		08E253B91E4201FA00432D2C /* Promise+Validate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Validate.swift"; path = "../Sources/Hydra/Promise+Validate.swift"; sourceTree = "<group>"; };
 		08E253BA1E4201FA00432D2C /* Promise+Zip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Zip.swift"; path = "../Sources/Hydra/Promise+Zip.swift"; sourceTree = "<group>"; };
+		C227188C1EDCFE3200AB10CF /* Promise+State.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+State.swift"; path = "../Sources/Hydra/Promise+State.swift"; sourceTree = "<group>"; };
+		C227188E1EDCFE6900AB10CF /* Promise+Observer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Promise+Observer.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,6 +177,8 @@
 			isa = PBXGroup;
 			children = (
 				08E253AD1E4201FA00432D2C /* Promise.swift */,
+				C227188C1EDCFE3200AB10CF /* Promise+State.swift */,
+				C227188E1EDCFE6900AB10CF /* Promise+Observer.swift */,
 				08E253AB1E4201FA00432D2C /* Commons.swift */,
 				08E253AC1E4201FA00432D2C /* Context.swift */,
 				08E253CC1E4205CD00432D2C /* Operators */,
@@ -357,6 +363,7 @@
 				08E253BF1E4201FA00432D2C /* Promise+All.swift in Sources */,
 				08E253C01E4201FA00432D2C /* Promise+Always.swift in Sources */,
 				08E253C21E4201FA00432D2C /* Promise+Catch.swift in Sources */,
+				C227188D1EDCFE3200AB10CF /* Promise+State.swift in Sources */,
 				08E253CA1E4201FA00432D2C /* Promise+Validate.swift in Sources */,
 				08E253BC1E4201FA00432D2C /* Commons.swift in Sources */,
 				08E253CB1E4201FA00432D2C /* Promise+Zip.swift in Sources */,
@@ -371,6 +378,7 @@
 				08E253BB1E4201FA00432D2C /* Promise+Await.swift in Sources */,
 				08E253BE1E4201FA00432D2C /* Promise.swift in Sources */,
 				08E253C31E4201FA00432D2C /* Promise+Defer.swift in Sources */,
+				C227188F1EDCFE6900AB10CF /* Promise+Observer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -449,7 +457,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -503,7 +511,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -532,6 +540,7 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
+				CURRENT_PROJECT_VERSION = 5;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = E5DU3FA699;
 				DYLIB_COMPATIBILITY_VERSION = 2;
@@ -557,6 +566,7 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
+				CURRENT_PROJECT_VERSION = 5;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = E5DU3FA699;
 				DYLIB_COMPATIBILITY_VERSION = 2;

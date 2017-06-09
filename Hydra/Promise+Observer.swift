@@ -33,24 +33,39 @@
 
 import Foundation
 
-public extension Promise {
-
-	/// Delay the executon of a Promise chain by some number of seconds from current time
+extension Promise {
+	
+	//MARK: Promise Observer
+	
+	/// This enum represent an observer which receive the state of a promise.
 	///
-	/// - Parameters:
-	///   - context: context in which the body is executed (if not specified `background` is used)
-	///   - seconds: delay time in seconds; execution time is `.now()+seconds`
-	/// - Returns: the Promise to resolve to after the delay
-	public func `defer`(in context: Context? = nil, _ seconds: TimeInterval) -> Promise<Value> {
-		let ctx = context ?? .background
-		return self.then(in: ctx, { value in
-			return Promise<Value> { resolve, _ in
-				let fireTime: DispatchTime = .now() + seconds
-				ctx.queue.asyncAfter(deadline: fireTime) {
-					resolve(value)
+	/// - onResolve: register an handler which is executed only if target promise is fulfilled.
+	/// - onReject: register an handler which is executed only if target promise is rejected.
+	internal indirect enum Observer {
+		typealias ResolveObserver = ((Value) -> (Void))
+		typealias RejectObserver = ((Error) -> (Void))
+		
+		case onResolve(_: Context, _: ResolveObserver)
+		case onReject(_: Context, _: RejectObserver)
+		
+		/// Call the observer by state
+		///
+		/// - Parameter state: State
+		func call(_ state: State) {
+			switch (self, state) {
+			case (.onResolve(let context, let handler), .resolved(let value)):
+				context.queue.async {
+					handler(value)
 				}
+			case (.onReject(let context, let handler), .rejected(let error)):
+				context.queue.async {
+					handler(error)
+				}
+			default:
+				return
 			}
-		})
+		}
+		
 	}
 	
 }
