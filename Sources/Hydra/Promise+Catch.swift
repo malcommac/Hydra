@@ -45,10 +45,10 @@ public extension Promise {
 	public func `catch`(in context: Context? = nil, _ body: @escaping ((Error) throws -> (Void))) -> Promise<Void> {
 		let ctx = context ?? .main
 		let nextPromise = Promise<Void>(in: ctx) { resolve, reject in
-			let onResolve = Observer<Value>.onResolve(ctx, { _ in
+			let onResolve = Observer.onResolve(ctx, { _ in
 				resolve(())
 			})
-			let onReject = Observer<Value>.onReject(ctx, { error in
+			let onReject = Observer.onReject(ctx, { error in
 				do {
 					try body(error)
 				} catch let error {

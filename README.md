@@ -33,7 +33,7 @@ Take a look here:
 
 ## Current Release
 
-Latest release is: 0.9.4 [Download here](https://github.com/malcommac/Hydra/releases/tag/0.9.4).
+Latest release is: 0.9.5 [Download here](https://github.com/malcommac/Hydra/releases/tag/0.9.5).
 
 A complete list of changes for each release is available in the [CHANGELOG](CHANGELOG.md) file.
 
@@ -163,7 +163,7 @@ For example the code above can be rewritten directly as:
 ```swift
 // With `async` we have just defined a Promise which will be executed in a given
 // context (if omitted `background` thread is used) and return an Int value.
-let asyncFunc = async({ _ -> Int // you must specify the return of the Promise, here an Int
+let asyncFunc = async({ _ -> Int in // you must specify the return of the Promise, here an Int
 	// With `await` the async code is resolved in a sync manner
 	let loggedUser = try await(loginUser(username,pass))
 	// one promise...

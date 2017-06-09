@@ -41,7 +41,7 @@ public extension Promise {
 	/// Executed body can also reject the chain if throws.
 	///
 	/// - Parameters:
-	///   - queue: context in which the queue is executed
+	///   - context: context in which the body is executed (if not specified `main` is used)
 	///   - body: block to execute
 	/// - Returns: a chainable promise
 	@discardableResult
@@ -69,7 +69,7 @@ public extension Promise {
 	/// Executed body can also reject the chain if throws.
 	///
 	/// - Parameters:
-	///   - queue: queue in which the context is executed (if not specified `.main` is used)
+	///   - context: context in which the body is executed (if not specified `main` is used)
 	///   - body: body to execute
 	/// - Returns: chainable promise
 	@discardableResult
@@ -78,14 +78,14 @@ public extension Promise {
 		let nextPromise = Promise<N>(in: ctx, { resolve, reject in
 			
 			// Observe the resolve of the self promise
-			let onResolve = Observer<Value>.onResolve(ctx, { value in
+			let onResolve = Observer.onResolve(ctx, { value in
 				do {
 					// Pass the value to the body and get back a new promise
 					// with another value
 					let chainedPromise = try body(value)
 					// execute the promise's body and get the result of it
-					let pResolve = Observer<N>.onResolve(ctx, resolve)
-					let pReject = Observer<N>.onReject(ctx, reject)
+					let pResolve = Promise<N>.Observer.onResolve(ctx, resolve)
+					let pReject = Promise<N>.Observer.onReject(ctx, reject)
 					chainedPromise.add(observers: pResolve, pReject)
 					chainedPromise.runBody()
 				} catch let error {
@@ -94,7 +94,7 @@ public extension Promise {
 			})
 			
 			// Observe the reject of the self promise
-			let onReject = Observer<Value>.onReject(ctx, reject)
+			let onReject = Observer.onReject(ctx, reject)
 			
 			self.add(observers: onResolve, onReject)
 		})
@@ -110,7 +110,7 @@ public extension Promise {
 	/// Returned object is a promise which is able to dispatch both error or resolved value of the promise.
 	///
 	/// - Parameters:
-	///   - queue: queue in which the context is executed (if not specified `.main` is used)
+	///   - context: context in which the body is executed (if not specified `main` is used)
 	///   - body: code block to execute
 	/// - Returns: a chainable promise
 	@discardableResult
@@ -120,7 +120,7 @@ public extension Promise {
 		// promise, get the value and allows to execute a body. Body can also throw and reject
 		// next chained promise.
 		let nextPromise = Promise<Value>(in: ctx, { resolve, reject in
-			let onResolve = Observer<Value>.onResolve(ctx, { value in
+			let onResolve = Observer.onResolve(ctx, { value in
 				do {
 					// execute body and resolve this promise with the same value
 					// no transformations are allowed in this `then` except the throw.
@@ -134,7 +134,7 @@ public extension Promise {
 			})
 
 			// this promise rejects so nextPromise also rejects with the error
-			let onReject = Observer<Value>.onReject(ctx, reject)
+			let onReject = Observer.onReject(ctx, reject)
 			self.add(observers: onResolve, onReject)
 		})
 		// execute the body of nextPromise so we can register observer

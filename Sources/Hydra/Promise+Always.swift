@@ -38,7 +38,7 @@ public extension Promise {
 	/// Always run given body at the end of a promise chain regardless of the whether the chain resolves or rejects.
 	///
 	/// - Parameters:
-	///   - queue: queue in which the body is executed
+	///   - context: context in which the body is executed (if not specified `background` is used)
 	///   - body: body to execute
 	/// - Returns: promise
 	@discardableResult
@@ -46,7 +46,7 @@ public extension Promise {
 		let ctx = context ?? .background
 		let nextPromise = Promise<Value>(in: ctx) { resolve, reject in
 			// Always call body both for reject and resolve
-			let onResolve = Observer<Value>.onResolve(ctx, { value in
+			let onResolve = Observer.onResolve(ctx, { value in
 				do {
 					try body()
 					resolve(value)
@@ -55,7 +55,7 @@ public extension Promise {
 				}
 			})
 			
-			let onReject = Observer<Value>.onReject(ctx, { error in
+			let onReject = Observer.onReject(ctx, { error in
 				do {
 					try body()
 					reject(error)

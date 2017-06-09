@@ -33,24 +33,37 @@
 
 import Foundation
 
-public extension Promise {
-
-	/// Delay the executon of a Promise chain by some number of seconds from current time
+extension Promise {
+	
+	//MARK: Promise State
+	
+	/// This represent the state of a Promise
 	///
-	/// - Parameters:
-	///   - context: context in which the body is executed (if not specified `background` is used)
-	///   - seconds: delay time in seconds; execution time is `.now()+seconds`
-	/// - Returns: the Promise to resolve to after the delay
-	public func `defer`(in context: Context? = nil, _ seconds: TimeInterval) -> Promise<Value> {
-		let ctx = context ?? .background
-		return self.then(in: ctx, { value in
-			return Promise<Value> { resolve, _ in
-				let fireTime: DispatchTime = .now() + seconds
-				ctx.queue.asyncAfter(deadline: fireTime) {
-					resolve(value)
-				}
-			}
-		})
+	/// - pending: pending state. Promise was not evaluated yet.
+	/// - fulfilled: final state. Promise was fulfilled with expected value instance.
+	/// - rejected: final state. Promise was rejected with given error.
+	internal indirect enum State {
+		case pending
+		case resolved(_: Value)
+		case rejected(_: Error)
+		
+		/// Resolved `value` associated with the state. `nil` if the state is not `resolved`.
+		var value: Value? {
+			guard case .resolved(let value) = self else { return nil }
+			return value
+		}
+		
+		/// Error associated with the state. `nil` if the state is not `rejected`.
+		var error: Error? {
+			guard case .rejected(let error) = self else { return nil }
+			return error
+		}
+		
+		/// Return `true` if the promise is in `pending` state, `false` otherwise.
+		var isPending: Bool {
+			guard case .pending = self else { return false }
+			return true
+		}
 	}
 	
 }

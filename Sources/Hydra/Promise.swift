@@ -39,7 +39,7 @@ public class Promise<Value> {
 	public typealias Body = ((_ resolve: @escaping Resolved, _ reject: @escaping Rejector) throws -> ())
 
 	/// State of the Promise. Initially a promise has a `pending` state.
-	internal var state: State<Value> = .pending
+	internal var state: State = .pending
 	
 	/// This is the queue used to ensure thread safety on Promise's `state`.
 	internal let stateQueue = DispatchQueue(label: "com.mokasw.promise")
@@ -54,7 +54,7 @@ public class Promise<Value> {
 	private(set) var context: Context = Context.custom(queue: DispatchQueue.global(qos: .background))
 	
 	/// Observers of the promise; define a callback called in specified context with the result of resolve/reject of the promise
-	private var observers: [Observer<Value>] = []
+	private var observers: [Observer] = []
 	
 	/// Is body of the promise called
 	/// It's used to prevent multiple call of the body on operators chaining
@@ -164,7 +164,7 @@ public class Promise<Value> {
 	/// Once the state did change all involved registered observer will be called.
 	///
 	/// - Parameter newState: new state to set
-	private func set(state newState: State<Value>) {
+	private func set(state newState: State) {
 		self.stateQueue.sync {
 			// a promise state can be changed only if the current state is pending
 			// once resolved or rejected state cannot be change further.
@@ -190,10 +190,10 @@ public class Promise<Value> {
 	///   - context: context in which specified resolve/reject observers is called
 	///   - onResolve: observer to add for resolve
 	///   - onReject: observer to add for
-	internal func add(in context: Context? = nil, onResolve: @escaping Observer<Value>.ResolveObserver, onReject: @escaping Observer<Value>.RejectObserver) {
+	internal func add(in context: Context? = nil, onResolve: @escaping Observer.ResolveObserver, onReject: @escaping Observer.RejectObserver) {
 		let ctx = context ?? .background
-		let onResolve = Observer<Value>.onResolve(ctx, onResolve)
-		let onReject = Observer<Value>.onReject(ctx, onReject)
+		let onResolve = Observer.onResolve(ctx, onResolve)
+		let onReject = Observer.onReject(ctx, onReject)
 		self.add(observers: onResolve, onReject)
 	}
 	
@@ -205,7 +205,7 @@ public class Promise<Value> {
 	/// Each registered observer can be called in a specified context.
 	///
 	/// - Parameter observers: observers to register
-	internal func add(observers: Observer<Value>...) {
+	internal func add(observers: Observer...) {
 		self.stateQueue.sync {
 			self.observers.append(contentsOf: observers)
 			if self.state.isPending {
