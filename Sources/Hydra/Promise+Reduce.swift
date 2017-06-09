@@ -11,7 +11,7 @@ import Foundation
 /// Reduce a sequence of items with a asynchronous operation (Promise) to a single value
 ///
 /// - Parameters:
-///   - context: queue in which the reduce operation is made
+///   - context: context in which the transform is executed (if not specified `main` is used)
 ///   - items: initial value to begin reducing
 ///   - initial: sequence to reduce
 ///   - transform: transform function that accepts a partial result and sequence item

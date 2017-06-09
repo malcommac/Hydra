@@ -38,7 +38,7 @@ public extension Promise {
 	/// Always run given body at the end of a promise chain regardless of the whether the chain resolves or rejects.
 	///
 	/// - Parameters:
-	///   - queue: queue in which the body is executed
+	///   - context: context in which the body is executed (if not specified `background` is used)
 	///   - body: body to execute
 	/// - Returns: promise
 	@discardableResult
