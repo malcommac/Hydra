@@ -33,7 +33,7 @@ Take a look here:
 
 ## Current Release
 
-Latest release is: 0.9.4 [Download here](https://github.com/malcommac/Hydra/releases/tag/0.9.4).
+Latest release is: 0.9.5 [Download here](https://github.com/malcommac/Hydra/releases/tag/0.9.5).
 
 A complete list of changes for each release is available in the [CHANGELOG](CHANGELOG.md) file.
 
