@@ -537,7 +537,7 @@ class HydraTestThen: XCTestCase {
 	func test_async() {
 		let exp = expectation(description: "test_async")
 		let returnValue = 5
-		async { _ -> Int in
+		async { () -> Int in
 			Thread.sleep(forTimeInterval: 2.0)
 			return returnValue
 		}.then { value in
