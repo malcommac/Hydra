@@ -33,7 +33,9 @@ Take a look here:
 
 ## Current Release
 
-Latest release is: 0.9.5 [Download here](https://github.com/malcommac/Hydra/releases/tag/0.9.5).
+Latest releases are:
+- Swift 3.x: 0.9.5 [Download here](https://github.com/malcommac/Hydra/releases/tag/0.9.5).
+- Swift 4.x: >= 0.9.6 or later [Download here](https://github.com/malcommac/Hydra/releases/tag/0.9.6).
 
 A complete list of changes for each release is available in the [CHANGELOG](CHANGELOG.md) file.
 
@@ -436,10 +438,14 @@ myAsyncFunc(param).retry(3) { (remainAttempts, error) -> Bool in
 ## Installation
 You can install Swiftline using CocoaPods, carthage and Swift package manager
 
+- Swift 3.x: 0.9.5
+- Swift 4.x: >= 0.9.6
+
+
 ### CocoaPods
     use_frameworks!
     pod 'HydraAsync'
-
+    
 ### Carthage
     github 'malcommac/Hydra'
 
@@ -462,7 +468,7 @@ Add swiftline as dependency in your `Package.swift`
 
 Current version is compatible with:
 
-* Swift 3.0+
+* Swift 3.x (0.9.5 or earlier) and Swift 4.x (0.9.6 or later)
 * iOS 8.0 or later
 * tvOS 9.0 or later
 * macOS 10.10 or later
