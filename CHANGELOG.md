@@ -20,6 +20,27 @@ https://github.com/malcommac/Hydra/issues/25
 - **Release Date**: 2017-07-09
 - **Zipped Version**: [Download 0.9.7](https://github.com/malcommac/Hydra/releases/tag/0.9.7)
 
+### Important Notice
+
+Since 0.9.7 Hydra implements Cancellable Promises. In order to support this new feature we have slightly modified the `Body` signature of the `Promise`; in order to make your source code compatible you just need to add the third parameter along with `resolve`,`reject`: `operation`.
+`operation` encapsulate the logic to support `Invalidation Token`. It's just and object of type `PromiseStatus` you can query to see if a Promise is marked to be cancelled from the outside.
+If you are not interested in using it in your Promise declaration just mark it as `_`.
+
+
+To sum up your code:
+
+```swift
+return Promise<Int>(in: .main, token: token, { resolve, reject in ...
+```
+
+needs to be:
+
+```swift
+return Promise<Int>(in: .main, token: token, { resolve, reject, operation in // or resolve, reject, _
+```
+
+### New Features:
+
 - [#25](https://github.com/malcommac/Hydra/pull/25) Added support for Cancellable Promises via `InvalidationToken`. See the documentation for more info.
 
 <a name="094" />

@@ -81,6 +81,7 @@ A Promise is, in fact, a proxy object; due to the fact the system knows what suc
 - avoid callbacks, pyramid of dooms and make your code cleaner!
 
 <a name="updating097" />
+
 ## Updating to >=0.9.7
 
 Since 0.9.7 Hydra implements Cancellable Promises. In order to support this new feature we have slightly modified the `Body` signature of the `Promise`; in order to make your source code compatible you just need to add the third parameter along with `resolve`,`reject`: `operation`.
