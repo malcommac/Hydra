@@ -54,7 +54,7 @@ public func all<L, S: Sequence>(_ promises: S, concurrency: UInt = UInt.max) -> 
 	// when all input promises fullfill or one of them reject.
 	// Promises are resolved in parallel but the array with the results of all promises is reported
 	// in the same order of the input promises.
-	let allPromise = Promise<[L]> { (resolve, reject) in
+	let allPromise = Promise<[L]> { (resolve, reject, operation) in
 		var countRemaining = Array(promises).count
 		var countRunningPromises: UInt = 0
 		let allPromiseContext = Context.custom(queue: DispatchQueue(label: "com.hydra.queue.all"))
@@ -77,6 +77,8 @@ public func all<L, S: Sequence>(_ promises: S, concurrency: UInt = UInt.max) -> 
 				// if currentPromise reject the entire chain is broken and we reject the group Promise itself
 			}, onReject: { err in
 				reject(err)
+			}, onCancel: {
+				operation.cancel()
 			})
 			if concurrency > countRunningPromises {
 				currentPromise.runBody()

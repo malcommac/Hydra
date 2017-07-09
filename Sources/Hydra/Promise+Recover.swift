@@ -43,7 +43,7 @@ public extension Promise {
 	/// - Returns: a promise
 	public func recover(in context: Context? = nil, _ body: @escaping (Error) throws -> Promise<Value>) -> Promise<Value> {
 		let ctx = context ?? .background
-		return Promise<Value>(in: ctx, { resolve, reject in
+		return Promise<Value>(in: ctx, token: self.invalidationToken, { resolve, reject, operation in
 			return self.then(in: ctx, {
 				// If promise resolve we don't need to do anything.
 				resolve($0)

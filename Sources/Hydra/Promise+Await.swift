@@ -79,7 +79,7 @@ public func await<T>(in context: Context? = nil, _ promise: Promise<T>) throws -
 /// - Returns: the value of the promise
 /// - Throws: an exception if operation fails
 @discardableResult
-public func await<T>(in context: Context = .background, _ body: @escaping ((_ fulfill: @escaping (T) -> (), _ reject: @escaping (Error) -> () ) throws -> ())) throws -> T {
+public func await<T>(in context: Context = .background, _ body: @escaping ((_ fulfill: @escaping (T) -> (), _ reject: @escaping (Error) -> (), _ operation: PromiseStatus) throws -> ())) throws -> T {
 	let promise = Promise<T>(in: context, body)
 	return try await(in: context, promise)
 }

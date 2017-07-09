@@ -75,7 +75,7 @@ public extension Promise {
 	@discardableResult
 	public func then<N>(in context: Context? = nil, _ body: @escaping ( (Value) throws -> (Promise<N>) )) -> Promise<N> {
 		let ctx = context ?? .main
-		let nextPromise = Promise<N>(in: ctx, { resolve, reject in
+		let nextPromise = Promise<N>(in: ctx, token: self.invalidationToken, { resolve, reject, operation in
 			
 			// Observe the resolve of the self promise
 			let onResolve = Observer.onResolve(ctx, { value in
@@ -95,8 +95,9 @@ public extension Promise {
 			
 			// Observe the reject of the self promise
 			let onReject = Observer.onReject(ctx, reject)
-			
-			self.add(observers: onResolve, onReject)
+			let onCancel = Observer.onCancel(ctx, operation.cancel)
+
+			self.add(observers: onResolve, onReject, onCancel)
 		})
 		nextPromise.runBody()
 		self.runBody()
@@ -119,7 +120,7 @@ public extension Promise {
 		// This is the simplest `then` is possible to create; it simply execute the body of the
 		// promise, get the value and allows to execute a body. Body can also throw and reject
 		// next chained promise.
-		let nextPromise = Promise<Value>(in: ctx, { resolve, reject in
+		let nextPromise = Promise<Value>(in: ctx, token: self.invalidationToken, { resolve, reject, operation in
 			let onResolve = Observer.onResolve(ctx, { value in
 				do {
 					// execute body and resolve this promise with the same value
@@ -135,7 +136,9 @@ public extension Promise {
 
 			// this promise rejects so nextPromise also rejects with the error
 			let onReject = Observer.onReject(ctx, reject)
-			self.add(observers: onResolve, onReject)
+			let onCancel = Observer.onCancel(ctx, operation.cancel)
+			
+			self.add(observers: onResolve, onReject, onCancel)
 		})
 		// execute the body of nextPromise so we can register observer
 		// to this promise and get back value/error once its resolved/rejected.
