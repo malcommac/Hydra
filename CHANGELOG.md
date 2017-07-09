@@ -4,10 +4,23 @@
 
 ## CHANGELOG
 
+* Version **[0.9.7](#097)**
 * Version **[0.9.4](#094)**
 * Version **[0.9.3](#093)**
 * Version **[0.9.2](#092)**
 * Version **[0.9.1](#091)**
+
+
+https://github.com/malcommac/Hydra/issues/25
+
+<a name="097" />
+
+## Hydra 0.9.7
+---
+- **Release Date**: 2017-07-09
+- **Zipped Version**: [Download 0.9.7](https://github.com/malcommac/Hydra/releases/tag/0.9.7)
+
+- [#25](https://github.com/malcommac/Hydra/pull/25) Added support for Cancellable Promises via `InvalidationToken`. See the documentation for more info.
 
 <a name="094" />
 
