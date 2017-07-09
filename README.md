@@ -34,8 +34,7 @@ Take a look here:
 ## Current Release
 
 Latest releases are:
-- Swift 3.x: 0.9.5 [Download here](https://github.com/malcommac/Hydra/releases/tag/0.9.5).
-- Swift 4.x: >= 0.9.6 or later [Download here](https://github.com/malcommac/Hydra/releases/tag/0.9.6).
+- Swift 3.x: 0.9.7 [Download here](https://github.com/malcommac/Hydra/releases/tag/0.9.7).
 
 A complete list of changes for each release is available in the [CHANGELOG](CHANGELOG.md) file.
 
@@ -44,6 +43,7 @@ A complete list of changes for each release is available in the [CHANGELOG](CHAN
 * **[Create a Promise](#createpromise)**
 * **[How to use a Promise](#howtousepromise)**
 * **[Chaining Multiple Promises](#chaining)**
+* **[Cancellable Promises](#cancellablepromises)**
 * **[Await & Async: async code in sync manner](#awaitasync)**
 * **[All Features](#allfeatures)**
 	* **[always](#always)**
@@ -57,6 +57,7 @@ A complete list of changes for each release is available in the [CHANGELOG](CHAN
 	* **[zip](#zip)**
 	* **[defer](#defer)**
 	* **[retry](#retry)**
+	* **[cancel](#cancel)**
 * **[Installation (CocoaPods, SwiftPM and Carthage)](#installation)**
 * **[Requirements](#requirements)**
 * **[Credits](#credits)**
@@ -86,7 +87,7 @@ This is a simple async image downloader:
 
 ```swift
 func getImage(url: String) -> Promise<UIImage> {
-    return Promise<UIImage>(in: .background, { resolve, reject in
+    return Promise<UIImage>(in: .background, { resolve, reject, _ in
         self.dataTask(with: request, completionHandler: { data, response, error in
             if let error = error {
                 reject(error)
@@ -154,6 +155,58 @@ loginUser(username,pass).then(getFollowers).then(unfollow).then { count in
 
 Easy uh? (Please note: in this example context is not specified so the default `.main` is used instead).
 
+<a name="cancellablepromises" />
+
+## Cancellable Promises
+
+Cancellable Promises are a very sensitive task; by default Promises are not cancellable. Hydra allows you to cancel a promise from the outside by implementing the `InvalidationToken`. `InvalidationToken` is a concrete open class which is conform to the `InvalidatableProtocol` protocol.
+It must implement at least one `Bool` property called `isCancelled`.
+
+When `isCancelled` is set to `true` it means someone outside the promise want to cancel the task.
+
+Its your responsibility to check from inside the `Promise`'s body the status of this variable by asking to `operation.isCancelled`.
+If `true` you can do all your best to cancel the operation; at the end of your operations just call `cancel()` and stop the workflow.
+
+Your promise must be also initialized using this token instance.
+
+This is a concrete example with `UITableViewCell`: working with table cells, often the result of a promise needs to be ignored. To do this, each cell can hold on to an `InvalidationToken`. An `InvalidationToken` is an execution context that can be invalidated. If the context is invalidated, then the block that is passed to it will be discarded and not executed.
+
+To use this with table cells, the queue should be invalidated and reset on `prepareForReuse()`.
+
+```swift
+class SomeTableViewCell: UITableViewCell {
+    var token = InvalidationToken()
+
+	func setImage(atURL url: URL) {
+		downloadImage(url).then(in: .main, { image in
+			self.imageView.image = image
+		})
+	}
+
+	override func prepareForReuse() {
+		super.prepareForReuse()
+		token.invalidate() // stop current task and ignore result
+		token = InvalidationToken() // new token
+	}
+
+	func downloadImage(url: URL) -> Promise<UIImage> {
+		return Promise<Something>(in: .background, token: token, { (resolve, reject, operation) in
+		// ... your async operation
+
+		// somewhere in your Promise's body, for example in download progression
+		// you should check for the status of the operation.
+		if operation.isCancelled {
+			// operation should be cancelled
+			// do your best to cancel the promise's task
+			operation.cancel() // request to mark the Promise as cancelled
+			return // stop the workflow! it's important
+		}
+		// ... your async operation
+		})
+	}
+}
+```
+
 <a name="awaitasync" />
 
 ## Await & Async: async code in sync manner
@@ -194,7 +247,7 @@ Below an example of the async function which will be executed without delay in b
 ```swift
 async({
 	print("And now some intensive task...")
-	let result = try! await(.background, { resolve,reject in
+	let result = try! await(.background, { resolve,reject, _ in
 		delay(10, context: .background, closure: { // jut a trick for our example
 			resolve(5)
 		})
@@ -243,6 +296,7 @@ Hydra supports:
 - `map`: Transform items to Promises and resolve them (in paralle or in series)
 - `zip`: Create a Promise tuple of a two promises
 - `defer`: defer the execution of a Promise by a given time interval.
+- `cancel`: cancel is called when a promise is marked as `cancelled` using `operation.cancel()`
 
 <a name="always" />
 
@@ -431,6 +485,17 @@ myAsyncFunc(param).retry(3) { (remainAttempts, error) -> Bool in
 }.catch { err in
 	print("Failed to get a value after \(currentAttempt) attempts with error: \(err)")
 }
+```
+
+<a name="cancel" />
+
+### cancel
+`cancel` is called when a promise is marked as `cancelled` from the Promise's body by calling the `operation.cancel()` function. See the **[Cancellable Promises](#cancellablepromises)** for more info.
+
+```swift
+asyncFunc1().cancel(.main, {
+	// promise is cancelled, do something
+}).then...
 ```
 
 <a name="installation" />
