@@ -41,6 +41,7 @@ A complete list of changes for each release is available in the [CHANGELOG](CHAN
 
 ## Index
 * **[What's a Promise](#whatspromise)**
+* **[Updating to >=0.9.7](#updating097)**
 * **[Create a Promise](#createpromise)**
 * **[How to use a Promise](#howtousepromise)**
 * **[Chaining Multiple Promises](#chaining)**
@@ -78,6 +79,25 @@ A Promise is, in fact, a proxy object; due to the fact the system knows what suc
 - write async code as you may write standard sync code
 - resolve dependent async operations by passing the result of each value to the next operation, then get the final result
 - avoid callbacks, pyramid of dooms and make your code cleaner!
+
+<a name="updating097" />
+## Updating to >=0.9.7
+
+Since 0.9.7 Hydra implements Cancellable Promises. In order to support this new feature we have slightly modified the `Body` signature of the `Promise`; in order to make your source code compatible you just need to add the third parameter along with `resolve`,`reject`: `operation`.
+`operation` encapsulate the logic to support `Invalidation Token`. It's just and object of type `PromiseStatus` you can query to see if a Promise is marked to be cancelled from the outside.
+If you are not interested in using it in your Promise declaration just mark it as `_`.
+
+To sum up your code:
+
+```swift
+return Promise<Int>(in: .main, token: token, { resolve, reject in ...
+```
+
+needs to be:
+
+```swift
+return Promise<Int>(in: .main, token: token, { resolve, reject, operation in // or resolve, reject, _
+```
 
 <a name="createpromise" />
 
