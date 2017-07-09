@@ -30,29 +30,29 @@
 *
 */
 
-
 import Foundation
 
 public extension Promise {
-	/// Reject the receiving Promise if it does not resolve or reject after a given number of seconds
+	
+	/// Catch a cancelled promise.
 	///
 	/// - Parameters:
-	///   - context: context in which the nextPromise will be executed (if not specified `background` is used)
-	///   - timeout: timeout expressed in seconds
-	///   - error: error to report, if nil `PromiseError.timeout` is used instead
-	/// - Returns: promise
-	public func timeout(in context: Context? = nil, timeout: TimeInterval, error: Error? = nil) -> Promise<Value> {
-		let ctx = context ?? .background
-		let nextPromise = Promise<Value>(in: ctx, token: self.invalidationToken) { resolve, reject, operation in
-			// Dispatch the result of self promise to the nextPromise
-			self.add(onResolve: resolve, onReject: reject, onCancel: operation.cancel)
-			// If self promise does not resolve or reject in given amount of time
-			// nextPromise is rejected with passed error or generic timeout error
-			// and any other result of the self promise is ignored
-			ctx.queue.asyncAfter(deadline: (.now() + timeout), execute: {
-				let errorToPass = (error ?? PromiseError.timeout)
-				reject(errorToPass)
+	///   - context: context in which the body will be eecuted. If not specified `.main` is used.
+	///   - body: body to execute
+	/// - Returns: a new void promise
+	@discardableResult
+	public func cancelled(in context: Context? = nil, _ body: @escaping ((Void) -> ((Void)))) -> Promise<Void> {
+		let ctx = context ?? .main
+		let nextPromise = Promise<Void>(in: ctx, token: self.invalidationToken) { resolve, reject, operation in
+			let onResolve = Observer.onResolve(ctx, { _ in
+				resolve(())
 			})
+			let onReject = Observer.onReject(ctx, reject)
+			let onCancel = Observer.onCancel(ctx, {
+				body()
+				operation.cancel()
+			})
+			self.add(observers: onResolve, onReject, onCancel)
 		}
 		nextPromise.runBody()
 		self.runBody()

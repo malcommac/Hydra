@@ -41,12 +41,14 @@ extension Promise {
 	///
 	/// - onResolve: register an handler which is executed only if target promise is fulfilled.
 	/// - onReject: register an handler which is executed only if target promise is rejected.
-	internal indirect enum Observer {
-		typealias ResolveObserver = ((Value) -> (Void))
-		typealias RejectObserver = ((Error) -> (Void))
+	public indirect enum Observer {
+		public typealias ResolveObserver = ((Value) -> (Void))
+		public typealias RejectObserver = ((Error) -> (Void))
+		public typealias CancelObserver = (() -> ())
 		
 		case onResolve(_: Context, _: ResolveObserver)
 		case onReject(_: Context, _: RejectObserver)
+		case onCancel(_: Context, _: CancelObserver)
 		
 		/// Call the observer by state
 		///
@@ -60,6 +62,10 @@ extension Promise {
 			case (.onReject(let context, let handler), .rejected(let error)):
 				context.queue.async {
 					handler(error)
+				}
+			case (.onCancel(let context, let handler), .cancelled):
+				context.queue.async {
+					handler()
 				}
 			default:
 				return

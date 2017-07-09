@@ -44,7 +44,7 @@ public extension Promise {
 	@discardableResult
 	public func always(in context: Context? = nil, body: @escaping () throws -> Void) -> Promise<Value> {
 		let ctx = context ?? .background
-		let nextPromise = Promise<Value>(in: ctx) { resolve, reject in
+		let nextPromise = Promise<Value>(in: ctx, token: self.invalidationToken) { resolve, reject, operation in
 			// Always call body both for reject and resolve
 			let onResolve = Observer.onResolve(ctx, { value in
 				do {
@@ -64,7 +64,9 @@ public extension Promise {
 				}
 			})
 			
-			self.add(observers: onResolve, onReject)
+			let onCancel = Observer.onCancel(ctx, operation.cancel)
+			
+			self.add(observers: onResolve, onReject, onCancel)
 		}
 		nextPromise.runBody()
 		self.runBody()

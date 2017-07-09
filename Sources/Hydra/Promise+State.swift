@@ -46,6 +46,7 @@ extension Promise {
 		case pending
 		case resolved(_: Value)
 		case rejected(_: Error)
+		case cancelled
 		
 		/// Resolved `value` associated with the state. `nil` if the state is not `resolved`.
 		var value: Value? {
@@ -62,6 +63,11 @@ extension Promise {
 		/// Return `true` if the promise is in `pending` state, `false` otherwise.
 		var isPending: Bool {
 			guard case .pending = self else { return false }
+			return true
+		}
+		
+		var isCancelled: Bool {
+			guard case .cancelled = self else { return false }
 			return true
 		}
 	}

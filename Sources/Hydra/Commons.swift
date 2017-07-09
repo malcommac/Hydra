@@ -49,3 +49,63 @@ public enum PromiseError: Error {
 	case invalidContext
 	case attemptsFailed
 }
+
+
+/// Invalidatable protocol is used to control the execution of a promise from the outside
+/// You should pass an object conforms to this type at the init of your Promsie instance.
+/// To invalidate a Promise just return the `.isCancelled` property to `true`.
+///
+/// From the inside of your Promise's body you should check if the `operation.isCancelled` is `true`.
+/// If yes you should act accordingly by stopping your execution and call `operation.invalidate()` function
+/// at the end.
+public protocol InvalidatableProtocol {
+
+	/// Set to `true` in order to receive the message from the inside the Promise's body.
+	var isCancelled: Bool { get }
+	
+}
+
+
+/// This is a simple implementation of the `InvalidatableProtocol` protocol.
+/// You can use or extend this class in order to provide your own bussiness logic.
+open class InvalidationToken: InvalidatableProtocol {
+	
+	/// Current status of the promise
+	public var isCancelled: Bool = false
+	
+	/// Call this function to mark the operation as invalid.
+	public func invalidate() {
+		isCancelled = true
+	}
+	
+	/// Public init
+	public init() { }
+}
+
+
+
+/// This object is passed into the Promise's body and allows you to check for the current
+/// Promise status (is it valid or not) and mark it as cancelled if necessary.
+/// In order to mark a Promise as `cancelled` you must call `cancel` function of this instance
+/// and stop the workflow of your promise's body.
+
+public struct PromiseStatus {
+	
+	/// Reference to the Promise's invalidation token
+	internal var token: InvalidationToken?
+	
+	/// Cancel Promise workflow and mark the promise itself as `cancelled`.
+	public let cancel: ((Void) -> (Void))
+	
+	/// Check if the promise is valid by querying your provided `InvalidatableProtocol` object.
+	public var isCancelled: Bool {
+		get { return token?.isCancelled ?? false }
+	}
+	
+	// Initialize a new `PromiseStatus` object.
+	// You don't need to do it manually, it's done when a new `Promise` is initialized with a valida `InvalidatableProtocol`
+	internal init(token: InvalidationToken? = nil, _ action: @escaping ((Void) -> (Void))) {
+		self.token = token
+		self.cancel = action
+	}
+}
