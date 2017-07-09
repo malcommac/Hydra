@@ -5,7 +5,7 @@
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage) [![CI Status](https://travis-ci.org/malcommac/HydraAsync.svg)](https://travis-ci.org/malcommac/HydraAsync) [![Version](https://img.shields.io/cocoapods/v/HydraAsync.svg?style=flat)](http://cocoadocs.org/docsets/HydraAsync) [![License](https://img.shields.io/cocoapods/l/HydraAsync.svg?style=flat)](http://cocoadocs.org/docsets/HydraAsync) [![Platform](https://img.shields.io/cocoapods/p/HydraAsync.svg?style=flat)](http://cocoadocs.org/docsets/HydraAsync)
 
 <p align="center" >Love your async code again with Hydra <br/>
-Made with ♥ in pure Swift (both 3.x and 4.x), no dependencies, lightweight & fully portable
+Made with ♥ in pure Swift 3.x+, no dependencies, lightweight & fully portable
 <p/>
 <p align="center" >★★ <b>Star our github repository to help us!</b> ★★</p>
 <p align="center" >Created by <a href="http://www.danielemargutti.com">Daniele Margutti</a> (<a href="http://www.twitter.com/danielemargutti">@danielemargutti</a>)</p>
@@ -35,6 +35,7 @@ Take a look here:
 
 Latest releases are:
 - Swift 3.x: 0.9.7 [Download here](https://github.com/malcommac/Hydra/releases/tag/0.9.7).
+- Swift 4.x: See the `swift-4` branch(https://github.com/malcommac/Hydra/tree/swift-4)
 
 A complete list of changes for each release is available in the [CHANGELOG](CHANGELOG.md) file.
 
