@@ -41,7 +41,7 @@ return Promise<Int>(in: .main, token: token, { resolve, reject, operation in // 
 
 ### New Features:
 
-- [#25](https://github.com/malcommac/Hydra/pull/25) Added support for Cancellable Promises via `InvalidationToken`. See the documentation for more info.
+- [#25](https://github.com/malcommac/Hydra/pull/25) Added support for Cancellable Promises via `InvalidationToken`. [See the documentation](https://github.com/malcommac/Hydra/tree/feature/0.9.7#cancellablepromises) for more info.
 
 <a name="094" />
 
