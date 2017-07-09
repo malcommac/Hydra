@@ -40,7 +40,7 @@ import Foundation
 ///   - body: body to execute. To fulfill the promise it should 
 /// - Returns: a new promise
 public func async<T>(in context: Context? = nil, _ body: @escaping ( () throws -> (T)) ) -> Promise<T> {
-	return Promise<T>(in: context, { resolve, reject in
+	return Promise<T>(in: context, { resolve, reject, _ in
 		do {
 			try resolve(body())
 		} catch {

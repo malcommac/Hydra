@@ -44,7 +44,7 @@ public extension Promise {
 	@discardableResult
 	public func `catch`(in context: Context? = nil, _ body: @escaping ((Error) throws -> (Void))) -> Promise<Void> {
 		let ctx = context ?? .main
-		let nextPromise = Promise<Void>(in: ctx) { resolve, reject in
+		let nextPromise = Promise<Void>(in: ctx, token: self.invalidationToken) { resolve, reject, operation in
 			let onResolve = Observer.onResolve(ctx, { _ in
 				resolve(())
 			})
@@ -56,7 +56,10 @@ public extension Promise {
 				}
 				resolve(())
 			})
-			self.add(observers: onResolve, onReject)
+
+			let onCancel = Observer.onCancel(ctx, operation.cancel)
+			
+			self.add(observers: onResolve, onReject, onCancel)
 		}
 		nextPromise.runBody()
 		self.runBody()

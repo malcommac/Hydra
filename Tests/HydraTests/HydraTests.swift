@@ -81,10 +81,10 @@ class HydraTestThen: XCTestCase {
 	/// correct resolve value.
 	func test_fulfillDispatcher() {
 		let result = "Hello"
-		Promise<String> { fulfill,_ in
+		Promise<String> { fulfill,_,_ in
 			fulfill(result)
-		}.then { value in
-			XCTAssertEqual(value, result)
+			}.then { value in
+				XCTAssertEqual(value, result)
 		}
 	}
 	
@@ -96,16 +96,16 @@ class HydraTestThen: XCTestCase {
 		let exp = expectation(description: "test_asyncFulfillRaceCondition")
 		let fulfillResult = "Hello"
 		let rejectError = TestErrors.someError
-		Promise<String> { fullfill,reject in
+		Promise<String> { fullfill,reject,_ in
 			fullfill(fulfillResult)
 			reject(rejectError)
-		}.then { result in
-			if result == fulfillResult {
-				print("chiamata")
-				exp.fulfill()
-			} else {
-				XCTFail()
-			}
+			}.then { result in
+				if result == fulfillResult {
+					print("chiamata")
+					exp.fulfill()
+				} else {
+					XCTFail()
+				}
 		}
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
@@ -119,7 +119,7 @@ class HydraTestThen: XCTestCase {
 		let exp = expectation(description: "test_asyncRejectRaceCondition")
 		let fulfillResult = "Hello"
 		let rejectError = TestErrors.someError
-		let promise = Promise<String> { fullfill,reject in
+		let promise = Promise<String> { fullfill,reject,_ in
 			reject(rejectError)
 			fullfill(fulfillResult)
 		}
@@ -204,16 +204,16 @@ class HydraTestThen: XCTestCase {
 		let p = intPromise(5)
 		p.then { value in
 			self.toStringErrorPromise(value)
-		}.catch { err in
-			if let err = err as? TestErrors {
-				if err == TestErrors.anotherError {
-					exp.fulfill()
+			}.catch { err in
+				if let err = err as? TestErrors {
+					if err == TestErrors.anotherError {
+						exp.fulfill()
+					} else {
+						XCTFail()
+					}
 				} else {
 					XCTFail()
 				}
-			} else {
-				XCTFail()
-			}
 		}
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
@@ -231,13 +231,13 @@ class HydraTestThen: XCTestCase {
 		let expResult = 5
 		intPromise(expResult).then { value in
 			self.toStringErrorPromise(value)
-		}.recover { err -> Promise<String> in
-			return self.toStringPromise("\(expResult)")
-		}.then { string in
-			if ("\(expResult)" != string) {
-				XCTFail()
-			}
-			exp.fulfill()
+			}.recover { err -> Promise<String> in
+				return self.toStringPromise("\(expResult)")
+			}.then { string in
+				if ("\(expResult)" != string) {
+					XCTFail()
+				}
+				exp.fulfill()
 		}
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
@@ -249,9 +249,9 @@ class HydraTestThen: XCTestCase {
 		let errPromise = intFailedPromiseImmediate(TestErrors.anotherError)
 		errPromise.recover { (err) -> Promise<Int> in
 			return Promise<Int>(rejected: TestErrors.someError)
-		}.catch { (e) -> (Void) in
-			XCTAssertEqual(e as! TestErrors, TestErrors.someError)
-			exp.fulfill()
+			}.catch { (e) -> (Void) in
+				XCTAssertEqual(e as! TestErrors, TestErrors.someError)
+				exp.fulfill()
 		}
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
@@ -268,8 +268,8 @@ class HydraTestThen: XCTestCase {
 		let expResult = 5
 		intPromise(expResult).pass { value in
 			print("logging \(value)")
-		}.then { final in
-			exp.fulfill()
+			}.then { final in
+				exp.fulfill()
 		}
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
@@ -283,14 +283,14 @@ class HydraTestThen: XCTestCase {
 		let expResult = 5
 		intPromise(5).pass { value in
 			print("value is int \(value)")
-		}.then(intPromise).pass { value in
-			print("value is int \(value)")
-		}.then { value in
-			if value != expResult {
-				XCTFail()
-			} else {
-				exp.fulfill()
-			}
+			}.then(intPromise).pass { value in
+				print("value is int \(value)")
+			}.then { value in
+				if value != expResult {
+					XCTFail()
+				} else {
+					exp.fulfill()
+				}
 		}
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
@@ -304,8 +304,8 @@ class HydraTestThen: XCTestCase {
 		let exp = expectation(description: "test_always")
 		intPromise(5).always {
 			exp.fulfill()
-		}.catch { _ in
-			XCTFail()
+			}.catch { _ in
+				XCTFail()
 		}
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
@@ -317,10 +317,10 @@ class HydraTestThen: XCTestCase {
 		let exp = expectation(description: "test_always")
 		intPromise(5).pass { value in
 			print(value)
-		}.then { value -> Promise<String> in
-			return self.toStringPromise("\(value)")
-		}.always {
-			exp.fulfill()
+			}.then { value -> Promise<String> in
+				return self.toStringPromise("\(value)")
+			}.always {
+				exp.fulfill()
 		}
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
@@ -331,10 +331,10 @@ class HydraTestThen: XCTestCase {
 		let exp = expectation(description: "test_always")
 		intFailedPromise(TestErrors.anotherError).then { value in
 			XCTFail()
-		}.catch { err in
-			print("\(err)")
-		}.always {
-			exp.fulfill()
+			}.catch { err in
+				print("\(err)")
+			}.always {
+				exp.fulfill()
 		}
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
@@ -351,8 +351,8 @@ class HydraTestThen: XCTestCase {
 		any(promise1, promise2).then { result in
 			XCTAssertEqual(result, promise1.result!)
 			exp.fulfill()
-		}.catch { _ in
-			XCTFail()
+			}.catch { _ in
+				XCTFail()
 		}
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
@@ -365,8 +365,8 @@ class HydraTestThen: XCTestCase {
 		any([promise1, promise2]).then { result in
 			XCTAssertEqual(result, promise1.result!)
 			exp.fulfill()
-		}.catch { _ in
-			XCTFail()
+			}.catch { _ in
+				XCTFail()
 		}
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
@@ -411,8 +411,8 @@ class HydraTestThen: XCTestCase {
 			XCTAssertEqual(results[0], promise1.result!)
 			XCTAssertEqual(results[1], promise2.result!)
 			exp.fulfill()
-		}.catch { _ in
-			XCTFail()
+			}.catch { _ in
+				XCTFail()
 		}
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
@@ -430,8 +430,8 @@ class HydraTestThen: XCTestCase {
 			XCTAssertEqual(timebasedResults[0], promise1.result!)
 			XCTAssertEqual(timebasedResults[1], promise2.result!)
 			exp.fulfill()
-		}.catch { _ in
-			XCTFail()
+			}.catch { _ in
+				XCTFail()
 		}
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
@@ -444,9 +444,9 @@ class HydraTestThen: XCTestCase {
 		let promise2 = intFailedPromise(TestErrors.anotherError)
 		all([promise1, promise2]).then { results in
 			XCTFail()
-		}.catch { error in
-			XCTAssertEqual(error as! TestErrors, TestErrors.anotherError)
-			exp.fulfill()
+			}.catch { error in
+				XCTAssertEqual(error as! TestErrors, TestErrors.anotherError)
+				exp.fulfill()
 		}
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
@@ -475,14 +475,14 @@ class HydraTestThen: XCTestCase {
 		
 		map(as: type, items) { result in
 			return self.doubleIntPromise(result)
-		}.then { items in
-			if items.elementsEqual(itemsDoubled) {
-				exp.fulfill()
-			} else {
+			}.then { items in
+				if items.elementsEqual(itemsDoubled) {
+					exp.fulfill()
+				} else {
+					XCTFail()
+				}
+			}.catch { _ in
 				XCTFail()
-			}
-		}.catch { _ in
-			XCTFail()
 		}
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
@@ -514,8 +514,8 @@ class HydraTestThen: XCTestCase {
 		let exp = expectation(description: "test_timeoutOK")
 		intPromiseDelay(5, delay: 0.5).timeout(timeout: 0.7).then { value in
 			exp.fulfill()
-		}.catch { _ in
-			XCTFail()
+			}.catch { _ in
+				XCTFail()
 		}
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
@@ -526,8 +526,8 @@ class HydraTestThen: XCTestCase {
 		let exp = expectation(description: "test_timeoutFailed")
 		intPromiseDelay(5, delay: 1.5).timeout(timeout: 0.7).then { value in
 			XCTFail()
-		}.catch { _ in
-			exp.fulfill()
+			}.catch { _ in
+				exp.fulfill()
 		}
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
@@ -540,12 +540,12 @@ class HydraTestThen: XCTestCase {
 		async { () -> Int in
 			Thread.sleep(forTimeInterval: 2.0)
 			return returnValue
-		}.then { value in
-			if value == returnValue {
-				exp.fulfill()
-			} else {
-				XCTFail()
-			}
+			}.then { value in
+				if value == returnValue {
+					exp.fulfill()
+				} else {
+					XCTFail()
+				}
 		}
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
@@ -560,7 +560,7 @@ class HydraTestThen: XCTestCase {
 		async(in: .background) {
 			do {
 				let startValue = 5
-//				let result1 = try ..self.intPromise(startValue)
+				//				let result1 = try ..self.intPromise(startValue)
 				let result1 = try await(self.intPromise(startValue))
 				let result2 = try ..self.intPromiseDelay(result1 * 2, delay: 0.5)
 				let result3 = try ..self.intPromiseDelay(result2 * 2, delay: 0.5)
@@ -603,14 +603,14 @@ class HydraTestThen: XCTestCase {
 		let items = [1,5,10,20,40,60,80]
 		reduce(items, 0) { (partial, current) in
 			return self.doubleAndSumImmediatePromise(partial: partial, value: current)
-		}.then { value in
-			if value == 432 {
-				exp.fulfill()
-			} else {
+			}.then { value in
+				if value == 432 {
+					exp.fulfill()
+				} else {
+					XCTFail()
+				}
+			}.catch { _ in
 				XCTFail()
-			}
-		}.catch { _ in
-			XCTFail()
 		}
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
@@ -624,10 +624,10 @@ class HydraTestThen: XCTestCase {
 				return self.intFailedPromiseImmediate(TestErrors.anotherError)
 			}
 			return self.doubleAndSumImmediatePromise(partial: partial, value: current)
-		}.then { value in
-			XCTFail()
-		}.catch { _ in
-			exp.fulfill()
+			}.then { value in
+				XCTFail()
+			}.catch { _ in
+				exp.fulfill()
 		}
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
@@ -640,7 +640,7 @@ class HydraTestThen: XCTestCase {
 		let retryAttempts = 3
 		let successOnAttempt = 3
 		var currentAttempt = 0
-		Promise<Int> { (resolve, reject) in
+		Promise<Int> { (resolve, reject, _) in
 			currentAttempt += 1
 			if currentAttempt < successOnAttempt {
 				print("attempt is \(currentAttempt)... reject")
@@ -649,13 +649,13 @@ class HydraTestThen: XCTestCase {
 				print("attempt is \(currentAttempt)... resolve")
 				resolve(5)
 			}
-		}.retry(retryAttempts).then { value in
-			print("value \(value) at attempt \(currentAttempt)")
-			XCTAssertEqual(currentAttempt, 3)
-			exp.fulfill()
-		}.catch { err in
-			print("failed \(err) at attempt \(currentAttempt)")
-			XCTFail()
+			}.retry(retryAttempts).then { value in
+				print("value \(value) at attempt \(currentAttempt)")
+				XCTAssertEqual(currentAttempt, 3)
+				exp.fulfill()
+			}.catch { err in
+				print("failed \(err) at attempt \(currentAttempt)")
+				XCTFail()
 		}
 		
 		waitForExpectations(timeout: expTimeout, handler: nil)
@@ -666,18 +666,18 @@ class HydraTestThen: XCTestCase {
 		
 		let retryAttempts = 3
 		var currentAttempt = 0
-		Promise<Int> { (resolve, reject) in
+		Promise<Int> { (resolve, reject, _) in
 			currentAttempt += 1
 			print("attempt is \(currentAttempt)... reject")
 			reject(TestErrors.anotherError)
-		}.retry(retryAttempts).then { value in
-			print("value \(value) at attempt \(currentAttempt)")
-			XCTFail()
-		}.catch { err in
-			print("failed \(err) at attempt \(currentAttempt)")
-			XCTAssertEqual(err as! TestErrors, .anotherError)
-			XCTAssertEqual(currentAttempt, 3)
-			exp.fulfill()
+			}.retry(retryAttempts).then { value in
+				print("value \(value) at attempt \(currentAttempt)")
+				XCTFail()
+			}.catch { err in
+				print("failed \(err) at attempt \(currentAttempt)")
+				XCTAssertEqual(err as! TestErrors, .anotherError)
+				XCTAssertEqual(currentAttempt, 3)
+				exp.fulfill()
 		}
 		
 		waitForExpectations(timeout: expTimeout, handler: nil)
@@ -691,7 +691,7 @@ class HydraTestThen: XCTestCase {
 		let successOnAttempt = 5
 		let retryableRemainAttempt = 2
 		var currentAttempt = 0
-		Promise<Int> { (resolve, reject) in
+		Promise<Int> { (resolve, reject, _) in
 			currentAttempt += 1
 			if currentAttempt < successOnAttempt {
 				print("attempt is \(currentAttempt)... reject")
@@ -700,31 +700,66 @@ class HydraTestThen: XCTestCase {
 				print("attempt is \(currentAttempt)... resolve")
 				resolve(5)
 			}
-		}.retry(retryAttempts) { (remainAttempts, error) -> Bool in
-			if remainAttempts > retryableRemainAttempt {
-				print("retry remainAttempts is \(remainAttempts)... true")
-				return true
-			} else {
-				print("retry remainAttempts is \(remainAttempts)... false")
-				return false
-			}
-		}.then { value in
-			print("value \(value) at attempt \(currentAttempt)")
+			}.retry(retryAttempts) { (remainAttempts, error) -> Bool in
+				if remainAttempts > retryableRemainAttempt {
+					print("retry remainAttempts is \(remainAttempts)... true")
+					return true
+				} else {
+					print("retry remainAttempts is \(remainAttempts)... false")
+					return false
+				}
+			}.then { value in
+				print("value \(value) at attempt \(currentAttempt)")
+				XCTFail()
+			}.catch { err in
+				print("failed \(err) at attempt \(currentAttempt)")
+				XCTAssertEqual(err as! TestErrors, .anotherError)
+				XCTAssertEqual(currentAttempt, 3)
+				exp.fulfill()
+		}
+		
+		waitForExpectations(timeout: expTimeout, handler: nil)
+	}
+	
+	func test_invalidationToken() {
+		let exp = expectation(description: "test_retry_condition")
+
+		let invalidator: InvalidationToken = InvalidationToken()
+		
+		DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 2, execute: {
+			invalidator.isCancelled = true
+		})
+		
+		test_invalidationToken(token: invalidator).then { total in
+			print("Operation finished with: \(total)")
 			XCTFail()
-		}.catch { err in
-			print("failed \(err) at attempt \(currentAttempt)")
-			XCTAssertEqual(err as! TestErrors, .anotherError)
-			XCTAssertEqual(currentAttempt, 3)
+		}.cancelled {
+			print("Operation cancelled")
 			exp.fulfill()
 		}
 		
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
 	
+	func test_invalidationToken(token: InvalidationToken) -> Promise<Int> {
+		return Promise<Int>(in: .main, token: token, { (resolve, reject, op) in
+			var total: Int = 0
+			for i in 0..<100 {
+				if op.isCancelled == true {
+					op.cancel()
+					return
+				}
+				sleep(1)
+				total += i
+			}
+			resolve(total)
+		})
+	}
+	
 	//MARK: Helper
 	
 	func intFailedPromise(_ error: Error) -> Promise<Int> {
-		return Promise<Int> { _, reject in
+		return Promise<Int> { _, reject, _ in
 			DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + self.delayResult, execute: {
 				reject(error)
 			})
@@ -732,13 +767,13 @@ class HydraTestThen: XCTestCase {
 	}
 	
 	func intFailedPromiseImmediate(_ error: Error) -> Promise<Int> {
-		return Promise<Int> { _, reject in
+		return Promise<Int> { _, reject, _ in
 			reject(error)
 		}
 	}
 	
 	func intPromise(_ value: Int = 10) -> Promise<Int> {
-		return Promise<Int> { resolve, _ in
+		return Promise<Int> { resolve, _, _ in
 			DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + self.delayResult, execute: {
 				resolve(value)
 			})
@@ -746,13 +781,13 @@ class HydraTestThen: XCTestCase {
 	}
 	
 	func intPromiseImmediate(_ value: Int = 10) -> Promise<Int> {
-		return Promise<Int> { resolve, _ in
+		return Promise<Int> { resolve, _, _ in
 			resolve(value)
 		}
 	}
 	
 	func intPromiseDelay(_ value: Int = 10, delay: TimeInterval) -> Promise<Int> {
-		return Promise<Int> { resolve, _ in
+		return Promise<Int> { resolve, _, _ in
 			DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + delay, execute: {
 				resolve(value)
 			})
@@ -760,7 +795,7 @@ class HydraTestThen: XCTestCase {
 	}
 	
 	func intPromiseDelayWithCompletion(_ value: Int = 10, delay: TimeInterval, completion: ((Int) -> Void)? = nil) -> Promise<Int> {
-		return Promise<Int> { resolve, _ in
+		return Promise<Int> { resolve, _, _ in
 			DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + delay, execute: {
 				completion?(value)
 				resolve(value)
@@ -769,7 +804,7 @@ class HydraTestThen: XCTestCase {
 	}
 	
 	func doubleIntPromise(_ input: Int) -> Promise<Int> {
-		return Promise<Int> { resolve, _ in
+		return Promise<Int> { resolve, _, _ in
 			DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + self.delayResult, execute: {
 				resolve(input*2)
 			})
@@ -777,13 +812,13 @@ class HydraTestThen: XCTestCase {
 	}
 	
 	func doubleAndSumImmediatePromise(partial: Int, value: Int) -> Promise<Int> {
-		return Promise<Int> { resolve, _ in
+		return Promise<Int> { resolve, _, _ in
 			resolve( partial + (value * 2) )
 		}
 	}
 	
 	func toStringErrorPromise(_ input: Int) -> Promise<String> {
-		return Promise<String> { _, reject in
+		return Promise<String> { _, reject, _ in
 			DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + self.delayResult, execute: {
 				reject(TestErrors.anotherError)
 			})
@@ -791,7 +826,7 @@ class HydraTestThen: XCTestCase {
 	}
 	
 	func toStringPromise(_ input: String) -> Promise<String> {
-		return Promise<String> { resolve, _ in
+		return Promise<String> { resolve, _, _ in
 			DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + self.delayResult, execute: {
 				resolve(input)
 			})

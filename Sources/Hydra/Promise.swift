@@ -36,7 +36,7 @@ public class Promise<Value> {
 	
 	public typealias Resolved = (Value) -> ()
 	public typealias Rejector = (Error) -> ()
-	public typealias Body = ((_ resolve: @escaping Resolved, _ reject: @escaping Rejector) throws -> ())
+	public typealias Body = ((_ resolve: @escaping Resolved, _ reject: @escaping Rejector, _ promise: PromiseStatus) throws -> ())
 
 	/// State of the Promise. Initially a promise has a `pending` state.
 	internal var state: State = .pending
@@ -62,6 +62,17 @@ public class Promise<Value> {
 	
 	/// Optional promise identifier
 	public var name: String?
+	
+	//internal var operation: PromiseStatus
+	internal var invalidationToken: InvalidationToken? = nil
+	
+	/// This is the object sent to Promise's body to capture the status and
+	/// eventually manage any cancel task.
+	public lazy var operation: PromiseStatus = {
+		return PromiseStatus(token: self.invalidationToken, {
+			self.set(state: .cancelled)
+		})
+	}()
 	
 	/// Thread safe current result of the promise.
 	/// It contains a valid value only if promise is resolved, otherwise it's `nil`.
@@ -121,7 +132,8 @@ public class Promise<Value> {
 	/// - Parameters:
 	///   - context: context in which the body of the promise is executed. If `nil` global background queue is used instead
 	///   - body: body of the promise, define the code executed by the promise itself.
-	public init(in context: Context? = nil, _ body: @escaping Body) {
+	public init(in context: Context? = nil, token: InvalidationToken? = nil, _ body: @escaping Body) {
+		self.invalidationToken = token
 		self.state = .pending
 		self.context = context ?? Context.custom(queue: DispatchQueue.global(qos: .background))
 		self.body = body
@@ -152,12 +164,20 @@ public class Promise<Value> {
 						self.set(state: .resolved(value)) // resolved
 					}, { err in
 						self.set(state: .rejected(err)) // rejected
-					})
+					}, self.operation)
 				} catch let err {
 					self.set(state: .rejected(err)) // rejected (using throw)
 				}
 			}
 		}
+	}
+	
+	public func cancel() {
+		self.set(state: .cancelled)
+	}
+	
+	public var isCancelled: Bool {
+		get { return self.invalidationToken?.isCancelled ?? false }
 	}
 	
 	/// Thread safe Promise's state change function.
@@ -172,7 +192,6 @@ public class Promise<Value> {
 				return
 			}
 			self.state = newState // change state
-			
 			self.observers.forEach { observer in
 				observer.call(self.state)
 			}
@@ -190,11 +209,16 @@ public class Promise<Value> {
 	///   - context: context in which specified resolve/reject observers is called
 	///   - onResolve: observer to add for resolve
 	///   - onReject: observer to add for
-	internal func add(in context: Context? = nil, onResolve: @escaping Observer.ResolveObserver, onReject: @escaping Observer.RejectObserver) {
+	internal func add(in context: Context? = nil,
+	                  onResolve: @escaping Observer.ResolveObserver,
+	                  onReject: @escaping Observer.RejectObserver,
+	                  onCancel: Observer.CancelObserver? = nil) {
 		let ctx = context ?? .background
 		let onResolve = Observer.onResolve(ctx, onResolve)
 		let onReject = Observer.onReject(ctx, onReject)
-		self.add(observers: onResolve, onReject)
+		let onCancel = (onCancel != nil ? Observer.onCancel(ctx, onCancel!) : nil)
+		
+		self.add(observers: onResolve, onReject, onCancel)
 	}
 	
 	
@@ -205,9 +229,9 @@ public class Promise<Value> {
 	/// Each registered observer can be called in a specified context.
 	///
 	/// - Parameter observers: observers to register
-	internal func add(observers: Observer...) {
+	internal func add(observers: Observer?...) {
 		self.stateQueue.sync {
-			self.observers.append(contentsOf: observers)
+			observers.forEach({ if let observer = $0 { self.observers.append(observer) } })
 			if self.state.isPending {
 				return
 			}

@@ -44,7 +44,7 @@ public extension Promise {
 	public func `defer`(in context: Context? = nil, _ seconds: TimeInterval) -> Promise<Value> {
 		let ctx = context ?? .background
 		return self.then(in: ctx, { value in
-			return Promise<Value> { resolve, _ in
+			return Promise<Value> { resolve, _, _ in
 				let fireTime: DispatchTime = .now() + seconds
 				ctx.queue.asyncAfter(deadline: fireTime) {
 					resolve(value)

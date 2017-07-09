@@ -54,10 +54,10 @@ public func any<L>(in context: Context? = nil, _ promises: [Promise<L>]) -> Prom
 		// if number of passed promises is zero a rejected promises is returned
 		return Promise<L>(rejected: PromiseError.invalidInput)
 	}
-	let anyPromise = Promise<L> { (resolve, reject) in
+	let anyPromise = Promise<L> { (resolve, reject, operation) in
 		for currentPromise in promises {
 			// first promises which resolve is returned
-			currentPromise.add(in: context, onResolve: resolve, onReject: reject)
+			currentPromise.add(in: context, onResolve: resolve, onReject: reject, onCancel: operation.cancel)
 			currentPromise.runBody()
 		}
 	}
