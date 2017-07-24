@@ -43,6 +43,8 @@ return Promise<Int>(in: .main, token: token, { resolve, reject, operation in // 
 
 - [#25](https://github.com/malcommac/Hydra/pull/25) Added support for Cancellable Promises via `InvalidationToken`. [See the documentation](https://github.com/malcommac/Hydra/tree/feature/0.9.7#cancellablepromises) for more info.
 
+Thanks to [Maurizio Panzica](https://www.facebook.com/maurizio.panzica?ref=br_rs) to point me to the right solution to support cancellable promises feature.
+
 <a name="094" />
 
 ## Hydra 0.9.4
