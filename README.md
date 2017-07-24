@@ -34,7 +34,7 @@ Take a look here:
 ## Current Release
 
 Latest releases are:
-- Swift 3.x: 0.9.7 [Download here](https://github.com/malcommac/Hydra/releases/tag/0.9.7).
+- Swift 3.x: 0.9.8 [Download here](https://github.com/malcommac/Hydra/releases/tag/0.9.8).
 - Swift 4.x: See the `swift-4` [branch](https://github.com/malcommac/Hydra/tree/swift-4). Official releases will be relased in Sept.
 
 A complete list of changes for each release is available in the [CHANGELOG](CHANGELOG.md) file.
