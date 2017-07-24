@@ -34,7 +34,7 @@ Take a look here:
 ## Current Release
 
 Latest releases are:
-- Swift 3.x: 0.9.7 [Download here](https://github.com/malcommac/Hydra/releases/tag/0.9.7).
+- Swift 3.x: 0.9.8 [Download here](https://github.com/malcommac/Hydra/releases/tag/0.9.8).
 - Swift 4.x: See the `swift-4` [branch](https://github.com/malcommac/Hydra/tree/swift-4). Official releases will be relased in Sept.
 
 A complete list of changes for each release is available in the [CHANGELOG](CHANGELOG.md) file.
@@ -60,6 +60,7 @@ A complete list of changes for each release is available in the [CHANGELOG](CHAN
 	* **[defer](#defer)**
 	* **[retry](#retry)**
 	* **[cancel](#cancel)**
+* **[Chaining Promises with different `Value` types](#chainingdifferentpromises)**
 * **[Installation (CocoaPods, SwiftPM and Carthage)](#installation)**
 * **[Requirements](#requirements)**
 * **[Credits](#credits)**
@@ -520,13 +521,35 @@ asyncFunc1().cancel(.main, {
 }).then...
 ```
 
+<a name="chainingdifferentpromises" />
+
+## Chaining Promises with different `Value` types
+
+Sometimes you may need to chain (using one of the available operators, like `all` or `any`) promises which returns different kind of values. Due to the nature of Promise you are not able to create an array of promises with different result types.
+However thanks to `void` property you are able to transform promise instances to generic `void` result type.
+So, for example, you can execute the following `Promises` and return final values directly from the Promise's `result` property.
+
+```swift
+let op_1: Promise<User> = asyncGetCurrentUserProfile()
+let op_2: Promise<UIImage> = asyncGetCurrentUserAvatar()
+let op_3: Promise<[User]> = asyncGetCUrrentUserFriends()
+
+all(op_1.void,op_2.void,op_3.void).then { _ in
+	let userProfile = op_1.result
+	let avatar = op_2.result
+	let friends = op_3.result
+}.catch { err in
+	// do something
+}
+```
+
 <a name="installation" />
 
 ## Installation
 You can install Swiftline using CocoaPods, carthage and Swift package manager
 
 - Swift 3.x: 0.9.5
-- Swift 4.x: >= 0.9.6
+- Swift 4.x: swift-4 branch
 
 
 ### CocoaPods
