@@ -60,7 +60,7 @@ A complete list of changes for each release is available in the [CHANGELOG](CHAN
 	* **[defer](#defer)**
 	* **[retry](#retry)**
 	* **[cancel](#cancel)**
-* **[Chaining different Promises](#chainingdifferentpromises)
+* **[Chaining Promises with different `Result` types](#chainingdifferentpromises)**
 * **[Installation (CocoaPods, SwiftPM and Carthage)](#installation)**
 * **[Requirements](#requirements)**
 * **[Credits](#credits)**
@@ -523,7 +523,7 @@ asyncFunc1().cancel(.main, {
 
 <a name="chainingdifferentpromises" />
 
-## Chaining different Promises
+## Chaining Promises with different `Result` types
 
 Sometimes you may need to chain (using one of the available operators, like `all` or `any`) promises which returns different kind of values. Due to the nature of Promise you are not able to create an array of promises with different result types.
 However thanks to `void` property you are able to transform promises instance to generic `void` type.
