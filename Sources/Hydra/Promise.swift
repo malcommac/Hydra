@@ -243,10 +243,31 @@ public class Promise<Value> {
 	}
 
 	
+	/// Transform given promise to a void promise.
+	@available(*, deprecated: 0.9.8, message: "Use .void var instead")
+	public func voidPromise() -> Promise<Void> {
+		return self.then { _ in
+			return ()
+		}
+	}
+	
 	/// Transform given promise to a void promise
+	/// This is useful when you need to execute multiple promises which has different return values
+	/// For example you can do:
+	/// ```
+	///		let op_1: Promise<User> = asyncGetCurrentUserProfile()
+	///		let op_2: Promise<UIImage> = asyncGetCurrentUserAvatar()
+	///		let op_3: Promise<[User]> = asyncGetCUrrentUserFriends()
+	///		all(op_1.void,op_2.void,op_3.void).then { _ in
+	///			let userProfile = op_1.result
+	///			let avatar = op_2.result
+	///			let friends = op_3.result
+	///		}.catch { err in
+	///			// do something
+	///		}
 	///
 	/// - Returns: promise
-	internal func voidPromise() -> Promise<Void> {
+	public var void: Promise<Void> {
 		return self.then { _ in
 			return ()
 		}

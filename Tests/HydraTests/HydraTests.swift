@@ -741,6 +741,40 @@ class HydraTestThen: XCTestCase {
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
 	
+	func test_cancelledPromiseChainable() {
+		let exp = expectation(description: "test_cancelledPromiseChainable")
+		
+		let invalidator: InvalidationToken = InvalidationToken()
+		invalidator.isCancelled = true
+		
+		test_invalidationToken(token: invalidator)
+			.retry()
+			.recover { (error) -> Promise<Int> in
+				XCTFail()
+				return Promise<Int>(resolved: 1)
+			}
+			.defer(0.1)
+			.pass { (value) in
+				XCTFail()
+			}
+			.then { (value) -> Int in
+				XCTFail()
+				return 2
+			}
+			.validate { (value) -> (Bool) in
+				XCTFail()
+				return value == 2
+			}
+			.catch { (error) -> (Void) in
+				XCTFail()
+			}.cancelled {
+				print("Operation cancelled")
+				exp.fulfill()
+		}
+		
+		waitForExpectations(timeout: expTimeout, handler: nil)
+	}
+	
 	func test_invalidationToken(token: InvalidationToken) -> Promise<Int> {
 		return Promise<Int>(in: .main, token: token, { (resolve, reject, op) in
 			var total: Int = 0
