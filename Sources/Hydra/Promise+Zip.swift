@@ -45,7 +45,7 @@ public extension Promise {
 	///   - b: promise b
 	/// - Returns: joined promise of type Promise<(A,B)>
 	public static func zip<A, B>(in context: Context? = nil, _ a: Promise<A>, _ b: Promise<B>) -> Promise<(A,B)> {
-		return all(a.voidPromise(),b.voidPromise()).then(in: context, { _ in
+		return all(a.void,b.void).then(in: context, { _ in
 			return Promise<(A, B)>(resolved: (a.state.value!, b.state.value!))
 		})
 	}
@@ -61,7 +61,7 @@ public extension Promise {
 	///   - c: promise c
 	/// - Returns: joined promise of type Promise<(A,B,C)>
 	public static func zip<A,B,C>(in context: Context? = nil, a: Promise<A>, b: Promise<B>, c: Promise<C>) -> Promise<(A,B,C)> {
-		return all(a.voidPromise(),b.voidPromise(),c.voidPromise()).then(in: context, { _ in
+		return all(a.void,b.void,c.void).then(in: context, { _ in
 			return Promise<(A, B, C)>(resolved: (a.state.value!, b.state.value!, c.state.value!))
 		})
 	}
@@ -78,7 +78,7 @@ public extension Promise {
 	///   - d: promise d
 	/// - Returns: joined promise of type Promise<(A,B,C,D)>
 	public static func zip<A,B,C,D>(in context: Context? = nil, a: Promise<A>, b: Promise<B>, c: Promise<C>, d: Promise<D>) -> Promise<(A,B,C,D)> {
-		return all(a.voidPromise(),b.voidPromise(),c.voidPromise()).then(in: context, { _ in
+		return all(a.void,b.void,c.void).then(in: context, { _ in
 			return Promise<(A, B, C, D)>(resolved: (a.state.value!, b.state.value!, c.state.value!, d.state.value!))
 		})
 	}
