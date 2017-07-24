@@ -4,14 +4,21 @@
 
 ## CHANGELOG
 
+* Version **[0.9.8](#098)**
 * Version **[0.9.7](#097)**
 * Version **[0.9.4](#094)**
 * Version **[0.9.3](#093)**
 * Version **[0.9.2](#092)**
 * Version **[0.9.1](#091)**
 
+<a name="098" />
 
-https://github.com/malcommac/Hydra/issues/25
+## Hydra 0.9.8
+---
+- **Release Date**: 2017-07-24
+- **Zipped Version**: [Download 0.9.8](https://github.com/malcommac/Hydra/releases/tag/0.9.8)
+
+- [#39](https://github.com/malcommac/Hydra/pull/39) `void` variable now allows to chain multiple promises which return different `Result` types. See the doc on README to learn more.
 
 <a name="097" />
 
