@@ -549,7 +549,7 @@ all(op_1.void,op_2.void,op_3.void).then { _ in
 You can install Swiftline using CocoaPods, carthage and Swift package manager
 
 - Swift 3.x: 0.9.5
-- Swift 4.x: >= 0.9.6
+- Swift 4.x: swift-4 branch
 
 
 ### CocoaPods
