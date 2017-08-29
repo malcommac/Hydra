@@ -1,5 +1,6 @@
 //
-//  D.swift
+//  DispatchTimerWrapper.swift
+//  This class was originally created with ProcedureKit project.
 //  Hydra
 //
 //  Created by dan on 29/08/2017.
@@ -21,6 +22,7 @@ internal class DispatchTimerWrapper {
 	init(queue: DispatchQueue) {
 		timer = DispatchSource.makeTimerSource(flags: [], queue: queue)
 	}
+	
 	deinit {
 		// ensure that the timer is cancelled and resumed before deiniting
 		// (trying to deconstruct a suspended DispatchSource will fail)
@@ -35,12 +37,15 @@ internal class DispatchTimerWrapper {
 	func setEventHandler(qos: DispatchQoS = .unspecified, flags: DispatchWorkItemFlags = [], handler: @escaping EventHandler) {
 		timer.setEventHandler(qos: qos, flags: flags, handler: handler)
 	}
+	
 	func setEventHandler(handler: DispatchWorkItem) {
 		timer.setEventHandler(handler: handler)
 	}
+	
 	func scheduleOneshot(deadline: DispatchTime, leeway: DispatchTimeInterval = .nanoseconds(0)) {
 		timer.scheduleOneshot(deadline: deadline, leeway: leeway)
 	}
+	
 	func resume() {
 		lock.withCriticalScope {
 			guard !didResume else { fatalError("Do not call resume() twice.") }
@@ -48,6 +53,7 @@ internal class DispatchTimerWrapper {
 			didResume = true
 		}
 	}
+	
 	func cancel() {
 		timer.cancel()
 	}
