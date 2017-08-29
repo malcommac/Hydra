@@ -45,14 +45,19 @@ public extension Promise {
 		let ctx = context ?? .background
 		let nextPromise = Promise<Value>(in: ctx, token: self.invalidationToken) { resolve, reject, operation in
 			// Dispatch the result of self promise to the nextPromise
-			self.add(onResolve: resolve, onReject: reject, onCancel: operation.cancel)
+			let task = DispatchWorkItem {
+				let errorToPass = (error ?? PromiseError.timeout)
+				reject(errorToPass)
+			}
+			self.add(onResolve: { v in
+				resolve(v)
+				task.cancel()
+			}, onReject: reject, onCancel: operation.cancel)
+			//self.add(onResolve: resolve, onReject: reject, onCancel: operation.cancel)
 			// If self promise does not resolve or reject in given amount of time
 			// nextPromise is rejected with passed error or generic timeout error
 			// and any other result of the self promise is ignored
-			ctx.queue.asyncAfter(deadline: (.now() + timeout), execute: {
-				let errorToPass = (error ?? PromiseError.timeout)
-				reject(errorToPass)
-			})
+			ctx.queue.asyncAfter(deadline: .now() + timeout, execute: task)
 		}
 		nextPromise.runBody()
 		self.runBody()
