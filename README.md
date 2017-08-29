@@ -303,6 +303,31 @@ async({
 ```
 When you use these methods and you are doing asynchronous, be careful to do nothing in the main thread, otherwise you risk to enter in a deadlock situation.
 
+The last example show how to use cancellable `async`:
+
+```swift
+func test_invalidationTokenWithAsyncOperator() {
+
+// create an invalidation token
+let invalidator: InvalidationToken = InvalidationToken()
+
+async(token: invalidator, { status -> String in
+	Thread.sleep(forTimeInterval: 2.0)
+	if status.isCancelled {
+		print("Promise cancelled")
+	} else {
+		print("Promise resolved")
+	}
+	return "" // read result
+}).then { _ in
+	// read result
+}
+
+// Anytime you can send a cancel message to invalidate the promise
+invalidator.invalidate()
+}
+```
+
 <a name="allfeature" />
 
 ## All Features

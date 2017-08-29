@@ -537,7 +537,7 @@ class HydraTestThen: XCTestCase {
 	func test_async() {
 		let exp = expectation(description: "test_async")
 		let returnValue = 5
-		async { () -> Int in
+		async { (_) -> Int in
 			Thread.sleep(forTimeInterval: 2.0)
 			return returnValue
 			}.then { value in
@@ -718,6 +718,27 @@ class HydraTestThen: XCTestCase {
 				exp.fulfill()
 		}
 		
+		waitForExpectations(timeout: expTimeout, handler: nil)
+	}
+	
+	func test_invalidationTokenWithAsyncOperator() {
+		let exp = expectation(description: "test_retry_condition")
+		let invalidator: InvalidationToken = InvalidationToken()
+		
+		async(token: invalidator, { st -> String in
+			Thread.sleep(forTimeInterval: 2.0)
+			if st.isCancelled {
+				print("Promise cancelled")
+				exp.fulfill()
+			} else {
+				print("Promise resolved")
+				XCTFail()
+			}
+			return ""
+		}).then { _ in
+
+		}
+		invalidator.invalidate()
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
 	
