@@ -69,8 +69,8 @@ public class Promise<Value> {
 	/// This is the object sent to Promise's body to capture the status and
 	/// eventually manage any cancel task.
 	public lazy var operation: PromiseStatus = {
-		return PromiseStatus(token: self.invalidationToken, {
-			self.set(state: .cancelled)
+		return PromiseStatus(token: self.invalidationToken, { [weak self] _ in
+			self?.set(state: .cancelled)
 		})
 	}()
 	
