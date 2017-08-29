@@ -99,6 +99,10 @@
 		37ACAE401F0FB53A00ED284A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 37ACAE3F1F0FB53A00ED284A /* Assets.xcassets */; };
 		37ACAE431F0FB53A00ED284A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 37ACAE411F0FB53A00ED284A /* LaunchScreen.storyboard */; };
 		37ACAE4A1F0FB55100ED284A /* Hydra.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52D6D97C1BEFF229002C0205 /* Hydra.framework */; };
+		37ACBBA41F55FD7D003E92AC /* DispatchTimerWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37ACBBA31F55FD7D003E92AC /* DispatchTimerWrapper.swift */; };
+		37ACBBA51F55FD7D003E92AC /* DispatchTimerWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37ACBBA31F55FD7D003E92AC /* DispatchTimerWrapper.swift */; };
+		37ACBBA61F55FD7D003E92AC /* DispatchTimerWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37ACBBA31F55FD7D003E92AC /* DispatchTimerWrapper.swift */; };
+		37ACBBA71F55FD7D003E92AC /* DispatchTimerWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37ACBBA31F55FD7D003E92AC /* DispatchTimerWrapper.swift */; };
 		52D6D9871BEFF229002C0205 /* Hydra.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52D6D97C1BEFF229002C0205 /* Hydra.framework */; };
 		8933C78E1EB5B82C000D00A4 /* HydraTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8933C7891EB5B82A000D00A4 /* HydraTests.swift */; };
 		8933C78F1EB5B82C000D00A4 /* HydraTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8933C7891EB5B82A000D00A4 /* HydraTests.swift */; };
@@ -181,6 +185,7 @@
 		37ACAE3F1F0FB53A00ED284A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		37ACAE421F0FB53A00ED284A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		37ACAE441F0FB53A00ED284A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		37ACBBA31F55FD7D003E92AC /* DispatchTimerWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DispatchTimerWrapper.swift; path = Hydra/DispatchTimerWrapper.swift; sourceTree = "<group>"; };
 		52D6D97C1BEFF229002C0205 /* Hydra.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Hydra.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		52D6D9861BEFF229002C0205 /* Hydra-iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Hydra-iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		52D6D9E21BEFFF6E002C0205 /* Hydra.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Hydra.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -330,6 +335,7 @@
 				37ACADDB1F0FB4A800ED284A /* Promise+Timeout.swift */,
 				37ACADDC1F0FB4A800ED284A /* Promise+Validate.swift */,
 				37ACADDD1F0FB4A800ED284A /* Promise+Zip.swift */,
+				37ACBBA31F55FD7D003E92AC /* DispatchTimerWrapper.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -705,6 +711,7 @@
 				37ACAE221F0FB4A800ED284A /* Promise+Then.swift in Sources */,
 				37ACAE1E1F0FB4A800ED284A /* Promise+State.swift in Sources */,
 				37ACAE1A1F0FB4A800ED284A /* Promise+Retry.swift in Sources */,
+				37ACBBA41F55FD7D003E92AC /* DispatchTimerWrapper.swift in Sources */,
 				37ACAE0A1F0FB4A800ED284A /* Promise+Observer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -723,6 +730,7 @@
 			files = (
 				37ACAE081F0FB4A800ED284A /* Promise+Map.swift in Sources */,
 				37ACADF41F0FB4A800ED284A /* Promise+Any.swift in Sources */,
+				37ACBBA61F55FD7D003E92AC /* DispatchTimerWrapper.swift in Sources */,
 				37ACADF01F0FB4A800ED284A /* Promise+Always.swift in Sources */,
 				37ACAE041F0FB4A800ED284A /* Promise+Defer.swift in Sources */,
 				37ACAE181F0FB4A800ED284A /* Promise+Reduce.swift in Sources */,
@@ -751,6 +759,7 @@
 			files = (
 				37ACAE091F0FB4A800ED284A /* Promise+Map.swift in Sources */,
 				37ACADF51F0FB4A800ED284A /* Promise+Any.swift in Sources */,
+				37ACBBA71F55FD7D003E92AC /* DispatchTimerWrapper.swift in Sources */,
 				37ACADF11F0FB4A800ED284A /* Promise+Always.swift in Sources */,
 				37ACAE051F0FB4A800ED284A /* Promise+Defer.swift in Sources */,
 				37ACAE191F0FB4A800ED284A /* Promise+Reduce.swift in Sources */,
@@ -779,6 +788,7 @@
 			files = (
 				37ACAE071F0FB4A800ED284A /* Promise+Map.swift in Sources */,
 				37ACADF31F0FB4A800ED284A /* Promise+Any.swift in Sources */,
+				37ACBBA51F55FD7D003E92AC /* DispatchTimerWrapper.swift in Sources */,
 				37ACADEF1F0FB4A800ED284A /* Promise+Always.swift in Sources */,
 				37ACAE031F0FB4A800ED284A /* Promise+Defer.swift in Sources */,
 				37ACAE171F0FB4A800ED284A /* Promise+Reduce.swift in Sources */,

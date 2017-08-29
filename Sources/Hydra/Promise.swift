@@ -48,7 +48,7 @@ public class Promise<Value> {
 	/// This define the real core of your async function.
 	/// Promise's `body` is not executed until you chain an operator to it (ex. `.then` or `.catch`)
 	private var body: Body?
-	
+		
 	/// Context (GCD queue) in which the body of the promise is executed
 	/// By default background queue is used.
 	private(set) var context: Context = Context.custom(queue: DispatchQueue.global(qos: .background))
