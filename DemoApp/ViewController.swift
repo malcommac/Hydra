@@ -27,21 +27,7 @@ class ViewController: UIViewController {
 	
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
-		let invalidator: InvalidationToken = InvalidationToken()
-
-		let x = async(token: invalidator, { st -> String in
-			Thread.sleep(forTimeInterval: 2.0)
-			if st.isCancelled {
-				print("cancelled")
-			} else {
-				print("opened")
-			}
-			return "x"
-		}).then { x in
-				print("x")
-		}
-		invalidator.invalidate()
 	}
-	
+
 }
 

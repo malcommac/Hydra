@@ -48,11 +48,12 @@ public extension Promise {
 			return Promise<Value>(rejected: PromiseError.invalidInput)
 		}
 		
+		var innerPromise: Promise<Value>? = nil
 		var remainingAttempts = attempts
 		// We'll create a next promise which will be resolved when attempts to resolve self (source promise)
 		// is reached (with a fulfill or a rejection).
 		let nextPromise = Promise<Value>(in: self.context, token: self.invalidationToken) { (resolve, reject, operation) in
-			let innerPromise = self.recover(in: self.context) { [unowned self] (error) -> (Promise<Value>) in
+			innerPromise = self.recover(in: self.context) { [unowned self] (error) -> (Promise<Value>) in
 				// If promise is rejected we'll decrement the attempts counter
 				remainingAttempts -= 1
 				guard remainingAttempts >= 1 else {
@@ -83,8 +84,8 @@ public extension Promise {
 			let onCancel = Observer.onCancel(self.context, operation.cancel)
 			
 			// Observe changes from source promise
-			innerPromise.add(observers: onResolve, onReject, onCancel)
-			innerPromise.runBody()
+			innerPromise?.add(observers: onResolve, onReject, onCancel)
+			innerPromise?.runBody()
 		}
 		nextPromise.runBody()
 		return nextPromise
