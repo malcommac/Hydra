@@ -9,10 +9,6 @@
 import UIKit
 import Hydra
 
-public enum Errors: Error {
-	case any
-}
-
 class ViewController: UIViewController {
 	
 	override func viewDidLoad() {

@@ -47,6 +47,7 @@ A complete list of changes for each release is available in the [CHANGELOG](CHAN
 * **[Chaining Multiple Promises](#chaining)**
 * **[Cancellable Promises](#cancellablepromises)**
 * **[Await & Async: async code in sync manner](#awaitasync)**
+* **[Await an `zip` operator to resolve all promises](#allawait)**
 * **[All Features](#allfeatures)**
 	* **[always](#always)**
 	* **[validate](#validate)**
@@ -326,6 +327,18 @@ async(token: invalidator, { status -> String in
 // Anytime you can send a cancel message to invalidate the promise
 invalidator.invalidate()
 }
+```
+
+<a name="allawait" />
+
+## Await an `zip` operator to resolve all promises
+
+Await can be also used in conjuction with zip to resolve all promises from a list:
+
+```swift
+let (resultA,resultB) = await(Promise<Void>.zip(promiseA,promiseB))
+print(resultA)
+print(resultB)
 ```
 
 <a name="allfeature" />
