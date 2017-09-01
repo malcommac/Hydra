@@ -43,7 +43,7 @@ internal class DispatchTimerWrapper {
 	}
 	
 	func scheduleOneshot(deadline: DispatchTime, leeway: DispatchTimeInterval = .nanoseconds(0)) {
-		timer.scheduleOneshot(deadline: deadline, leeway: leeway)
+		timer.schedule(deadline: deadline, leeway: leeway)
 	}
 	
 	func resume() {

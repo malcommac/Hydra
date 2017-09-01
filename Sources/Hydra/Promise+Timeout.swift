@@ -50,7 +50,7 @@ public extension Promise {
 			// nextPromise is rejected with passed error or generic timeout error
 			// and any other result of the self promise is ignored
 			let timer = DispatchTimerWrapper(queue: ctx.queue)
-			timer.setEventHandler { _ in
+			timer.setEventHandler { 
 				let errorToPass = (error ?? PromiseError.timeout)
 				reject(errorToPass)
 			}
