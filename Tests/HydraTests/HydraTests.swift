@@ -249,7 +249,7 @@ class HydraTestThen: XCTestCase {
 		let errPromise = intFailedPromiseImmediate(TestErrors.anotherError)
 		errPromise.recover { (err) -> Promise<Int> in
 			return Promise<Int>(rejected: TestErrors.someError)
-			}.catch { (e) -> (Void) in
+			}.catch { (e) -> () in
 				XCTAssertEqual(e as! TestErrors, TestErrors.someError)
 				exp.fulfill()
 		}
@@ -765,7 +765,7 @@ class HydraTestThen: XCTestCase {
 				XCTFail()
 				return value == 2
 			}
-			.catch { (error) -> (Void) in
+			.catch { (error) -> () in
 				XCTFail()
 			}.cancelled {
 				print("Operation cancelled")

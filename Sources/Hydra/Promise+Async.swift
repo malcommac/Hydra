@@ -56,7 +56,7 @@ public func async<T>(in context: Context? = nil, _ body: @escaping ( () throws -
 ///   - context: context in which the block will be executed
 ///	  - after: allows you to specify a delay interval before executing the block itself.
 ///   - block: block to execute
-public func async(in context: Context, after: TimeInterval? = nil, _ block: @escaping () -> (Void)) -> Void {
+public func async(in context: Context, after: TimeInterval? = nil, _ block: @escaping () -> ()) -> Void {
 	guard let delay = after else {
 		context.queue.async {
 			block()
