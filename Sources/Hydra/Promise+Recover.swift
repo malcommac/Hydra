@@ -56,7 +56,7 @@ public extension Promise {
 				} catch (let error) {
 					reject(error)
 				}
-			}).cancelled(in: ctx, { _ -> Void in
+			}).cancelled(in: ctx, { () -> Void in
 				operation.cancel()
 			})
 		})
