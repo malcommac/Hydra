@@ -5,7 +5,7 @@
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage) [![CI Status](https://travis-ci.org/malcommac/HydraAsync.svg)](https://travis-ci.org/malcommac/HydraAsync) [![Version](https://img.shields.io/cocoapods/v/HydraAsync.svg?style=flat)](http://cocoadocs.org/docsets/HydraAsync) [![License](https://img.shields.io/cocoapods/l/HydraAsync.svg?style=flat)](http://cocoadocs.org/docsets/HydraAsync) [![Platform](https://img.shields.io/cocoapods/p/HydraAsync.svg?style=flat)](http://cocoadocs.org/docsets/HydraAsync)
 
 <p align="center" >Love your async code again with Hydra <br/>
-Made with ♥ in pure Swift 3.x+, no dependencies, lightweight & fully portable
+Made with ♥ in pure Swift, no dependencies, lightweight & fully portable
 <p/>
 <p align="center" >★★ <b>Star our github repository to help us!</b> ★★</p>
 <p align="center" >Created by <a href="http://www.danielemargutti.com">Daniele Margutti</a> (<a href="http://www.twitter.com/danielemargutti">@danielemargutti</a>)</p>
@@ -35,7 +35,7 @@ Take a look here:
 
 Latest releases are:
 - **Swift 3.x**: Up to 1.0.0 (latest release for Swift 3) [Download here](https://github.com/malcommac/Hydra/releases/tag/1.0.0).
-- **Swift 4.x**: Latest is 1.1.0 [Download here](https://github.com/malcommac/Hydra/releases/tag/1.1.0).
+- **Swift 4.x**: swift-4 branch [Check it here](https://github.com/malcommac/Hydra/tree/feature/swift-4).
 
 A complete list of changes for each release is available in the [CHANGELOG](CHANGELOG.md) file.
 
@@ -549,8 +549,7 @@ all(op_1.void,op_2.void,op_3.void).then { _ in
 You can install Swiftline using CocoaPods, carthage and Swift package manager
 
 - **Swift 3.x**: Up to 1.0.0 (latest release for Swift 3) [Download here](https://github.com/malcommac/Hydra/releases/tag/1.0.0).
-- **Swift 4.x**: Latest is 1.1.0 [Download here](https://github.com/malcommac/Hydra/releases/tag/1.1.0).
-
+- **Swift 4.x**: swift-4 branch [Check it here](https://github.com/malcommac/Hydra/tree/feature/swift-4).
 ### CocoaPods
     use_frameworks!
     pod 'HydraAsync'
