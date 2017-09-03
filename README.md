@@ -11,7 +11,7 @@ Made with ♥ in pure Swift, no dependencies, lightweight & fully portable
 <p align="center" >Created by <a href="http://www.danielemargutti.com">Daniele Margutti</a> (<a href="http://www.twitter.com/danielemargutti">@danielemargutti</a>)</p>
 
 # Hydra
-Hydra is full-featured lightweight library which allows you to write better async code in Swift 3+. It's partially based on [JavaScript A+](https://promisesaplus.com) specs and also implements modern construct like `await` (as seen in [Async/Await specification in ES8 (ECMAScript 2017)](https://github.com/tc39/ecmascript-asyncawait) or C#) which allows you to write async code in sync manner.
+Hydra is full-featured lightweight library which allows you to write better async code in Swift. It's partially based on [JavaScript A+](https://promisesaplus.com) specs and also implements modern construct like `await` (as seen in [Async/Await specification in ES8 (ECMAScript 2017)](https://github.com/tc39/ecmascript-asyncawait) or C#) which allows you to write async code in sync manner.
 Hydra supports all sexiest operators like `always`, `validate`, `timeout`, `retry`, `all`, `any`, `pass`, `recover`, `map`, `zip`, `defer` and `retry`.
 Starts writing better async code with Hydra!
 
