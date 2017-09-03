@@ -34,8 +34,8 @@ Take a look here:
 ## Current Release
 
 Latest releases are:
-- Swift 3.x: 0.9.8 [Download here](https://github.com/malcommac/Hydra/releases/tag/0.9.8).
-- Swift 4.x: See the `swift-4` [branch](https://github.com/malcommac/Hydra/tree/swift-4). Official releases will be relased in Sept.
+- **Swift 3.x**: Up to 1.0.0 (latest release for Swift 3) [Download here](https://github.com/malcommac/Hydra/releases/tag/1.0.0).
+- **Swift 4.x**: Latest is 1.1.0 [Download here](https://github.com/malcommac/Hydra/releases/tag/1.1.0).
 
 A complete list of changes for each release is available in the [CHANGELOG](CHANGELOG.md) file.
 
@@ -548,9 +548,8 @@ all(op_1.void,op_2.void,op_3.void).then { _ in
 ## Installation
 You can install Swiftline using CocoaPods, carthage and Swift package manager
 
-- Swift 3.x: 0.9.5
-- Swift 4.x: swift-4 branch
-
+- **Swift 3.x**: Up to 1.0.0 (latest release for Swift 3) [Download here](https://github.com/malcommac/Hydra/releases/tag/1.0.0).
+- **Swift 4.x**: Latest is 1.1.0 [Download here](https://github.com/malcommac/Hydra/releases/tag/1.1.0).
 
 ### CocoaPods
     use_frameworks!
@@ -578,7 +577,8 @@ Add swiftline as dependency in your `Package.swift`
 
 Current version is compatible with:
 
-* Swift 3.x (0.9.5 or earlier) and Swift 4.x (0.9.6 or later)
+- **Swift 3.x**: Up to 1.0.0 (latest release for Swift 3) [Download here](https://github.com/malcommac/Hydra/releases/tag/1.0.0).
+- **Swift 4.x**: Latest is 1.1.0 [Download here](https://github.com/malcommac/Hydra/releases/tag/1.1.0).
 * iOS 8.0 or later
 * tvOS 9.0 or later
 * macOS 10.10 or later
