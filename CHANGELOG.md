@@ -4,12 +4,28 @@
 
 ## CHANGELOG
 
+* Version **[1.0.0](#100)**
 * Version **[0.9.9](#099)**
 * Version **[0.9.7](#097)**
 * Version **[0.9.4](#094)**
 * Version **[0.9.3](#093)**
 * Version **[0.9.2](#092)**
 * Version **[0.9.1](#091)**
+
+<a name="100" />
+## Hydra 1.0.0
+---
+- **Release Date**: 2017-09-04
+- **Download Version for Swift 3**: [Download 1.0.0](https://github.com/malcommac/Hydra/releases/tag/1.0.0)
+- **Download Version for Swift 4**: [See swift-4 branch](https://github.com/malcommac/Hydra/tree/feature/swift-4)
+
+- [#45](https://github.com/malcommac/Hydra/pull/45) Added support for cancellable promises inside the `await` operator.
+- [#46](https://github.com/malcommac/Hydra/pull/46) Resolved an issue where `timeout` operator keep a Promise alive even if it resolves correctly before it expires.
+- [#44](https://github.com/malcommac/Hydra/pull/44) Resolved a compatibility issue with `await` under iOS 11 or later.
+- [#48](https://github.com/malcommac/Hydra/pull/48) Resolved a memory leaks with cancellable promises.
+- [#49](https://github.com/malcommac/Hydra/pull/49) Replaced with `(Void)` with `()`  to fix warnings with Swift 4 and XCode 9
+
+
 
 <a name="099" />
 
