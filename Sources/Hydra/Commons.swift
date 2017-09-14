@@ -95,7 +95,7 @@ public struct PromiseStatus {
 	internal var token: InvalidationToken?
 	
 	/// Cancel Promise workflow and mark the promise itself as `cancelled`.
-	public let cancel: ((Void) -> (Void))
+	public let cancel: (() -> ())
 	
 	/// Check if the promise is valid by querying your provided `InvalidatableProtocol` object.
 	public var isCancelled: Bool {
@@ -104,7 +104,7 @@ public struct PromiseStatus {
 	
 	// Initialize a new `PromiseStatus` object.
 	// You don't need to do it manually, it's done when a new `Promise` is initialized with a valida `InvalidatableProtocol`
-	internal init(token: InvalidationToken? = nil, _ action: @escaping ((Void) -> (Void))) {
+	internal init(token: InvalidationToken? = nil, _ action: @escaping (() -> ())) {
 		self.token = token
 		self.cancel = action
 	}

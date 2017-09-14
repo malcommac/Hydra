@@ -31,11 +31,11 @@ Take a look here:
 * **[SwiftSimplify](https://github.com/malcommac/SwiftSimplify)** - Tiny high-performance Swift Polyline Simplification Library
 * **[SwiftMsgPack](https://github.com/malcommac/SwiftMsgPack)** - MsgPack Encoder/Decoder in Swift
 
-## Current Release
+## Current Release (Swift 3 and 4 releases)
 
 Latest releases are:
-- **Swift 3.x**: Up to 1.0.0 (latest release for Swift 3) [Download here](https://github.com/malcommac/Hydra/releases/tag/1.0.0).
-- **Swift 4.x**: Latest is 1.1.0 [Download here](https://github.com/malcommac/Hydra/releases/tag/1.1.0).
+- **Swift 4.x**: From (>=) **1.1.0** [Download here](https://github.com/malcommac/Hydra/releases/tag/1.1.0).
+- **Swift 3.x**: Latest release is **1.0.0** [Download here](https://github.com/malcommac/Hydra/releases/tag/1.0.0).
 
 A complete list of changes for each release is available in the [CHANGELOG](CHANGELOG.md) file.
 
@@ -47,6 +47,7 @@ A complete list of changes for each release is available in the [CHANGELOG](CHAN
 * **[Chaining Multiple Promises](#chaining)**
 * **[Cancellable Promises](#cancellablepromises)**
 * **[Await & Async: async code in sync manner](#awaitasync)**
+* **[Await an `zip` operator to resolve all promises](#allawait)**
 * **[All Features](#allfeatures)**
 	* **[always](#always)**
 	* **[validate](#validate)**
@@ -303,6 +304,43 @@ async({
 ```
 When you use these methods and you are doing asynchronous, be careful to do nothing in the main thread, otherwise you risk to enter in a deadlock situation.
 
+The last example show how to use cancellable `async`:
+
+```swift
+func test_invalidationTokenWithAsyncOperator() {
+
+// create an invalidation token
+let invalidator: InvalidationToken = InvalidationToken()
+
+async(token: invalidator, { status -> String in
+	Thread.sleep(forTimeInterval: 2.0)
+	if status.isCancelled {
+		print("Promise cancelled")
+	} else {
+		print("Promise resolved")
+	}
+	return "" // read result
+}).then { _ in
+	// read result
+}
+
+// Anytime you can send a cancel message to invalidate the promise
+invalidator.invalidate()
+}
+```
+
+<a name="allawait" />
+
+## Await an `zip` operator to resolve all promises
+
+Await can be also used in conjuction with zip to resolve all promises from a list:
+
+```swift
+let (resultA,resultB) = await(Promise<Void>.zip(promiseA,promiseB))
+print(resultA)
+print(resultB)
+```
+
 <a name="allfeature" />
 
 ## All Features
@@ -548,8 +586,8 @@ all(op_1.void,op_2.void,op_3.void).then { _ in
 ## Installation
 You can install Swiftline using CocoaPods, carthage and Swift package manager
 
-- **Swift 3.x**: Up to 1.0.0 (latest release for Swift 3) [Download here](https://github.com/malcommac/Hydra/releases/tag/1.0.0).
-- **Swift 4.x**: Latest is 1.1.0 [Download here](https://github.com/malcommac/Hydra/releases/tag/1.1.0).
+- **Swift 3.x**: Up to 1.0.0 ([Direct Download](https://github.com/malcommac/Hydra/releases/tag/1.0.0))
+- **Swift 4.x**: Starting from 1.1.0 ([Direct Download](https://github.com/malcommac/Hydra/releases/tag/1.1.0))
 
 ### CocoaPods
     use_frameworks!
@@ -577,8 +615,7 @@ Add swiftline as dependency in your `Package.swift`
 
 Current version is compatible with:
 
-- **Swift 3.x**: Up to 1.0.0 (latest release for Swift 3) [Download here](https://github.com/malcommac/Hydra/releases/tag/1.0.0).
-- **Swift 4.x**: Latest is 1.1.0 [Download here](https://github.com/malcommac/Hydra/releases/tag/1.1.0).
+* Swift 4 (>= 1.1.0) or Swift 3.x (Up to 1.0.0)
 * iOS 8.0 or later
 * tvOS 9.0 or later
 * macOS 10.10 or later
