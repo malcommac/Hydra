@@ -37,12 +37,13 @@ import Foundation
 ///
 /// - Parameters:
 ///   - context: context in which the body should be execute
+///	  - token: invalidation token you need to provide to cancel the promise
 ///   - body: body to execute. To fulfill the promise it should 
 /// - Returns: a new promise
-public func async<T>(in context: Context? = nil, _ body: @escaping ( () throws -> (T)) ) -> Promise<T> {
-	return Promise<T>(in: context, { resolve, reject, _ in
+public func async<T>(in context: Context? = nil, token: InvalidationToken? = nil, _ body: @escaping ( (_ status: PromiseStatus) throws -> (T)) ) -> Promise<T> {
+	return Promise<T>(in: context, token: token, { resolve, reject, st in
 		do {
-			try resolve(body())
+			try resolve(body(st))
 		} catch {
 			reject(error)
 		}
@@ -56,7 +57,7 @@ public func async<T>(in context: Context? = nil, _ body: @escaping ( () throws -
 ///   - context: context in which the block will be executed
 ///	  - after: allows you to specify a delay interval before executing the block itself.
 ///   - block: block to execute
-public func async(in context: Context, after: TimeInterval? = nil, _ block: @escaping () -> (Void)) -> Void {
+public func async(in context: Context, after: TimeInterval? = nil, _ block: @escaping () -> ()) -> Void {
 	guard let delay = after else {
 		context.queue.async {
 			block()

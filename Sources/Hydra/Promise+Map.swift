@@ -90,7 +90,7 @@ public func map_series<A, B, S: Sequence>(context: Context, items: S, transform:
 internal func map_parallel<A, B, S: Sequence>(context: Context, items: S, transform: @escaping (A) throws -> Promise<B>) -> Promise<[B]> where S.Iterator.Element == A {
 	
 	let transformPromise = Promise<Void>(resolved: ())
-	return transformPromise.then(in: context) { (Void) -> Promise<[B]> in
+	return transformPromise.then(in: context) { () -> Promise<[B]> in
 		do {
 			let mappedPromises: [Promise<B>] = try items.map({ item in
 				return try transform(item)

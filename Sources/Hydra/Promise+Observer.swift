@@ -42,8 +42,8 @@ extension Promise {
 	/// - onResolve: register an handler which is executed only if target promise is fulfilled.
 	/// - onReject: register an handler which is executed only if target promise is rejected.
 	public indirect enum Observer {
-		public typealias ResolveObserver = ((Value) -> (Void))
-		public typealias RejectObserver = ((Error) -> (Void))
+		public typealias ResolveObserver = ((Value) -> ())
+		public typealias RejectObserver = ((Error) -> ())
 		public typealias CancelObserver = (() -> ())
 		
 		case onResolve(_: Context, _: ResolveObserver)
