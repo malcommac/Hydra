@@ -34,8 +34,8 @@ Take a look here:
 ## Current Release (Swift 3 and 4 releases)
 
 Latest releases are:
-- **Swift 3.x**: Up to **1.0.0** [Download here](https://github.com/malcommac/Hydra/releases/tag/1.0.0).
 - **Swift 4.x**: From (>=) **1.1.0** [Download here](https://github.com/malcommac/Hydra/releases/tag/1.1.0).
+- **Swift 3.x**: Latest release is **1.0.0** [Download here](https://github.com/malcommac/Hydra/releases/tag/1.0.0).
 
 A complete list of changes for each release is available in the [CHANGELOG](CHANGELOG.md) file.
 
