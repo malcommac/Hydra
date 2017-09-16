@@ -12,8 +12,8 @@ Made with ♥ in pure Swift 3.x/4.x, no dependencies, lightweight & fully portab
 
 ## Swift 3 and Swift 4 Compatibility
 
-Swift 4.x: >= 1.1.0 - Latest is 1.1.0 (`pod 'HydraAsync'`)
-Swift 3.x: Latest compatible version is 1.0.0 Download here. If you are using CocoaPods be sure to fix the release (`pod 'HydraAsync', '~> 1.0.0'`)
+* **Swift 4.x**: >= 1.1.0 - Latest is 1.1.0 (`pod 'HydraAsync'`)
+* **Swift 3.x**: Latest compatible version is 1.0.0 Download here. If you are using CocoaPods be sure to fix the release (`pod 'HydraAsync', '~> 1.0.0'`)
 
 # Hydra
 Hydra is full-featured lightweight library which allows you to write better async code in Swift 3.x/4.x. It's partially based on [JavaScript A+](https://promisesaplus.com) specs and also implements modern construct like `await` (as seen in [Async/Await specification in ES8 (ECMAScript 2017)](https://github.com/tc39/ecmascript-asyncawait) or C#) which allows you to write async code in sync manner.
