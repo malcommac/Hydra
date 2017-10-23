@@ -593,7 +593,7 @@ all(op_1.void,op_2.void,op_3.void).then { _ in
 <a name="installation" />
 
 ## Installation
-You can install Swiftline using CocoaPods, carthage and Swift package manager
+You can install Hydra using CocoaPods, Carthage and Swift package manager
 
 - **Swift 3.x**: Up to 1.0.0 ([Direct Download](https://github.com/malcommac/Hydra/releases/tag/1.0.0))
 - **Swift 4.x**: Starting from 1.1.0 ([Direct Download](https://github.com/malcommac/Hydra/releases/tag/1.1.0))
@@ -606,7 +606,7 @@ You can install Swiftline using CocoaPods, carthage and Swift package manager
     github 'malcommac/Hydra'
 
 ### Swift Package Manager
-Add swiftline as dependency in your `Package.swift`
+Add Hydra as dependency in your `Package.swift`
 
 ```
   import PackageDescription
