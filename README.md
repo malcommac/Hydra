@@ -12,8 +12,8 @@ Made with ♥ in pure Swift 3.x/4.x, no dependencies, lightweight & fully portab
 
 ## Swift 3 and Swift 4 Compatibility
 
-* **Swift 4.x**: >= 1.1.0 - Latest is 1.1.0 (`pod 'HydraAsync'`)
-* **Swift 3.x**: Latest compatible version is 1.0.0 Download here. If you are using CocoaPods be sure to fix the release (`pod 'HydraAsync', '~> 1.0.0'`)
+* **Swift 4.x**: Latest is 1.2.0 (`pod 'HydraAsync'`)
+* **Swift 3.x**: Latest is 1.0.1 - Latest compatible version is 1.0.1 Download here. If you are using CocoaPods be sure to fix the release (`pod 'HydraAsync', '~> 1.0.1'`)
 
 # Hydra
 Hydra is full-featured lightweight library which allows you to write better async code in Swift 3.x/4.x. It's partially based on [JavaScript A+](https://promisesaplus.com) specs and also implements modern construct like `await` (as seen in [Async/Await specification in ES8 (ECMAScript 2017)](https://github.com/tc39/ecmascript-asyncawait) or C#) which allows you to write async code in sync manner.
@@ -43,8 +43,8 @@ Take a look below:
 ## Current Release (Swift 3 and 4 releases)
 
 Latest releases are:
-- **Swift 4.x**: From (>=) **1.1.0** [Download here](https://github.com/malcommac/Hydra/releases/tag/1.1.0).
-- **Swift 3.x**: Latest release is **1.0.0** [Download here](https://github.com/malcommac/Hydra/releases/tag/1.0.0).
+* **Swift 4.x**: Latest is 1.2.0 (`pod 'HydraAsync'`) [Download here](https://github.com/malcommac/Hydra/releases/tag/1.2.0).
+* **Swift 3.x**: Latest is 1.0.1 (`pod 'HydraAsync', '~> 1.0.1'`) [Download here](https://github.com/malcommac/Hydra/releases/tag/1.0.1).
 
 A complete list of changes for each release is available in the [CHANGELOG](CHANGELOG.md) file.
 
@@ -595,8 +595,8 @@ all(op_1.void,op_2.void,op_3.void).then { _ in
 ## Installation
 You can install Hydra using CocoaPods, Carthage and Swift package manager
 
-- **Swift 3.x**: Up to 1.0.0 ([Direct Download](https://github.com/malcommac/Hydra/releases/tag/1.0.0))
-- **Swift 4.x**: Starting from 1.1.0 ([Direct Download](https://github.com/malcommac/Hydra/releases/tag/1.1.0))
+- **Swift 3.x**: Latest compatible is 1.0.1 `pod 'HydraAsync', ~> '1.0.1'`
+- **Swift 4.x**: 1.1.0 or later `pod 'HydraAsync'`
 
 ### CocoaPods
     use_frameworks!
@@ -624,7 +624,7 @@ Add Hydra as dependency in your `Package.swift`
 
 Current version is compatible with:
 
-* Swift 4 (>= 1.1.0) or Swift 3.x (Up to 1.0.0)
+* Swift 4 (>= 1.1.0) or Swift 3.x (Up to 1.0.1)
 * iOS 8.0 or later
 * tvOS 9.0 or later
 * macOS 10.10 or later
