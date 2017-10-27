@@ -67,7 +67,7 @@ public extension Promise {
 	}
 	
 	
-	/// Join two promises and return a tuple with the results of the four promises passed (promises will be resolved in parallel in `background` QoS queue).
+	/// Join four promises and return a tuple with the results of the four promises passed (promises will be resolved in parallel in `background` QoS queue).
 	/// Rejects as soon one promise reject.
 	///
 	/// - Parameters:
@@ -78,7 +78,7 @@ public extension Promise {
 	///   - d: promise d
 	/// - Returns: joined promise of type Promise<(A,B,C,D)>
 	public static func zip<A,B,C,D>(in context: Context? = nil, a: Promise<A>, b: Promise<B>, c: Promise<C>, d: Promise<D>) -> Promise<(A,B,C,D)> {
-		return all(a.void,b.void,c.void).then(in: context, { _ in
+		return all(a.void,b.void,c.void,d.void).then(in: context, { _ in
 			return Promise<(A, B, C, D)>(resolved: (a.state.value!, b.state.value!, c.state.value!, d.state.value!))
 		})
 	}
