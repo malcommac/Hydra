@@ -4,12 +4,23 @@
 
 ## CHANGELOG
 
+* Version **[1.0.2](#102)**
 * Version **[0.9.9](#099)**
 * Version **[0.9.7](#097)**
 * Version **[0.9.4](#094)**
 * Version **[0.9.3](#093)**
 * Version **[0.9.2](#092)**
 * Version **[0.9.1](#091)**
+
+<a name="102" />
+
+## Hydra 1.0.2 (latest for Swift 3)
+---
+- **Release Date**: 2017-10-27
+- **Download Version for Swift 3**: [Download 1.0.2](https://github.com/malcommac/Hydra/releases/tag/1.0.2)
+
+- [#56](https://github.com/malcommac/Hydra/pull/56) Fixed an issue with Promise and Zip with four parameters
+
 
 <a name="099" />
 
