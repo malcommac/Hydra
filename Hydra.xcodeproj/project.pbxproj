@@ -99,6 +99,10 @@
 		37ACAE401F0FB53A00ED284A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 37ACAE3F1F0FB53A00ED284A /* Assets.xcassets */; };
 		37ACAE431F0FB53A00ED284A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 37ACAE411F0FB53A00ED284A /* LaunchScreen.storyboard */; };
 		37ACAE4A1F0FB55100ED284A /* Hydra.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52D6D97C1BEFF229002C0205 /* Hydra.framework */; };
+		37ACBBA41F55FD7D003E92AC /* DispatchTimerWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37ACBBA31F55FD7D003E92AC /* DispatchTimerWrapper.swift */; };
+		37ACBBA51F55FD7D003E92AC /* DispatchTimerWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37ACBBA31F55FD7D003E92AC /* DispatchTimerWrapper.swift */; };
+		37ACBBA61F55FD7D003E92AC /* DispatchTimerWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37ACBBA31F55FD7D003E92AC /* DispatchTimerWrapper.swift */; };
+		37ACBBA71F55FD7D003E92AC /* DispatchTimerWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37ACBBA31F55FD7D003E92AC /* DispatchTimerWrapper.swift */; };
 		52D6D9871BEFF229002C0205 /* Hydra.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52D6D97C1BEFF229002C0205 /* Hydra.framework */; };
 		644F560B1FA358DA00B7B854 /* Promise+Cancel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37843A5B1F12238A0071989E /* Promise+Cancel.swift */; };
 		644F560C1FA358DB00B7B854 /* Promise+Cancel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37843A5B1F12238A0071989E /* Promise+Cancel.swift */; };
@@ -184,6 +188,7 @@
 		37ACAE3F1F0FB53A00ED284A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		37ACAE421F0FB53A00ED284A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		37ACAE441F0FB53A00ED284A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		37ACBBA31F55FD7D003E92AC /* DispatchTimerWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DispatchTimerWrapper.swift; path = Hydra/DispatchTimerWrapper.swift; sourceTree = "<group>"; };
 		52D6D97C1BEFF229002C0205 /* Hydra.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Hydra.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		52D6D9861BEFF229002C0205 /* Hydra-iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Hydra-iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		52D6D9E21BEFFF6E002C0205 /* Hydra.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Hydra.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -333,6 +338,7 @@
 				37ACADDB1F0FB4A800ED284A /* Promise+Timeout.swift */,
 				37ACADDC1F0FB4A800ED284A /* Promise+Validate.swift */,
 				37ACADDD1F0FB4A800ED284A /* Promise+Zip.swift */,
+				37ACBBA31F55FD7D003E92AC /* DispatchTimerWrapper.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -548,7 +554,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0830;
-				LastUpgradeCheck = 0810;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = Hydra;
 				TargetAttributes = {
 					37ACAE351F0FB53A00ED284A = {
@@ -708,6 +714,7 @@
 				37ACAE221F0FB4A800ED284A /* Promise+Then.swift in Sources */,
 				37ACAE1E1F0FB4A800ED284A /* Promise+State.swift in Sources */,
 				37ACAE1A1F0FB4A800ED284A /* Promise+Retry.swift in Sources */,
+				37ACBBA41F55FD7D003E92AC /* DispatchTimerWrapper.swift in Sources */,
 				37ACAE0A1F0FB4A800ED284A /* Promise+Observer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -726,6 +733,7 @@
 			files = (
 				37ACAE081F0FB4A800ED284A /* Promise+Map.swift in Sources */,
 				37ACADF41F0FB4A800ED284A /* Promise+Any.swift in Sources */,
+				37ACBBA61F55FD7D003E92AC /* DispatchTimerWrapper.swift in Sources */,
 				37ACADF01F0FB4A800ED284A /* Promise+Always.swift in Sources */,
 				37ACAE041F0FB4A800ED284A /* Promise+Defer.swift in Sources */,
 				37ACAE181F0FB4A800ED284A /* Promise+Reduce.swift in Sources */,
@@ -755,6 +763,7 @@
 			files = (
 				37ACAE091F0FB4A800ED284A /* Promise+Map.swift in Sources */,
 				37ACADF51F0FB4A800ED284A /* Promise+Any.swift in Sources */,
+				37ACBBA71F55FD7D003E92AC /* DispatchTimerWrapper.swift in Sources */,
 				37ACADF11F0FB4A800ED284A /* Promise+Always.swift in Sources */,
 				37ACAE051F0FB4A800ED284A /* Promise+Defer.swift in Sources */,
 				37ACAE191F0FB4A800ED284A /* Promise+Reduce.swift in Sources */,
@@ -784,6 +793,7 @@
 			files = (
 				37ACAE071F0FB4A800ED284A /* Promise+Map.swift in Sources */,
 				37ACADF31F0FB4A800ED284A /* Promise+Any.swift in Sources */,
+				37ACBBA51F55FD7D003E92AC /* DispatchTimerWrapper.swift in Sources */,
 				37ACADEF1F0FB4A800ED284A /* Promise+Always.swift in Sources */,
 				37ACAE031F0FB4A800ED284A /* Promise+Defer.swift in Sources */,
 				37ACAE171F0FB4A800ED284A /* Promise+Reduce.swift in Sources */,
@@ -882,7 +892,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.danielemargutti.DemoApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -900,7 +910,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.danielemargutti.DemoApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -912,14 +922,20 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -948,7 +964,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -963,14 +979,20 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -991,7 +1013,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1007,7 +1029,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 0;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Configs/Hydra.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1018,7 +1040,7 @@
 				PRODUCT_NAME = Hydra;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -1030,7 +1052,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 0;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Configs/Hydra.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1040,7 +1062,7 @@
 				PRODUCT_NAME = Hydra;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -1054,7 +1076,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Hydra.Hydra-iOS-Tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -1068,7 +1090,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Hydra.Hydra-iOS-Tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -1090,7 +1112,7 @@
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
@@ -1114,7 +1136,7 @@
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
@@ -1138,7 +1160,7 @@
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};
@@ -1162,7 +1184,7 @@
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};
@@ -1189,7 +1211,7 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -1214,7 +1236,7 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -1230,7 +1252,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Hydra.Hydra-macOS-Tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -1247,7 +1269,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -1260,7 +1282,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Hydra.Hydra-tvOS-Tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TVOS_DEPLOYMENT_TARGET = 9.1;
 			};
 			name = Debug;
@@ -1275,7 +1297,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TVOS_DEPLOYMENT_TARGET = 9.1;
 			};
 			name = Release;

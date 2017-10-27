@@ -5,37 +5,46 @@
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage) [![CI Status](https://travis-ci.org/malcommac/HydraAsync.svg)](https://travis-ci.org/malcommac/HydraAsync) [![Version](https://img.shields.io/cocoapods/v/HydraAsync.svg?style=flat)](http://cocoadocs.org/docsets/HydraAsync) [![License](https://img.shields.io/cocoapods/l/HydraAsync.svg?style=flat)](http://cocoadocs.org/docsets/HydraAsync) [![Platform](https://img.shields.io/cocoapods/p/HydraAsync.svg?style=flat)](http://cocoadocs.org/docsets/HydraAsync)
 
 <p align="center" >Love your async code again with Hydra <br/>
-Made with ♥ in pure Swift 3.x+, no dependencies, lightweight & fully portable
+Made with ♥ in pure Swift 3.x/4.x, no dependencies, lightweight & fully portable
 <p/>
 <p align="center" >★★ <b>Star our github repository to help us!</b> ★★</p>
 <p align="center" >Created by <a href="http://www.danielemargutti.com">Daniele Margutti</a> (<a href="http://www.twitter.com/danielemargutti">@danielemargutti</a>)</p>
 
+## Swift 3 and Swift 4 Compatibility
+
+* **Swift 4.x**: >= 1.1.0 - Latest is 1.1.0 (`pod 'HydraAsync'`)
+* **Swift 3.x**: Latest compatible version is 1.0.0 Download here. If you are using CocoaPods be sure to fix the release (`pod 'HydraAsync', '~> 1.0.0'`)
+
 # Hydra
-Hydra is full-featured lightweight library which allows you to write better async code in Swift 3+. It's partially based on [JavaScript A+](https://promisesaplus.com) specs and also implements modern construct like `await` (as seen in [Async/Await specification in ES8 (ECMAScript 2017)](https://github.com/tc39/ecmascript-asyncawait) or C#) which allows you to write async code in sync manner.
+Hydra is full-featured lightweight library which allows you to write better async code in Swift 3.x/4.x. It's partially based on [JavaScript A+](https://promisesaplus.com) specs and also implements modern construct like `await` (as seen in [Async/Await specification in ES8 (ECMAScript 2017)](https://github.com/tc39/ecmascript-asyncawait) or C#) which allows you to write async code in sync manner.
 Hydra supports all sexiest operators like `always`, `validate`, `timeout`, `retry`, `all`, `any`, `pass`, `recover`, `map`, `zip`, `defer` and `retry`.
 Starts writing better async code with Hydra!
 
 ## Internals
 A more detailed look at how Hydra works can be found in [ARCHITECTURE](https://github.com/malcommac/Hydra/blob/master/ARCHITECTURE.md) file or on [Medium](https://medium.com/@danielemargutti/hydra-promises-swift-c6319f6a6209).
 
-## You also may like
+## OTHER LIBRARIES YOU MAY LIKE
 
-Do you like `Hydra`? I'm also working on several other opensource libraries.
+I'm also working on several other projects you may like.
+Take a look below:
 
-Take a look here:
+<p align="center" >
 
-* **[SwiftDate](https://github.com/malcommac/SwiftDate)** - Date & Timezone management in Swift
-* **[SwiftLocation](https://github.com/malcommac/SwiftLocation)** - CoreLocation and Beacon Monitoring on steroid!
-* **[SwiftRichString](https://github.com/malcommac/SwiftRichString)** - Elegant and painless attributed string in Swift
-* **[SwiftScanner](https://github.com/malcommac/SwiftScanner)** - String scanner in pure Swift with full unicode support
-* **[SwiftSimplify](https://github.com/malcommac/SwiftSimplify)** - Tiny high-performance Swift Polyline Simplification Library
-* **[SwiftMsgPack](https://github.com/malcommac/SwiftMsgPack)** - MsgPack Encoder/Decoder in Swift
+| Library         | Description                                      |
+|-----------------|--------------------------------------------------|
+| [**SwiftDate**](https://github.com/malcommac/SwiftDate)       | The best way to manage date/timezones in Swift   |
+| [**Hydra**](https://github.com/malcommac/Hydra)           | Write better async code: async/await & promises  |
+| [**Flow**](https://github.com/malcommac/Flow) | A new declarative approach to table managment. Forget datasource & delegates. |
+| [**SwiftRichString**](https://github.com/malcommac/SwiftRichString) | Elegant & Painless NSAttributedString in Swift   |
+| [**SwiftLocation**](https://github.com/malcommac/SwiftLocation)   | Efficient location manager                       |
+| [**SwiftMsgPack**](https://github.com/malcommac/SwiftMsgPack)    | Fast/efficient msgPack encoder/decoder           |
+</p>
 
-## Current Release
+## Current Release (Swift 3 and 4 releases)
 
 Latest releases are:
-- **Swift 3.x**: Up to 1.0.0 (latest release for Swift 3) [Download here](https://github.com/malcommac/Hydra/releases/tag/1.0.0).
-- **Swift 4.x**: Latest is 1.1.0 [Download here](https://github.com/malcommac/Hydra/releases/tag/1.1.0).
+- **Swift 4.x**: From (>=) **1.1.0** [Download here](https://github.com/malcommac/Hydra/releases/tag/1.1.0).
+- **Swift 3.x**: Latest release is **1.0.0** [Download here](https://github.com/malcommac/Hydra/releases/tag/1.0.0).
 
 A complete list of changes for each release is available in the [CHANGELOG](CHANGELOG.md) file.
 
@@ -47,6 +56,7 @@ A complete list of changes for each release is available in the [CHANGELOG](CHAN
 * **[Chaining Multiple Promises](#chaining)**
 * **[Cancellable Promises](#cancellablepromises)**
 * **[Await & Async: async code in sync manner](#awaitasync)**
+* **[Await an `zip` operator to resolve all promises](#allawait)**
 * **[All Features](#allfeatures)**
 	* **[always](#always)**
 	* **[validate](#validate)**
@@ -303,6 +313,43 @@ async({
 ```
 When you use these methods and you are doing asynchronous, be careful to do nothing in the main thread, otherwise you risk to enter in a deadlock situation.
 
+The last example show how to use cancellable `async`:
+
+```swift
+func test_invalidationTokenWithAsyncOperator() {
+
+// create an invalidation token
+let invalidator: InvalidationToken = InvalidationToken()
+
+async(token: invalidator, { status -> String in
+	Thread.sleep(forTimeInterval: 2.0)
+	if status.isCancelled {
+		print("Promise cancelled")
+	} else {
+		print("Promise resolved")
+	}
+	return "" // read result
+}).then { _ in
+	// read result
+}
+
+// Anytime you can send a cancel message to invalidate the promise
+invalidator.invalidate()
+}
+```
+
+<a name="allawait" />
+
+## Await an `zip` operator to resolve all promises
+
+Await can be also used in conjuction with zip to resolve all promises from a list:
+
+```swift
+let (resultA,resultB) = await(Promise<Void>.zip(promiseA,promiseB))
+print(resultA)
+print(resultB)
+```
+
 <a name="allfeature" />
 
 ## All Features
@@ -548,8 +595,8 @@ all(op_1.void,op_2.void,op_3.void).then { _ in
 ## Installation
 You can install Swiftline using CocoaPods, carthage and Swift package manager
 
-- **Swift 3.x**: Up to 1.0.0 (latest release for Swift 3) [Download here](https://github.com/malcommac/Hydra/releases/tag/1.0.0).
-- **Swift 4.x**: Latest is 1.1.0 [Download here](https://github.com/malcommac/Hydra/releases/tag/1.1.0).
+- **Swift 3.x**: Up to 1.0.0 ([Direct Download](https://github.com/malcommac/Hydra/releases/tag/1.0.0))
+- **Swift 4.x**: Starting from 1.1.0 ([Direct Download](https://github.com/malcommac/Hydra/releases/tag/1.1.0))
 
 ### CocoaPods
     use_frameworks!
@@ -577,8 +624,7 @@ Add swiftline as dependency in your `Package.swift`
 
 Current version is compatible with:
 
-- **Swift 3.x**: Up to 1.0.0 (latest release for Swift 3) [Download here](https://github.com/malcommac/Hydra/releases/tag/1.0.0).
-- **Swift 4.x**: Latest is 1.1.0 [Download here](https://github.com/malcommac/Hydra/releases/tag/1.1.0).
+* Swift 4 (>= 1.1.0) or Swift 3.x (Up to 1.0.0)
 * iOS 8.0 or later
 * tvOS 9.0 or later
 * macOS 10.10 or later

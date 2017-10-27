@@ -249,7 +249,7 @@ class HydraTestThen: XCTestCase {
 		let errPromise = intFailedPromiseImmediate(TestErrors.anotherError)
 		errPromise.recover { (err) -> Promise<Int> in
 			return Promise<Int>(rejected: TestErrors.someError)
-			}.catch { (e) -> (Void) in
+			}.catch { (e) -> () in
 				XCTAssertEqual(e as! TestErrors, TestErrors.someError)
 				exp.fulfill()
 		}
@@ -537,7 +537,7 @@ class HydraTestThen: XCTestCase {
 	func test_async() {
 		let exp = expectation(description: "test_async")
 		let returnValue = 5
-		async { () -> Int in
+		async { (_) -> Int in
 			Thread.sleep(forTimeInterval: 2.0)
 			return returnValue
 			}.then { value in
@@ -721,6 +721,27 @@ class HydraTestThen: XCTestCase {
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
 	
+	func test_invalidationTokenWithAsyncOperator() {
+		let exp = expectation(description: "test_retry_condition")
+		let invalidator: InvalidationToken = InvalidationToken()
+		
+		async(token: invalidator, { st -> String in
+			Thread.sleep(forTimeInterval: 2.0)
+			if st.isCancelled {
+				print("Promise cancelled")
+				exp.fulfill()
+			} else {
+				print("Promise resolved")
+				XCTFail()
+			}
+			return ""
+		}).then { _ in
+
+		}
+		invalidator.invalidate()
+		waitForExpectations(timeout: expTimeout, handler: nil)
+	}
+	
 	func test_invalidationToken() {
 		let exp = expectation(description: "test_retry_condition")
 
@@ -765,7 +786,7 @@ class HydraTestThen: XCTestCase {
 				XCTFail()
 				return value == 2
 			}
-			.catch { (error) -> (Void) in
+			.catch { (error) -> () in
 				XCTFail()
 			}.cancelled {
 				print("Operation cancelled")
