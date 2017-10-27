@@ -100,6 +100,9 @@
 		37ACAE431F0FB53A00ED284A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 37ACAE411F0FB53A00ED284A /* LaunchScreen.storyboard */; };
 		37ACAE4A1F0FB55100ED284A /* Hydra.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52D6D97C1BEFF229002C0205 /* Hydra.framework */; };
 		52D6D9871BEFF229002C0205 /* Hydra.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52D6D97C1BEFF229002C0205 /* Hydra.framework */; };
+		644F560B1FA358DA00B7B854 /* Promise+Cancel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37843A5B1F12238A0071989E /* Promise+Cancel.swift */; };
+		644F560C1FA358DB00B7B854 /* Promise+Cancel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37843A5B1F12238A0071989E /* Promise+Cancel.swift */; };
+		644F560D1FA358DB00B7B854 /* Promise+Cancel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37843A5B1F12238A0071989E /* Promise+Cancel.swift */; };
 		8933C78E1EB5B82C000D00A4 /* HydraTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8933C7891EB5B82A000D00A4 /* HydraTests.swift */; };
 		8933C78F1EB5B82C000D00A4 /* HydraTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8933C7891EB5B82A000D00A4 /* HydraTests.swift */; };
 		8933C7901EB5B82D000D00A4 /* HydraTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8933C7891EB5B82A000D00A4 /* HydraTests.swift */; };
@@ -728,6 +731,7 @@
 				37ACAE181F0FB4A800ED284A /* Promise+Reduce.swift in Sources */,
 				37ACAE281F0FB4A800ED284A /* Promise+Timeout.swift in Sources */,
 				37ACADE01F0FB4A800ED284A /* Commons.swift in Sources */,
+				644F560C1FA358DB00B7B854 /* Promise+Cancel.swift in Sources */,
 				37ACADE41F0FB4A800ED284A /* Context.swift in Sources */,
 				37ACAE301F0FB4A800ED284A /* Promise+Zip.swift in Sources */,
 				37ACADF81F0FB4A800ED284A /* Promise+Async.swift in Sources */,
@@ -756,6 +760,7 @@
 				37ACAE191F0FB4A800ED284A /* Promise+Reduce.swift in Sources */,
 				37ACAE291F0FB4A800ED284A /* Promise+Timeout.swift in Sources */,
 				37ACADE11F0FB4A800ED284A /* Commons.swift in Sources */,
+				644F560D1FA358DB00B7B854 /* Promise+Cancel.swift in Sources */,
 				37ACADE51F0FB4A800ED284A /* Context.swift in Sources */,
 				37ACAE311F0FB4A800ED284A /* Promise+Zip.swift in Sources */,
 				37ACADF91F0FB4A800ED284A /* Promise+Async.swift in Sources */,
@@ -784,6 +789,7 @@
 				37ACAE171F0FB4A800ED284A /* Promise+Reduce.swift in Sources */,
 				37ACAE271F0FB4A800ED284A /* Promise+Timeout.swift in Sources */,
 				37ACADDF1F0FB4A800ED284A /* Commons.swift in Sources */,
+				644F560B1FA358DA00B7B854 /* Promise+Cancel.swift in Sources */,
 				37ACADE31F0FB4A800ED284A /* Context.swift in Sources */,
 				37ACAE2F1F0FB4A800ED284A /* Promise+Zip.swift in Sources */,
 				37ACADF71F0FB4A800ED284A /* Promise+Async.swift in Sources */,
