@@ -110,6 +110,10 @@
 		8933C78E1EB5B82C000D00A4 /* HydraTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8933C7891EB5B82A000D00A4 /* HydraTests.swift */; };
 		8933C78F1EB5B82C000D00A4 /* HydraTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8933C7891EB5B82A000D00A4 /* HydraTests.swift */; };
 		8933C7901EB5B82D000D00A4 /* HydraTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8933C7891EB5B82A000D00A4 /* HydraTests.swift */; };
+		CE286D1D205D3FDA009F1917 /* Promise+RetryWhen.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE286D1C205D3FDA009F1917 /* Promise+RetryWhen.swift */; };
+		CE286D1E205D3FDA009F1917 /* Promise+RetryWhen.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE286D1C205D3FDA009F1917 /* Promise+RetryWhen.swift */; };
+		CE286D1F205D3FDA009F1917 /* Promise+RetryWhen.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE286D1C205D3FDA009F1917 /* Promise+RetryWhen.swift */; };
+		CE286D20205D3FDA009F1917 /* Promise+RetryWhen.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE286D1C205D3FDA009F1917 /* Promise+RetryWhen.swift */; };
 		DD7502881C68FEDE006590AF /* Hydra.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52D6DA0F1BF000BD002C0205 /* Hydra.framework */; };
 		DD7502921C690C7A006590AF /* Hydra.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52D6D9F01BEFFFBE002C0205 /* Hydra.framework */; };
 /* End PBXBuildFile section */
@@ -197,6 +201,7 @@
 		8933C7891EB5B82A000D00A4 /* HydraTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HydraTests.swift; sourceTree = "<group>"; };
 		AD2FAA261CD0B6D800659CF4 /* Hydra.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Hydra.plist; sourceTree = "<group>"; };
 		AD2FAA281CD0B6E100659CF4 /* HydraTests.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = HydraTests.plist; sourceTree = "<group>"; };
+		CE286D1C205D3FDA009F1917 /* Promise+RetryWhen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Promise+RetryWhen.swift"; path = "Hydra/Promise+RetryWhen.swift"; sourceTree = "<group>"; };
 		DD75027A1C68FCFC006590AF /* Hydra-macOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Hydra-macOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD75028D1C690C7A006590AF /* Hydra-tvOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Hydra-tvOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -333,6 +338,7 @@
 				37ACADD61F0FB4A800ED284A /* Promise+Recover.swift */,
 				37ACADD71F0FB4A800ED284A /* Promise+Reduce.swift */,
 				37ACADD81F0FB4A800ED284A /* Promise+Retry.swift */,
+				CE286D1C205D3FDA009F1917 /* Promise+RetryWhen.swift */,
 				37ACADD91F0FB4A800ED284A /* Promise+State.swift */,
 				37ACADDA1F0FB4A800ED284A /* Promise+Then.swift */,
 				37ACADDB1F0FB4A800ED284A /* Promise+Timeout.swift */,
@@ -713,6 +719,7 @@
 				37ACAE121F0FB4A800ED284A /* Promise+Recover.swift in Sources */,
 				37ACAE221F0FB4A800ED284A /* Promise+Then.swift in Sources */,
 				37ACAE1E1F0FB4A800ED284A /* Promise+State.swift in Sources */,
+				CE286D1D205D3FDA009F1917 /* Promise+RetryWhen.swift in Sources */,
 				37ACAE1A1F0FB4A800ED284A /* Promise+Retry.swift in Sources */,
 				37ACBBA41F55FD7D003E92AC /* DispatchTimerWrapper.swift in Sources */,
 				37ACAE0A1F0FB4A800ED284A /* Promise+Observer.swift in Sources */,
@@ -751,6 +758,7 @@
 				37ACADEC1F0FB4A800ED284A /* Promise+All.swift in Sources */,
 				37ACAE141F0FB4A800ED284A /* Promise+Recover.swift in Sources */,
 				37ACAE241F0FB4A800ED284A /* Promise+Then.swift in Sources */,
+				CE286D1F205D3FDA009F1917 /* Promise+RetryWhen.swift in Sources */,
 				37ACAE201F0FB4A800ED284A /* Promise+State.swift in Sources */,
 				37ACAE1C1F0FB4A800ED284A /* Promise+Retry.swift in Sources */,
 				37ACAE0C1F0FB4A800ED284A /* Promise+Observer.swift in Sources */,
@@ -781,6 +789,7 @@
 				37ACADED1F0FB4A800ED284A /* Promise+All.swift in Sources */,
 				37ACAE151F0FB4A800ED284A /* Promise+Recover.swift in Sources */,
 				37ACAE251F0FB4A800ED284A /* Promise+Then.swift in Sources */,
+				CE286D20205D3FDA009F1917 /* Promise+RetryWhen.swift in Sources */,
 				37ACAE211F0FB4A800ED284A /* Promise+State.swift in Sources */,
 				37ACAE1D1F0FB4A800ED284A /* Promise+Retry.swift in Sources */,
 				37ACAE0D1F0FB4A800ED284A /* Promise+Observer.swift in Sources */,
@@ -811,6 +820,7 @@
 				37ACADEB1F0FB4A800ED284A /* Promise+All.swift in Sources */,
 				37ACAE131F0FB4A800ED284A /* Promise+Recover.swift in Sources */,
 				37ACAE231F0FB4A800ED284A /* Promise+Then.swift in Sources */,
+				CE286D1E205D3FDA009F1917 /* Promise+RetryWhen.swift in Sources */,
 				37ACAE1F1F0FB4A800ED284A /* Promise+State.swift in Sources */,
 				37ACAE1B1F0FB4A800ED284A /* Promise+Retry.swift in Sources */,
 				37ACAE0B1F0FB4A800ED284A /* Promise+Observer.swift in Sources */,
