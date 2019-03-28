@@ -41,7 +41,7 @@ public extension Promise {
 	///   - timeout: timeout expressed in seconds
 	///   - error: error to report, if nil `PromiseError.timeout` is used instead
 	/// - Returns: promise
-	public func timeout(in context: Context? = nil, timeout: TimeInterval, error: Error? = nil) -> Promise<Value> {
+	func timeout(in context: Context? = nil, timeout: TimeInterval, error: Error? = nil) -> Promise<Value> {
 		let ctx = context ?? .background
 		let nextPromise = Promise<Value>(in: ctx, token: self.invalidationToken) { resolve, reject, operation in
 			// Dispatch the result of self promise to the nextPromise

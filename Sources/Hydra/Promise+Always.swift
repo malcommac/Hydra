@@ -42,7 +42,7 @@ public extension Promise {
 	///   - body: body to execute
 	/// - Returns: promise
 	@discardableResult
-	public func always(in context: Context? = nil, body: @escaping () throws -> Void) -> Promise<Value> {
+	func always(in context: Context? = nil, body: @escaping () throws -> Void) -> Promise<Value> {
 		let ctx = context ?? .background
 		let nextPromise = Promise<Value>(in: ctx, token: self.invalidationToken) { resolve, reject, operation in
 			// Always call body both for reject and resolve

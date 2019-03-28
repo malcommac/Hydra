@@ -241,15 +241,6 @@ public class Promise<Value> {
 			self.observers.removeAll()
 		}
 	}
-
-	
-	/// Transform given promise to a void promise.
-	@available(*, deprecated: 0.9.8, message: "Use .void var instead")
-	public func voidPromise() -> Promise<Void> {
-		return self.then { _ in
-			return ()
-		}
-	}
 	
 	/// Transform given promise to a void promise
 	/// This is useful when you need to execute multiple promises which has different return values

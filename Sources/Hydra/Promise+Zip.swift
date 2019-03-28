@@ -33,54 +33,52 @@
 
 import Foundation
 
-public extension Promise {
-	
-	
-	/// Join two promises and return a tuple with the results of both (promises will be resolved in parallel in `background` QoS queue).
-	/// Rejects as soon one promise reject.
-	///
-	/// - Parameters:
-	///   - context: context queue to report the result (if not specified `background` queue is used instead)
-	///   - a: promise a
-	///   - b: promise b
-	/// - Returns: joined promise of type Promise<(A,B)>
-	public static func zip<A, B>(in context: Context? = nil, _ a: Promise<A>, _ b: Promise<B>) -> Promise<(A,B)> {
-		return all(a.void,b.void).then(in: context, { _ in
-			return Promise<(A, B)>(resolved: (a.state.value!, b.state.value!))
-		})
-	}
-	
-	
-	/// Join three promises and return a tuple with the results of the three passed promises (promises will be resolved in parallel in `background` QoS queue).
-	/// Rejects as soon one promise reject.
-	///
-	/// - Parameters:
-	///   - context: context queue to report the result (if not specified `background` queue is used instead)
-	///   - a: promise a
-	///   - b: promise b
-	///   - c: promise c
-	/// - Returns: joined promise of type Promise<(A,B,C)>
-	public static func zip<A,B,C>(in context: Context? = nil, a: Promise<A>, b: Promise<B>, c: Promise<C>) -> Promise<(A,B,C)> {
-		return all(a.void,b.void,c.void).then(in: context, { _ in
-			return Promise<(A, B, C)>(resolved: (a.state.value!, b.state.value!, c.state.value!))
-		})
-	}
-	
-	
-	/// Join four promises and return a tuple with the results of the four promises passed (promises will be resolved in parallel in `background` QoS queue).
-	/// Rejects as soon one promise reject.
-	///
-	/// - Parameters:
-	///   - context: context queue to report the result (if not specified `background` queue is used instead)
-	///   - a: promise a
-	///   - b: promsie b
-	///   - c: promise c
-	///   - d: promise d
-	/// - Returns: joined promise of type Promise<(A,B,C,D)>
-	public static func zip<A,B,C,D>(in context: Context? = nil, a: Promise<A>, b: Promise<B>, c: Promise<C>, d: Promise<D>) -> Promise<(A,B,C,D)> {
-		return all(a.void,b.void,c.void,d.void).then(in: context, { _ in
-			return Promise<(A, B, C, D)>(resolved: (a.state.value!, b.state.value!, c.state.value!, d.state.value!))
-		})
-	}
-	
+
+/// Join two promises and return a tuple with the results of both (promises will be resolved in parallel in `background` QoS queue).
+/// Rejects as soon one promise reject.
+///
+/// - Parameters:
+///   - context: context queue to report the result (if not specified `background` queue is used instead)
+///   - a: promise a
+///   - b: promise b
+/// - Returns: joined promise of type Promise<(A,B)>
+public func zip<A, B>(in context: Context? = nil, _ a: Promise<A>, _ b: Promise<B>) -> Promise<(A,B)> {
+	return all(a.void,b.void).then(in: context, { _ in
+		return Promise<(A, B)>(resolved: (a.state.value!, b.state.value!))
+	})
 }
+
+
+/// Join three promises and return a tuple with the results of the three passed promises (promises will be resolved in parallel in `background` QoS queue).
+/// Rejects as soon one promise reject.
+///
+/// - Parameters:
+///   - context: context queue to report the result (if not specified `background` queue is used instead)
+///   - a: promise a
+///   - b: promise b
+///   - c: promise c
+/// - Returns: joined promise of type Promise<(A,B,C)>
+public func zip<A,B,C>(in context: Context? = nil, a: Promise<A>, b: Promise<B>, c: Promise<C>) -> Promise<(A,B,C)> {
+	return all(a.void,b.void,c.void).then(in: context, { _ in
+		return Promise<(A, B, C)>(resolved: (a.state.value!, b.state.value!, c.state.value!))
+	})
+}
+
+
+/// Join four promises and return a tuple with the results of the four promises passed (promises will be resolved in parallel in `background` QoS queue).
+/// Rejects as soon one promise reject.
+///
+/// - Parameters:
+///   - context: context queue to report the result (if not specified `background` queue is used instead)
+///   - a: promise a
+///   - b: promsie b
+///   - c: promise c
+///   - d: promise d
+/// - Returns: joined promise of type Promise<(A,B,C,D)>
+public func zip<A,B,C,D>(in context: Context? = nil, a: Promise<A>, b: Promise<B>, c: Promise<C>, d: Promise<D>) -> Promise<(A,B,C,D)> {
+	return all(a.void,b.void,c.void,d.void).then(in: context, { _ in
+		return Promise<(A, B, C, D)>(resolved: (a.state.value!, b.state.value!, c.state.value!, d.state.value!))
+	})
+}
+
+

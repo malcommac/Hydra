@@ -34,61 +34,14 @@ import Foundation
 
 public extension Promise {
 	
-	/// `retry` operator allows you to execute source chained promise if it ends with a rejection.
-	/// If reached the attempts the promise still rejected chained promise is also rejected along with
-	/// the same source error.
-	///
-	/// - Parameters:
-	///   - attempts: number of retry attempts for source promise (must be a number > 1, otherwise promise is rejected with `PromiseError.invalidInput` error.
-	///   - condition: code block to check retryable source promise
-	/// - Returns: a promise which resolves when the first attempt to resolve source promise is succeded, rejects if none of the attempts ends with a success.
-    public func retry(_ attempts: Int = 3, _ condition: @escaping ((Int, Error) throws -> Bool) = { _,_ in true }) -> Promise<Value> {
-		guard attempts >= 1 else {
-			// Must be a valid attempts number
-			return Promise<Value>(rejected: PromiseError.invalidInput)
-		}
-		
-		var innerPromise: Promise<Value>? = nil
-		var remainingAttempts = attempts
-		// We'll create a next promise which will be resolved when attempts to resolve self (source promise)
-		// is reached (with a fulfill or a rejection).
-		let nextPromise = Promise<Value>(in: self.context, token: self.invalidationToken) { (resolve, reject, operation) in
-			innerPromise = self.recover(in: self.context) { [unowned self] (error) -> (Promise<Value>) in
-				// If promise is rejected we'll decrement the attempts counter
-				remainingAttempts -= 1
-				guard remainingAttempts >= 1 else {
-					// if the max number of attempts is reached
-					// we will end nextPromise with the last seen error
-					throw error
-				}
-				// If promise is rejected we will check condition that is retryable
-				do {
-					guard try condition(remainingAttempts, error) else {
-						throw error
-					}
-				} catch(_) {
-					// reject soruce promise error
-					throw error
-				}
-				// Reset the state of the promise
-				// (okay it's true, a Promise cannot change state as you know...this
-				// is a bit trick which will remain absolutely internal to the library itself)
-				self.resetState()
-				// Re-execute the body of the source promise to re-execute the async operation
-				self.runBody()
-				return self.retry(remainingAttempts, condition)
-			}
-			// If promise resolves nothing else to do, resolve the nextPromise!
-			let onResolve = Observer.onResolve(self.context, resolve)
-			let onReject = Observer.onReject(self.context, reject)
-			let onCancel = Observer.onCancel(self.context, operation.cancel)
-			
-			// Observe changes from source promise
-			innerPromise?.add(observers: onResolve, onReject, onCancel)
-			innerPromise?.runBody()
-		}
-		nextPromise.runBody()
-		return nextPromise
-	}
-	
+	func retry(_ attempts: Int = 3, _ condition: @escaping ((Int, Error) throws -> Bool) = { _,_ in true }) -> Promise<Value> {
+        return retryWhen(attempts) { (remainingAttempts, error) -> Promise<Bool> in
+            do {
+                return Promise<Bool>(resolved: try condition(remainingAttempts, error))
+            } catch (_) {
+                return Promise<Bool>(rejected: error)
+            }
+        }
+    }
+
 }
