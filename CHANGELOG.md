@@ -4,7 +4,8 @@
 
 ## CHANGELOG
 
-* Version **[1.2.0](#120)** (Swift 4)
+* Version **[1.2.1](#121)** (Swift 4)
+* Version **[1.2.0](#120)**
 * Version **[1.1.0](#110)** (first Swift 4)
 * Version **[1.0.1](#101)** (latest for Swift 3)
 * Version **[1.0.0](#100)**
@@ -14,6 +15,15 @@
 * Version **[0.9.3](#093)**
 * Version **[0.9.2](#092)**
 * Version **[0.9.1](#091)**
+
+<a name="121" />
+
+## Hydra 1.2.1 (Swift 4)
+---
+- **Release Date**: 2017-10-27
+- **Download Version for Swift 4**: [Download 1.2.1](https://github.com/malcommac/Hydra/releases/tag/1.2.1)
+
+- [#56](https://github.com/malcommac/Hydra/pull/56) Fixed an issue with Promise and Zip with four parameters
 
 <a name="120" />
 
@@ -38,6 +48,15 @@
 - [#48](https://github.com/malcommac/Hydra/pull/48) Resolved a memory leaks with cancellable promises.
 - [#49](https://github.com/malcommac/Hydra/pull/49) Replaced with `(Void)` with `()`  to fix warnings with Swift 4 and XCode 9
 
+
+<a name="102" />
+
+## Hydra 1.0.2 (latest for Swift 3)
+---
+- **Release Date**: 2017-10-27
+- **Download Version for Swift 3**: [Download 1.0.2](https://github.com/malcommac/Hydra/releases/tag/1.0.2)
+
+- [#56](https://github.com/malcommac/Hydra/pull/56) Fixed an issue with Promise and Zip with four parameters
 
 <a name="101" />
 

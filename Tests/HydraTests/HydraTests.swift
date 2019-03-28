@@ -721,6 +721,94 @@ class HydraTestThen: XCTestCase {
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
 	
+    //MARK: RetryWhen Test
+    
+    func test_retryWhen() {
+        let exp = expectation(description: "test_retryWhen")
+        
+        let retryAttempts = 3
+        let successOnAttempt = 3
+        var currentAttempt = 0
+        Promise<Int> { (resolve, reject, _) in
+            currentAttempt += 1
+            if currentAttempt < successOnAttempt {
+                print("attempt is \(currentAttempt)... reject")
+                reject(TestErrors.anotherError)
+            } else {
+                print("attempt is \(currentAttempt)... resolve")
+                resolve(5)
+            }
+        }.retryWhen(retryAttempts).then { value in
+            print("value \(value) at attempt \(currentAttempt)")
+            XCTAssertEqual(currentAttempt, 3)
+            exp.fulfill()
+        }.catch { (err) in
+            print("failed \(err) at attempt \(currentAttempt)")
+            XCTFail()
+        }
+        waitForExpectations(timeout: expTimeout, handler: nil)
+    }
+    
+    func test_retryWhen_allFailure() {
+        let exp = expectation(description: "test_retryWhen_allFailure")
+        
+        let retryAttempts = 3
+        var currentAttempt = 0
+        Promise<Int> { (resolve, reject, _) in
+            currentAttempt += 1
+            print("attempt is \(currentAttempt)... reject")
+            reject(TestErrors.anotherError)
+            }.retryWhen(retryAttempts).then { value in
+                print("value \(value) at attempt \(currentAttempt)")
+                XCTFail()
+            }.catch { err in
+                print("failed \(err) at attempt \(currentAttempt)")
+                XCTAssertEqual(err as! TestErrors, .anotherError)
+                XCTAssertEqual(currentAttempt, 3)
+                exp.fulfill()
+        }
+        
+        waitForExpectations(timeout: expTimeout, handler: nil)
+        
+    }
+    
+    func test_retryWhen_condition() {
+        let exp = expectation(description: "test_retryWhen_condition")
+        
+        let retryAttempts = 5
+        let successOnAttempt = 5
+        let retryableRemainAttempt = 2
+        var currentAttempt = 0
+        Promise<Int> { (resolve, reject, _) in
+            currentAttempt += 1
+            if currentAttempt < successOnAttempt {
+                print("attempt is \(currentAttempt)... reject")
+                reject(TestErrors.anotherError)
+            } else {
+                print("attempt is \(currentAttempt)... resolve")
+                resolve(5)
+            }
+        }.retryWhen(retryAttempts) { (remainAttempts, error) -> Promise<Bool> in
+            if remainAttempts > retryableRemainAttempt {
+                print("retry remainAttempts is \(remainAttempts)... true")
+                return Promise<Bool>(resolved: true).defer(5)
+            } else {
+                print("retry remainAttempts is \(remainAttempts)... false")
+                return Promise<Bool>(resolved: false)
+            }
+        }.then { value in
+            print("value \(value) at attempt \(currentAttempt)")
+            XCTFail()
+        }.catch { err in
+            print("failed \(err) at attempt \(currentAttempt)")
+            XCTAssertEqual(err as! TestErrors, .anotherError)
+            XCTAssertEqual(currentAttempt, 3)
+            exp.fulfill()
+        }
+        
+        waitForExpectations(timeout: expTimeout, handler: nil)
+    }
+    
 	func test_invalidationTokenWithAsyncOperator() {
 		let exp = expectation(description: "test_retry_condition")
 		let invalidator: InvalidationToken = InvalidationToken()
