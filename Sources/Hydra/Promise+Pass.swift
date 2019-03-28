@@ -42,7 +42,7 @@ public extension Promise {
 	///   - context: context in which the body is executed (if not specified `background` is used)
 	///   - body: body to execute
 	/// - Returns: a promise
-	public func pass<A>(in context: Context? = nil, _ body: @escaping (Value) throws -> Promise<A>) -> Promise<Value> {
+	func pass<A>(in context: Context? = nil, _ body: @escaping (Value) throws -> Promise<A>) -> Promise<Value> {
 		let ctx = context ?? .background
 		return self.then(in: ctx, { value in
 			try body(value).then(in: ctx, { _ in
@@ -58,7 +58,7 @@ public extension Promise {
 	///   - context: context in which the body is executed (if not specified `background` is used)
 	///   - body: body to execute
 	/// - Returns: a promise
-	public func pass(in context: Context? = nil, _ handler: @escaping (Value) throws -> Void) -> Promise<Value> {
+	func pass(in context: Context? = nil, _ handler: @escaping (Value) throws -> Void) -> Promise<Value> {
 		return self.pass(in: context, { value in
 			try Promise<Void>(resolved: handler(value))
 		})

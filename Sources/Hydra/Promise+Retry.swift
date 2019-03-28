@@ -34,7 +34,7 @@ import Foundation
 
 public extension Promise {
 	
-    public func retry(_ attempts: Int = 3, _ condition: @escaping ((Int, Error) throws -> Bool) = { _,_ in true }) -> Promise<Value> {
+	func retry(_ attempts: Int = 3, _ condition: @escaping ((Int, Error) throws -> Bool) = { _,_ in true }) -> Promise<Value> {
         return retryWhen(attempts) { (remainingAttempts, error) -> Promise<Bool> in
             do {
                 return Promise<Bool>(resolved: try condition(remainingAttempts, error))
@@ -43,4 +43,5 @@ public extension Promise {
             }
         }
     }
+
 }

@@ -33,7 +33,7 @@ import Foundation
 
 public extension Promise {
     
-    public func retryWhen(_ attempts: Int = 3, _ condition: @escaping ((Int, Error) -> Promise<Bool>) = { _,_ in Promise<Bool>(resolved: true) }) -> Promise<Value> {
+	func retryWhen(_ attempts: Int = 3, _ condition: @escaping ((Int, Error) -> Promise<Bool>) = { _,_ in Promise<Bool>(resolved: true) }) -> Promise<Value> {
         guard attempts >= 1 else {
             // Must be a valid attempts number
             return Promise<Value>(rejected: PromiseError.invalidInput)

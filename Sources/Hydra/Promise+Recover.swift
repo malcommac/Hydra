@@ -41,7 +41,7 @@ public extension Promise {
 	///   - context: context in which the body is executed (if not specified `background` is used)
 	///   - body: body to execute. It must return a new promise to evaluate (our recover promise)
 	/// - Returns: a promise
-	public func recover(in context: Context? = nil, _ body: @escaping (Error) throws -> Promise<Value>) -> Promise<Value> {
+	func recover(in context: Context? = nil, _ body: @escaping (Error) throws -> Promise<Value>) -> Promise<Value> {
 		let ctx = context ?? .background
 		return Promise<Value>(in: ctx, token: self.invalidationToken, { resolve, reject, operation in
 			return self.then(in: ctx, {

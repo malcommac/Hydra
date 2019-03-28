@@ -42,7 +42,7 @@ public extension Promise {
 	///   - body: body to execute
 	/// - Returns: a promise
 	@discardableResult
-	public func `catch`(in context: Context? = nil, _ body: @escaping ((Error) throws -> ())) -> Promise<Void> {
+	func `catch`(in context: Context? = nil, _ body: @escaping ((Error) throws -> ())) -> Promise<Void> {
 		let ctx = context ?? .main
 		let nextPromise = Promise<Void>(in: ctx, token: self.invalidationToken) { resolve, reject, operation in
 			let onResolve = Observer.onResolve(ctx, { _ in

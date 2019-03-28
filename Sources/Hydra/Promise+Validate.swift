@@ -44,7 +44,7 @@ public extension Promise {
 	///   - context: context in which the validate is executed (if not specified `background` is used)
 	///   - validate: validate block
 	/// - Returns: promise
-	public func validate(in context: Context? = nil, _ validate: @escaping ((Value) throws -> (Bool))) -> Promise<Value> {
+	func validate(in context: Context? = nil, _ validate: @escaping ((Value) throws -> (Bool))) -> Promise<Value> {
 		let ctx = context ?? .background
 		return self.then(in: ctx, { (value: Value) -> Value in
 			guard try validate(value) else {
