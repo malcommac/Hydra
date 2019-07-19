@@ -172,6 +172,14 @@ public class Promise<Value> {
 		}
 	}
 	
+    public func resolve(_ value: Value) {
+        set(state: .resolved(value))
+    }
+    
+    public func reject(_ error: Error) {
+        set(state: .rejected(error))
+    }
+    
 	public func cancel() {
 		self.set(state: .cancelled)
 	}
