@@ -115,6 +115,11 @@ public class Promise<Value> {
 		self.bodyCalled = true
 	}
 	
+    /// Initialize a promise in pending state.
+    public init() {
+        self.state = .pending
+        self.bodyCalled = true
+    }
 	
 	/// Initialize a new Promise in a rejected state with a specified error
 	///
