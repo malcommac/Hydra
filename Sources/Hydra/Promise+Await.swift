@@ -96,11 +96,11 @@ public extension Context {
 	/// - Throws: throw if promise fails
 	@discardableResult
 	internal func await<T>(_ promise: Promise<T>) throws -> T {
-        #if os(Linux)
-        let isNotMainQueue = self.queue.label != DispatchQueue.main.label
-        #else
-        let isNotMainQueue = self.queue != DispatchQueue.main
-        #endif
+		#if os(Linux)
+		let isNotMainQueue = self.queue.label != DispatchQueue.main.label
+		#else
+		let isNotMainQueue = self.queue != DispatchQueue.main
+		#endif
 		guard isNotMainQueue else {
 			// execute a promise on main context does not make sense
 			// dispatch_semaphore_wait should NOT be called on the main thread.
