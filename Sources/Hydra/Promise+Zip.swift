@@ -44,7 +44,7 @@ public extension Promise {
 	///   - a: promise a
 	///   - b: promise b
 	/// - Returns: joined promise of type Promise<(A,B)>
-	public static func zip<A, B>(in context: Context? = nil, _ a: Promise<A>, _ b: Promise<B>) -> Promise<(A,B)> {
+	static func zip<A, B>(in context: Context? = nil, _ a: Promise<A>, _ b: Promise<B>) -> Promise<(A,B)> {
 		return all(a.void,b.void).then(in: context, { _ in
 			return Promise<(A, B)>(resolved: (a.state.value!, b.state.value!))
 		})
@@ -60,7 +60,7 @@ public extension Promise {
 	///   - b: promise b
 	///   - c: promise c
 	/// - Returns: joined promise of type Promise<(A,B,C)>
-	public static func zip<A,B,C>(in context: Context? = nil, a: Promise<A>, b: Promise<B>, c: Promise<C>) -> Promise<(A,B,C)> {
+	static func zip<A,B,C>(in context: Context? = nil, a: Promise<A>, b: Promise<B>, c: Promise<C>) -> Promise<(A,B,C)> {
 		return all(a.void,b.void,c.void).then(in: context, { _ in
 			return Promise<(A, B, C)>(resolved: (a.state.value!, b.state.value!, c.state.value!))
 		})
@@ -73,11 +73,11 @@ public extension Promise {
 	/// - Parameters:
 	///   - context: context queue to report the result (if not specified `background` queue is used instead)
 	///   - a: promise a
-	///   - b: promsie b
+	///   - b: promise b
 	///   - c: promise c
 	///   - d: promise d
 	/// - Returns: joined promise of type Promise<(A,B,C,D)>
-	public static func zip<A,B,C,D>(in context: Context? = nil, a: Promise<A>, b: Promise<B>, c: Promise<C>, d: Promise<D>) -> Promise<(A,B,C,D)> {
+	static func zip<A,B,C,D>(in context: Context? = nil, a: Promise<A>, b: Promise<B>, c: Promise<C>, d: Promise<D>) -> Promise<(A,B,C,D)> {
 		return all(a.void,b.void,c.void,d.void).then(in: context, { _ in
 			return Promise<(A, B, C, D)>(resolved: (a.state.value!, b.state.value!, c.state.value!, d.state.value!))
 		})

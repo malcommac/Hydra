@@ -63,7 +63,7 @@ public prefix func ..!<T> (_ promise: Promise<T>) -> T? {
 /// - Parameters:
 ///   - context: context in which you want to execute the operation. If not specified default concurrent `awaitContext` is used instead.
 ///   - promise: target promise
-/// - Returns: fufilled value of the promise
+/// - Returns: fulfilled value of the promise
 /// - Throws: throws an exception if promise fails due to an error
 @discardableResult
 public func await<T>(in context: Context? = nil, _ promise: Promise<T>) throws -> T {
@@ -111,16 +111,16 @@ public extension Context {
 		let semaphore = DispatchSemaphore(value: 0)
 		
 		promise.then(in: self) { value -> Void in
-			// promise is fulfilled, fillup error and resume code execution
+			// promise is fulfilled, fill-up error and resume code execution
 			result = value
 			semaphore.signal()
 		}.catch(in: self) { err in
-			// promise is rejected, fillup error and resume code execution
+			// promise is rejected, fill-up error and resume code execution
 			error = err
 			semaphore.signal()
 		}
 	
-		// Wait and block code execution until promise is fullfilled or rejected
+		// Wait and block code execution until promise is full-filled or rejected
 		_ = semaphore.wait(timeout: .distantFuture)
 		
 		guard let promiseValue = result else {

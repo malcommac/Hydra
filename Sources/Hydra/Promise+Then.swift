@@ -45,7 +45,7 @@ public extension Promise {
 	///   - body: block to execute
 	/// - Returns: a chainable promise
 	@discardableResult
-	public func then<N>(in context: Context? = nil, _ body: @escaping ( (Value) throws -> N) ) -> Promise<N> {
+	func then<N>(in context: Context? = nil, _ body: @escaping ( (Value) throws -> N) ) -> Promise<N> {
 		let ctx = context ?? .main
 		return self.then(in: ctx, { value in
 			do {
@@ -73,7 +73,7 @@ public extension Promise {
 	///   - body: body to execute
 	/// - Returns: chainable promise
 	@discardableResult
-	public func then<N>(in context: Context? = nil, _ body: @escaping ( (Value) throws -> (Promise<N>) )) -> Promise<N> {
+	func then<N>(in context: Context? = nil, _ body: @escaping ( (Value) throws -> (Promise<N>) )) -> Promise<N> {
 		let ctx = context ?? .main
 		let nextPromise = Promise<N>(in: ctx, token: self.invalidationToken, { resolve, reject, operation in
 			
@@ -115,7 +115,7 @@ public extension Promise {
 	///   - body: code block to execute
 	/// - Returns: a chainable promise
 	@discardableResult
-	public func then(in context: Context? = nil, _ body: @escaping ( (Value) throws -> () ) ) -> Promise<Value> {
+	func then(in context: Context? = nil, _ body: @escaping ( (Value) throws -> () ) ) -> Promise<Value> {
 		let ctx = context ?? .main
 		// This is the simplest `then` is possible to create; it simply execute the body of the
 		// promise, get the value and allows to execute a body. Body can also throw and reject
