@@ -15,4 +15,5 @@ Pod::Spec.new do |spec|
   spec.requires_arc = true
   spec.module_name = 'Hydra'
   spec.frameworks  = "Foundation"
+  spec.swift_versions = ['4.0', '4.1', '4.2', '5.0', '5.1']
 end
