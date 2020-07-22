@@ -52,7 +52,7 @@ public enum PromiseError: Error {
 
 
 /// Invalidatable protocol is used to control the execution of a promise from the outside
-/// You should pass an object conforms to this type at the init of your Promsie instance.
+/// You should pass an object conforms to this type at the init of your Promise instance.
 /// To invalidate a Promise just return the `.isCancelled` property to `true`.
 ///
 /// From the inside of your Promise's body you should check if the `operation.isCancelled` is `true`.
@@ -67,7 +67,7 @@ public protocol InvalidatableProtocol {
 
 
 /// This is a simple implementation of the `InvalidatableProtocol` protocol.
-/// You can use or extend this class in order to provide your own bussiness logic.
+/// You can use or extend this class in order to provide your own business logic.
 open class InvalidationToken: InvalidatableProtocol {
 	
 	/// Current status of the promise

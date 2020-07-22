@@ -51,7 +51,7 @@ public func all<L, S: Sequence>(_ promises: S, concurrency: UInt = UInt.max) -> 
 	}
 	
 	// We want to create a Promise which groups all input Promises and return only
-	// when all input promises fullfill or one of them reject.
+	// when all input promises fulfill or one of them reject.
 	// Promises are resolved in parallel but the array with the results of all promises is reported
 	// in the same order of the input promises.
 	let allPromise = Promise<[L]> { (resolve, reject, operation) in
@@ -66,7 +66,7 @@ public func all<L, S: Sequence>(_ promises: S, concurrency: UInt = UInt.max) -> 
 				// decrement remaining promise to fulfill
 				countRemaining -= 1
 				if countRemaining == 0 {
-					// if all promises are fullfilled we can resolve our chain Promise
+					// if all promises are fulfilled we can resolve our chain Promise
 					// with an array of all values results of our input promises (in the same order)
 					let allResults = promises.map({ return $0.state.value! })
 					resolve(allResults)

@@ -35,13 +35,13 @@ import Foundation
 
 public extension Promise {
 
-	/// Delay the executon of a Promise chain by some number of seconds from current time
+	/// Delay the execution of a Promise chain by some number of seconds from current time
 	///
 	/// - Parameters:
 	///   - context: context in which the body is executed (if not specified `background` is used)
 	///   - seconds: delay time in seconds; execution time is `.now()+seconds`
 	/// - Returns: the Promise to resolve to after the delay
-	public func `defer`(in context: Context? = nil, _ seconds: TimeInterval) -> Promise<Value> {
+	func `defer`(in context: Context? = nil, _ seconds: TimeInterval) -> Promise<Value> {
 		let ctx = context ?? .background
 		return self.then(in: ctx, { value in
 			return Promise<Value> { resolve, _, _ in

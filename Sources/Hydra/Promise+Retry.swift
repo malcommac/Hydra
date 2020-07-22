@@ -41,8 +41,8 @@ public extension Promise {
 	/// - Parameters:
 	///   - attempts: number of retry attempts for source promise (must be a number > 1, otherwise promise is rejected with `PromiseError.invalidInput` error.
 	///   - condition: code block to check retryable source promise
-	/// - Returns: a promise which resolves when the first attempt to resolve source promise is succeded, rejects if none of the attempts ends with a success.
-    public func retry(_ attempts: Int = 3, _ condition: @escaping ((Int, Error) throws -> Bool) = { _,_ in true }) -> Promise<Value> {
+	/// - Returns: a promise which resolves when the first attempt to resolve source promise is succeeded, rejects if none of the attempts ends with a success.
+    func retry(_ attempts: Int = 3, _ condition: @escaping ((Int, Error) throws -> Bool) = { _,_ in true }) -> Promise<Value> {
 		guard attempts >= 1 else {
 			// Must be a valid attempts number
 			return Promise<Value>(rejected: PromiseError.invalidInput)
@@ -67,7 +67,7 @@ public extension Promise {
 						throw error
 					}
 				} catch(_) {
-					// reject soruce promise error
+					// reject source promise error
 					throw error
 				}
 				// Reset the state of the promise
