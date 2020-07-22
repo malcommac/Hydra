@@ -244,7 +244,7 @@ public class Promise<Value> {
 
 	
 	/// Transform given promise to a void promise.
-	@available(*, deprecated: 0.9.8, message: "Use .void var instead")
+    @available(*, deprecated, message: "Use .void var instead")
 	public func voidPromise() -> Promise<Void> {
 		return self.then { _ in
 			return ()
