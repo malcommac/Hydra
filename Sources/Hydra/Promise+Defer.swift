@@ -35,7 +35,7 @@ import Foundation
 
 public extension Promise {
 
-	/// Delay the executon of a Promise chain by some number of seconds from current time
+	/// Delay the execution of a Promise chain by some number of seconds from current time
 	///
 	/// - Parameters:
 	///   - context: context in which the body is executed (if not specified `background` is used)

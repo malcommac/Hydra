@@ -34,7 +34,6 @@
 import Foundation
 
 public extension Promise {
-	
 	/// Allows you to recover a failed promise by returning another promise with the same output
 	///
 	/// - Parameters:
