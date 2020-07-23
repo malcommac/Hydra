@@ -54,7 +54,7 @@ public extension Promise {
 				let errorToPass = (error ?? PromiseError.timeout)
 				reject(errorToPass)
 			}
-			timer.scheduleOneshot(deadline: .now() + timeout)
+			timer.scheduleOneShot(deadline: .now() + timeout)
 			timer.resume()
 			
 			// Observe resolve

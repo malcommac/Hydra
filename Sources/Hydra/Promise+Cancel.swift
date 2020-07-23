@@ -37,7 +37,7 @@ public extension Promise {
 	/// Catch a cancelled promise.
 	///
 	/// - Parameters:
-	///   - context: context in which the body will be eecuted. If not specified `.main` is used.
+	///   - context: context in which the body will be executed. If not specified `.main` is used.
 	///   - body: body to execute
 	/// - Returns: a new void promise
 	@discardableResult

@@ -261,7 +261,7 @@ public class Promise<Value> {
 	/// ```
 	///		let op_1: Promise<User> = asyncGetCurrentUserProfile()
 	///		let op_2: Promise<UIImage> = asyncGetCurrentUserAvatar()
-	///		let op_3: Promise<[User]> = asyncGetCUrrentUserFriends()
+	///		let op_3: Promise<[User]> = asyncGetCurrentUserFriends()
 	///		all(op_1.void,op_2.void,op_3.void).then { _ in
 	///			let userProfile = op_1.result
 	///			let avatar = op_2.result
