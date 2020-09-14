@@ -41,7 +41,7 @@ public extension Promise {
 	///   - body: body to execute
 	/// - Returns: a new void promise
 	@discardableResult
-	func cancelled(in context: Context? = nil, _ body: @escaping (() -> (()))) -> Promise<Void> {
+	func cancelled(in context: Context? = nil, _ body: @escaping (() -> (Void))) -> Promise<Void> {
 		let ctx = context ?? .main
 		let nextPromise = Promise<Void>(in: ctx, token: self.invalidationToken) { resolve, reject, operation in
 			let onResolve = Observer.onResolve(ctx, { _ in

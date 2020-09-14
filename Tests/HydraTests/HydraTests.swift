@@ -356,6 +356,23 @@ class HydraTestThen: XCTestCase {
 		}
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
+    
+    func test_thenChainAndAlways() {
+        let exp = expectation(description: "test_anyWithArray")
+        var passedThens = 0
+        
+        Promise<Int>(in: .background, token: nil) { (r, rj, s) in
+            r(10)
+        }.then { _ in
+            passedThens += 1
+        }.always(in: .main) {
+            passedThens += 1
+            XCTAssertTrue(passedThens == 2, "Not all thens are passed")
+            XCTAssertTrue(Thread.isMainThread, "Failed, the operation is not on main thread as we expect")
+            exp.fulfill()
+        }
+        waitForExpectations(timeout: expTimeout, handler: nil)
+    }
 	
 	/// The same test with `any` operator which takes as input an array instead of variable list of arguments
 	func test_anyWithArray() {
