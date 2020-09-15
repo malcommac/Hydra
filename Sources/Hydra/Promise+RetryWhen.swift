@@ -33,7 +33,8 @@ import Foundation
 
 public extension Promise {
     
-	func retryWhen(_ attempts: Int = 3, _ condition: @escaping ((Int, Error) -> Promise<Bool>) = { _,_ in Promise<Bool>(resolved: true) }) -> Promise<Value> {
+    func retryWhen(_ attempts: Int = 3, delay: TimeInterval = 0,
+                   _ condition: @escaping ((Int, Error) -> Promise<Bool>) = { _,_ in Promise<Bool>(resolved: true) }) -> Promise<Value> {
         guard attempts >= 1 else {
             // Must be a valid attempts number
             return Promise<Value>(rejected: PromiseError.invalidInput)
@@ -44,7 +45,7 @@ public extension Promise {
         // We'll create a next promise which will be resolved when attempts to resolve self (source promise)
         // is reached (with a fulfill or a rejection).
         let nextPromise = Promise<Value>(in: self.context, token: self.invalidationToken) { (resolve, reject, operation) in
-            innerPromise = self.recover(in: self.context) { [unowned self] (error) -> (Promise<Value>) in
+            innerPromise = self.defer(delay).recover(in: self.context) { [unowned self] (error) -> (Promise<Value>) in
                 // If promise is rejected we'll decrement the attempts counter
                 remainingAttempts -= 1
                 guard remainingAttempts >= 1 else {
@@ -64,7 +65,7 @@ public extension Promise {
                         self.resetState()
                         // Re-execute the body of the source promise to re-execute the async operation
                         self.runBody()
-                        self.retryWhen(remainingAttempts, condition).then(in: self.context) { (result) in
+                        self.retryWhen(remainingAttempts, delay: delay, condition).then(in: self.context) { (result) in
                             resolve(result)
                         }.catch { (retriedError) in
                             reject(retriedError)
