@@ -1,4 +1,4 @@
-// swift-tools-version:4.0
+// swift-tools-version:5.1
 import PackageDescription
 
 let package = Package(
@@ -9,6 +9,5 @@ let package = Package(
     targets: [
         .target(name: "Hydra", dependencies: []),
         .testTarget(name: "HydraTests", dependencies: ["Hydra"])
-    ],
-    swiftLanguageVersions: [4]
+    ]
 )

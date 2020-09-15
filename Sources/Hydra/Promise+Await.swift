@@ -63,7 +63,7 @@ public prefix func ..!<T> (_ promise: Promise<T>) -> T? {
 /// - Parameters:
 ///   - context: context in which you want to execute the operation. If not specified default concurrent `awaitContext` is used instead.
 ///   - promise: target promise
-/// - Returns: fufilled value of the promise
+/// - Returns: fulfilled value of the promise
 /// - Throws: throws an exception if promise fails due to an error
 @discardableResult
 public func await<T>(in context: Context? = nil, _ promise: Promise<T>) throws -> T {
@@ -92,17 +92,23 @@ public extension Context {
 	///  Awaits that the given promise fulfilled with its value or throws an error if the promise fails.
 	///
 	/// - Parameter promise: target promise
-	/// - Returns: return the value of the promise
-	/// - Throws: throw if promise fails
-	@discardableResult
-	internal func await<T>(_ promise: Promise<T>) throws -> T {
-		guard self.queue != DispatchQueue.main else {
-			// execute a promise on main context does not make sense
-			// dispatch_semaphore_wait should NOT be called on the main thread.
-			// more here: https://medium.com/@valentinkalchev/how-to-pause-and-resume-a-sequence-of-mutating-swift-structs-using-dispatch-semaphore-fc98eca55c0#.ipbujy4k2
-			throw PromiseError.invalidContext
-		}
-		
+    /// - Returns: return the value of the promise
+    /// - Throws: throw if promise fails
+    @discardableResult
+    internal func await<T>(_ promise: Promise<T>) throws -> T {
+        #if os(Linux)
+        let isNotMainQueue = self.queue.label != DispatchQueue.main.label
+        #else
+        let isNotMainQueue = self.queue != DispatchQueue.main
+        #endif
+        
+        guard isNotMainQueue else {
+            // execute a promise on main context does not make sense
+            // dispatch_semaphore_wait should NOT be called on the main thread.
+            // more here: https://medium.com/@valentinkalchev/how-to-pause-and-resume-a-sequence-of-mutating-swift-structs-using-dispatch-semaphore-fc98eca55c0#.ipbujy4k2
+            throw PromiseError.invalidContext
+        }
+        
 		var result: T?
 		var error: Error?
 		
@@ -111,16 +117,16 @@ public extension Context {
 		let semaphore = DispatchSemaphore(value: 0)
 		
 		promise.then(in: self) { value -> Void in
-			// promise is fulfilled, fillup error and resume code execution
+			// promise is fulfilled, fill-up error and resume code execution
 			result = value
 			semaphore.signal()
 		}.catch(in: self) { err in
-			// promise is rejected, fillup error and resume code execution
+			// promise is rejected, fill-up error and resume code execution
 			error = err
 			semaphore.signal()
 		}
 	
-		// Wait and block code execution until promise is fullfilled or rejected
+		// Wait and block code execution until promise is full-filled or rejected
 		_ = semaphore.wait(timeout: .distantFuture)
 		
 		guard let promiseValue = result else {

@@ -345,7 +345,7 @@ invalidator.invalidate()
 Await can be also used in conjuction with zip to resolve all promises from a list:
 
 ```swift
-let (resultA,resultB) = await(Promise<Void>.zip(promiseA,promiseB))
+let (resultA,resultB) = await(zip(promiseA,promiseB))
 print(resultA)
 print(resultB)
 ```
@@ -512,7 +512,7 @@ Map is used to transform a list of items into promises and resolve them in paral
 `zip` allows you to join different promises (2,3 or 4) and return a tuple with the result of them. Promises are resolved in parallel.
 
 ```swift
-Promise<Void>.zip(a: getUserProfile(user), b: getUserAvatar(user), c: getUserFriends(user))
+zip(a: getUserProfile(user), b: getUserAvatar(user), c: getUserFriends(user))
   .then { profile, avatar, friends in
 	// ... let's do something
 }.catch {

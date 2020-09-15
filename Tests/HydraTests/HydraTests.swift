@@ -226,22 +226,22 @@ class HydraTestThen: XCTestCase {
 	/// and return another Promise with the same value of the previous promise as output.
 	// In this test we have tried to recover a bad call by executing a resolving promise.
 	// Test is passed if recover works and we get a valid result into the final `then`.
-	func test_recoverPromise() {
-		let exp = expectation(description: "test_recoverPromise")
-		let expResult = 5
-		intPromise(expResult).then { value in
-			self.toStringErrorPromise(value)
-			}.recover { err -> Promise<String> in
-				return self.toStringPromise("\(expResult)")
-			}.then { string in
-				if ("\(expResult)" != string) {
-					XCTFail()
-				}
-				exp.fulfill()
-		}
-		waitForExpectations(timeout: expTimeout, handler: nil)
-	}
-	
+    func test_recoverPromise() {
+        let exp = expectation(description: "test_recoverPromise")
+        let expResult = 5
+        intPromise(expResult).then { value in
+            self.toStringErrorPromise(value)
+        }.recover { err -> Promise<String> in
+            return self.toStringPromise("\(expResult)")
+        }.then { string in
+            if ("\(expResult)" != string) {
+                XCTFail()
+            }
+            exp.fulfill()
+        }
+        waitForExpectations(timeout: expTimeout, handler: nil)
+    }
+    
 	/// If return rejected promise in `recover` operator, chain to next as its error.
 	func test_recover_failure() {
 		let exp = expectation(description: "test_recover_failure")
@@ -356,6 +356,23 @@ class HydraTestThen: XCTestCase {
 		}
 		waitForExpectations(timeout: expTimeout, handler: nil)
 	}
+    
+    func test_thenChainAndAlways() {
+        let exp = expectation(description: "test_anyWithArray")
+        var passedThens = 0
+        
+        Promise<Int>(in: .background, token: nil) { (r, rj, s) in
+            r(10)
+        }.then { _ in
+            passedThens += 1
+        }.always(in: .main) {
+            passedThens += 1
+            XCTAssertTrue(passedThens == 2, "Not all thens are passed")
+            XCTAssertTrue(Thread.isMainThread, "Failed, the operation is not on main thread as we expect")
+            exp.fulfill()
+        }
+        waitForExpectations(timeout: expTimeout, handler: nil)
+    }
 	
 	/// The same test with `any` operator which takes as input an array instead of variable list of arguments
 	func test_anyWithArray() {
@@ -633,34 +650,67 @@ class HydraTestThen: XCTestCase {
 	}
 	
 	//MARK: Retry Test
-	
-	func test_retry() {
-		let exp = expectation(description: "test_retry")
-		
-		let retryAttempts = 3
-		let successOnAttempt = 3
-		var currentAttempt = 0
-		Promise<Int> { (resolve, reject, _) in
-			currentAttempt += 1
-			if currentAttempt < successOnAttempt {
-				print("attempt is \(currentAttempt)... reject")
-				reject(TestErrors.anotherError)
-			} else {
-				print("attempt is \(currentAttempt)... resolve")
-				resolve(5)
-			}
-			}.retry(retryAttempts).then { value in
-				print("value \(value) at attempt \(currentAttempt)")
-				XCTAssertEqual(currentAttempt, 3)
-				exp.fulfill()
-			}.catch { err in
-				print("failed \(err) at attempt \(currentAttempt)")
-				XCTFail()
-		}
-		
-		waitForExpectations(timeout: expTimeout, handler: nil)
-	}
-	
+    
+    func test_retry() {
+        let exp = expectation(description: "test_retry")
+        
+        let retryAttempts = 3
+        let successOnAttempt = 3
+        var currentAttempt = 0
+        Promise<Int> { (resolve, reject, _) in
+            currentAttempt += 1
+            if currentAttempt < successOnAttempt {
+                print("attempt is \(currentAttempt)... reject")
+                reject(TestErrors.anotherError)
+            } else {
+                print("attempt is \(currentAttempt)... resolve")
+                resolve(5)
+            }
+        }.retry(retryAttempts).then { value in
+            print("value \(value) at attempt \(currentAttempt)")
+            XCTAssertEqual(currentAttempt, 3)
+            exp.fulfill()
+        }.catch { err in
+            print("failed \(err) at attempt \(currentAttempt)")
+            XCTFail()
+        }
+        
+        waitForExpectations(timeout: expTimeout, handler: nil)
+    }
+    
+    func test_retryWithDelay() {
+        let exp = expectation(description: "test_retryWithDelay")
+
+        let retryAttempts = 3
+        let successOnAttempt = 3
+        var currentAttempt = 0
+        var lastFailureDate = Date.distantPast
+        let retryDelay: TimeInterval = 0
+        
+        Promise<Int> { (resolve, reject, _) in
+            currentAttempt += 1
+            if currentAttempt < successOnAttempt {
+                print("attempt is \(currentAttempt)... reject")
+                lastFailureDate = Date()
+                reject(TestErrors.anotherError)
+            } else {
+                print("attempt is \(currentAttempt)... resolve")
+                resolve(5)
+            }
+        }.retry(retryAttempts, delay: retryDelay).then { value in
+            let passed = Date().timeIntervalSince(lastFailureDate)
+            XCTAssertGreaterThanOrEqual(passed, retryDelay)
+            print("value \(value) at attempt \(currentAttempt)")
+            XCTAssertEqual(currentAttempt, 3)
+            exp.fulfill()
+        }.catch { err in
+            print("failed \(err) at attempt \(currentAttempt)")
+            XCTFail()
+        }
+        
+        waitForExpectations(timeout: 30, handler: nil)
+    }
+    
 	func test_retry_allFailure() {
 		let exp = expectation(description: "test_retry_allFailure")
 		

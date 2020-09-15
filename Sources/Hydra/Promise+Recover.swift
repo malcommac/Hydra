@@ -34,7 +34,6 @@
 import Foundation
 
 public extension Promise {
-	
 	/// Allows you to recover a failed promise by returning another promise with the same output
 	///
 	/// - Parameters:
@@ -43,8 +42,8 @@ public extension Promise {
 	/// - Returns: a promise
 	func recover(in context: Context? = nil, _ body: @escaping (Error) throws -> Promise<Value>) -> Promise<Value> {
 		let ctx = context ?? .background
-		return Promise<Value>(in: ctx, token: self.invalidationToken, { resolve, reject, operation in
-			return self.then(in: ctx, {
+		return Promise<Value>(in: ctx, token: self.invalidationToken, { [weak self] resolve, reject, operation in
+			self?.then(in: ctx, {
 				// If promise resolve we don't need to do anything.
 				resolve($0)
 			}).catch(in: ctx, { error in
