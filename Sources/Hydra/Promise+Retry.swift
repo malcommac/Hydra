@@ -33,9 +33,17 @@
 import Foundation
 
 public extension Promise {
-	
-	func retry(_ attempts: Int = 3, _ condition: @escaping ((Int, Error) throws -> Bool) = { _,_ in true }) -> Promise<Value> {
-        return retryWhen(attempts) { (remainingAttempts, error) -> Promise<Bool> in
+    
+    /// Retry the operation of the promise.
+    ///
+    /// - Parameters:
+    ///   - attempts: number of attempts.
+    ///   - delay: delay between each attempts (starting when failed the first time).
+    ///   - condition: condition for delay.
+    /// - Returns: Promise<Value>
+    func retry(_ attempts: Int = 3, delay: TimeInterval = 0,
+               _ condition: @escaping ((Int, Error) throws -> Bool) = { _,_ in true }) -> Promise<Value> {
+        return retryWhen(attempts, delay: delay) { (remainingAttempts, error) -> Promise<Bool> in
             do {
                 return Promise<Bool>(resolved: try condition(remainingAttempts, error))
             } catch (_) {

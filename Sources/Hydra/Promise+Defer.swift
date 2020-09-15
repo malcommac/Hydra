@@ -42,6 +42,10 @@ public extension Promise {
 	///   - seconds: delay time in seconds; execution time is `.now()+seconds`
 	/// - Returns: the Promise to resolve to after the delay
 	func `defer`(in context: Context? = nil, _ seconds: TimeInterval) -> Promise<Value> {
+        guard seconds > 0 else {
+            return self
+        }
+        
 		let ctx = context ?? .background
 		return self.then(in: ctx, { value in
 			return Promise<Value> { resolve, _, _ in
