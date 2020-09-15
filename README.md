@@ -531,7 +531,8 @@ asyncFunc1().defer(.main, 5).then...
 
 ### retry
 `retry` operator allows you to execute source chained promise if it ends with a rejection.
-If reached the attempts the promise still rejected chained promise is also rejected along with the same source error.
+If reached the attempts the promise still rejected chained promise is also rejected along with the same source error.  
+Retry also support `delay` parameter which specify the number of seconds to wait before a new attempt (2.0.4+).
 
 ```swift
 // try to execute myAsyncFunc(); if it fails the operator try two other times
