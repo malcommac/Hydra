@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name = 'HydraAsync'
-  spec.version = '2.0.3'
+  spec.version = '2.0.4 '
   spec.summary = 'Promises & Await: Write better async in Swift'
   spec.homepage = 'https://github.com/malcommac/Hydra'
   spec.license = { :type => 'MIT', :file => 'LICENSE' }
@@ -15,5 +15,5 @@ Pod::Spec.new do |spec|
   spec.requires_arc = true
   spec.module_name = 'Hydra'
   spec.frameworks  = "Foundation"
-  spec.swift_versions = ['4.0', '4.1', '4.2', '5.0', '5.1']
+  spec.swift_versions = ['4.0', '4.1', '4.2', '5.0', '5.1', '5.3']
 end
