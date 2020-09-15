@@ -5,7 +5,7 @@
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage) [![CI Status](https://travis-ci.org/malcommac/HydraAsync.svg)](https://travis-ci.org/malcommac/HydraAsync) [![Version](https://img.shields.io/cocoapods/v/HydraAsync.svg?style=flat)](http://cocoadocs.org/docsets/HydraAsync) [![License](https://img.shields.io/cocoapods/l/HydraAsync.svg?style=flat)](http://cocoadocs.org/docsets/HydraAsync) [![Platform](https://img.shields.io/cocoapods/p/HydraAsync.svg?style=flat)](http://cocoadocs.org/docsets/HydraAsync)
 
 <p align="center" >Love your async code again with Hydra <br/>
-Made with ♥ in pure Swift 3.x/4.x, no dependencies, lightweight & fully portable
+Made with ♥ in pure Swift 5+, no dependencies, lightweight & fully portable (even on Linux)
 <p/>
 <p align="center" >★★ <b>Star our github repository to help us!</b> ★★</p>
 <p align="center" >Created by <a href="http://www.danielemargutti.com">Daniele Margutti</a> (<a href="http://www.twitter.com/danielemargutti">@danielemargutti</a>)</p>
