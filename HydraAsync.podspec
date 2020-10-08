@@ -8,7 +8,7 @@ Pod::Spec.new do |spec|
   spec.social_media_url = 'http://twitter.com/danielemargutti'
   spec.source = { :git => 'https://github.com/malcommac/Hydra.git', :tag => "#{spec.version}" }
   spec.source_files = 'Sources/**/*.swift'
-  spec.ios.deployment_target = '8.0'
+  spec.ios.deployment_target = '9.0'
   spec.watchos.deployment_target = '2.0'
   spec.osx.deployment_target = '10.10'
   spec.tvos.deployment_target = '9.0'
