@@ -626,7 +626,7 @@ Add Hydra as dependency in your `Package.swift`
 Current version is compatible with:
 
 * Swift 4 (>= 1.2.1) or Swift 3.x (Up to 1.0.2)
-* iOS 8.0 or later
+* iOS 9.0 or later
 * tvOS 9.0 or later
 * macOS 10.10 or later
 * watchOS 2.0 or later
