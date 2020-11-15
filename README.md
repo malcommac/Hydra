@@ -1,54 +1,31 @@
-<p align="center" >
-  <img src="https://raw.githubusercontent.com/malcommac/Hydra/develop/hydra-logo.png" width=210px height=204px alt="Hydra" title="Hydra">
+<p align="center">
+<img src="banner.png" width=476px alt="Hydra" title="Hydra">
 </p>
 
-[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage) [![CI Status](https://travis-ci.org/malcommac/HydraAsync.svg)](https://travis-ci.org/malcommac/HydraAsync) [![Version](https://img.shields.io/cocoapods/v/HydraAsync.svg?style=flat)](http://cocoadocs.org/docsets/HydraAsync) [![License](https://img.shields.io/cocoapods/l/HydraAsync.svg?style=flat)](http://cocoadocs.org/docsets/HydraAsync) [![Platform](https://img.shields.io/cocoapods/p/HydraAsync.svg?style=flat)](http://cocoadocs.org/docsets/HydraAsync)
+<p align="center"><strong>Lightweight full-featured Promises, Async & Await Library in Swift</strong></p>
 
-<p align="center" >Love your async code again with Hydra <br/>
-Made with ♥ in pure Swift 5+, no dependencies, lightweight & fully portable (even on Linux)
-<p/>
-<p align="center" >★★ <b>Star our github repository to help us!</b> ★★</p>
-<p align="center" >Created by <a href="http://www.danielemargutti.com">Daniele Margutti</a> (<a href="http://www.twitter.com/danielemargutti">@danielemargutti</a>)</p>
+## What's this?
 
-## Swift 3 and Swift 4 Compatibility
-
-* **Swift 4.x**: Latest is 1.2.1 (`pod 'HydraAsync'`)
-* **Swift 3.x**: Latest is 1.0.2 - Latest compatible version is 1.0.2 Download here. If you are using CocoaPods be sure to fix the release (`pod 'HydraAsync', '~> 1.0.2'`)
-
-# Hydra
 Hydra is full-featured lightweight library which allows you to write better async code in Swift 3.x/4.x. It's partially based on [JavaScript A+](https://promisesaplus.com) specs and also implements modern construct like `await` (as seen in [Async/Await specification in ES8 (ECMAScript 2017)](https://github.com/tc39/ecmascript-asyncawait) or C#) which allows you to write async code in sync manner.
-Hydra supports all sexiest operators like `always`, `validate`, `timeout`, `retry`, `all`, `any`, `pass`, `recover`, `map`, `zip`, `defer` and `retry`.
+Hydra supports all sexiest operators like always, validate, timeout, retry, all, any, pass, recover, map, zip, defer and retry.  
 Starts writing better async code with Hydra!
 
-## Internals
 A more detailed look at how Hydra works can be found in [ARCHITECTURE](https://github.com/malcommac/Hydra/blob/master/ARCHITECTURE.md) file or on [Medium](https://medium.com/@danielemargutti/hydra-promises-swift-c6319f6a6209).
 
-## OTHER LIBRARIES YOU MAY LIKE
+## ❤️ Your Support
 
-I'm also working on several other projects you may like.
-Take a look below:
+*Hi fellow developer!*  
+You know, maintaing and developing tools consumes resources and time. While I enjoy making them **your support is foundamental to allow me continue its development**.  
 
-<p align="center" >
+If you are using SwiftLocation or any other of my creations please consider the following options:
 
-| Library         | Description                                      |
-|-----------------|--------------------------------------------------|
-| [**SwiftDate**](https://github.com/malcommac/SwiftDate)       | The best way to manage date/timezones in Swift   |
-| [**Hydra**](https://github.com/malcommac/Hydra)           | Write better async code: async/await & promises  |
-| [**Flow**](https://github.com/malcommac/Flow) | A new declarative approach to table managment. Forget datasource & delegates. |
-| [**SwiftRichString**](https://github.com/malcommac/SwiftRichString) | Elegant & Painless NSAttributedString in Swift   |
-| [**SwiftLocation**](https://github.com/malcommac/SwiftLocation)   | Efficient location manager                       |
-| [**SwiftMsgPack**](https://github.com/malcommac/SwiftMsgPack)    | Fast/efficient msgPack encoder/decoder           |
-</p>
+- [**Make a donation with PayPal**](https://www.paypal.com/paypalme/danielemargutti/20)
+- [**Become a Sponsor**](https://github.com/sponsors/malcommac)
 
-## Current Release (Swift 3 and 4 releases)
+- [Follow Me](https://github.com/malcommac)
 
-Latest releases are:
-* **Swift 4.x**: Latest is 1.2.0 (`pod 'HydraAsync'`) [Download here](https://github.com/malcommac/Hydra/releases/tag/1.2.0).
-* **Swift 3.x**: Latest is 1.0.1 (`pod 'HydraAsync', '~> 1.0.1'`) [Download here](https://github.com/malcommac/Hydra/releases/tag/1.0.1).
+## Introduction
 
-A complete list of changes for each release is available in the [CHANGELOG](CHANGELOG.md) file.
-
-## Index
 * **[What's a Promise](#whatspromise)**
 * **[Updating to >=0.9.7](#updating097)**
 * **[Create a Promise](#createpromise)**
@@ -619,13 +596,15 @@ Add Hydra as dependency in your `Package.swift`
   )
 ```
 
+**Consider ❤️ [support the development](#support) of this library!**
+
 <a name="requirements" />
 
 ## Requirements
 
 Current version is compatible with:
 
-* Swift 4 (>= 1.2.1) or Swift 3.x (Up to 1.0.2)
+* Swift 5.x
 * iOS 9.0 or later
 * tvOS 9.0 or later
 * macOS 10.10 or later
@@ -634,17 +613,23 @@ Current version is compatible with:
 
 <a name="credits" />
 
-## Credits & License
-Hydra is owned and maintained by [Daniele Margutti](http://www.danielemargutti.com/).
+## Contributing
 
-As open source creation any help is welcome!
+- If you **need help** or you'd like to **ask a general question**, open an issue.
+- If you **found a bug**, open an issue.
+- If you **have a feature request**, open an issue.
+- If you **want to contribute**, submit a pull request.
 
-The code of this library is licensed under MIT License; you can use it in commercial products without any limitation.
+## Copyright & Acknowledgements
 
-The only requirement is to add a line in your Credits/About section with the text below:
+SwiftLocation is currently owned and maintained by Daniele Margutti.  
+You can follow me on Twitter [@danielemargutti](http://twitter.com/danielemargutti).  
+My web site is [https://www.danielemargutti.com](https://www.danielemargutti.com) 
 
-```
-This software uses open source Hydra's library to manage async code.
-Web: http://github.com/malcommac/Hydra
-Created by Daniele Margutti and licensed under MIT License.
+This software is licensed under [MIT License](LICENSE.md).
+
+***Follow me on:***  
+- 💼 [Linkedin](https://www.linkedin.com/in/danielemargutti/)  
+- 🐦 [Twitter](https://twitter.com/danielemargutti)
+
 ```
