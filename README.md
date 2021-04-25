@@ -223,6 +223,9 @@ class SomeTableViewCell: UITableViewCell {
 Have you ever dream to write asynchronous code like its synchronous counterpart? Hydra was heavily inspired by [Async/Await specification in ES8 (ECMAScript 2017) ](https://github.com/tc39/ecmascript-asyncawait) which provides a powerful way to write async doe in a sequential manner.
 
 Using `async` and `await` is pretty simple.
+
+> NOTE: Since Hydra 2.0.6 the await function is available under Hydra.await() function in order to supress the Xcode 12.5+ warning (await will become a Swift standard function soon!)
+
 For example the code above can be rewritten directly as:
 
 ```swift
@@ -230,11 +233,11 @@ For example the code above can be rewritten directly as:
 // context (if omitted `background` thread is used) and return an Int value.
 let asyncFunc = async({ _ -> Int in // you must specify the return of the Promise, here an Int
 	// With `await` the async code is resolved in a sync manner
-	let loggedUser = try await(loginUser(username,pass))
+	let loggedUser = try Hydra.await(loginUser(username,pass))
 	// one promise...
-	let followersList = try await(getFollowers(loggedUser))
+	let followersList = try Hydra.await(getFollowers(loggedUser))
 	// after another...
-	let countUnfollowed = try await(unfollow(followersList))
+	let countUnfollowed = try Hydra.await(unfollow(followersList))
 	// ... linearly
 	// Then our async promise will be resolved with the end value
 	return countUnfollowed
@@ -257,7 +260,7 @@ Below an example of the async function which will be executed without delay in b
 ```swift
 async({
 	print("And now some intensive task...")
-	let result = try! await(.background, { resolve,reject, _ in
+	let result = try! Hydra.await(.background, { resolve,reject, _ in
 		delay(10, context: .background, closure: { // jut a trick for our example
 			resolve(5)
 		})
@@ -322,7 +325,7 @@ invalidator.invalidate()
 Await can be also used in conjuction with zip to resolve all promises from a list:
 
 ```swift
-let (resultA,resultB) = await(zip(promiseA,promiseB))
+let (resultA,resultB) = Hydra.await(zip(promiseA,promiseB))
 print(resultA)
 print(resultB)
 ```
