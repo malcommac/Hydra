@@ -66,8 +66,9 @@ public prefix func ..!<T> (_ promise: Promise<T>) -> T? {
 /// - Returns: fulfilled value of the promise
 /// - Throws: throws an exception if promise fails due to an error
 @discardableResult
+@available(*, deprecated, renamed: "Hydra.await")
 public func await<T>(in context: Context? = nil, _ promise: Promise<T>) throws -> T {
-	return try (context ?? awaitContext).await(promise)
+    return try Hydra.await(in: context, promise)
 }
 
 /// Awaits that the given body is resolved. This is a shortcut which simply create a Promise; as for a Promise you need to
@@ -79,9 +80,39 @@ public func await<T>(in context: Context? = nil, _ promise: Promise<T>) throws -
 /// - Returns: the value of the promise
 /// - Throws: an exception if operation fails
 @discardableResult
+@available(*, deprecated, renamed: "Hydra.await")
 public func await<T>(in context: Context = .background, _ body: @escaping ((_ fulfill: @escaping (T) -> (), _ reject: @escaping (Error) -> (), _ operation: PromiseStatus) throws -> ())) throws -> T {
-	let promise = Promise<T>(in: context, body)
-	return try await(in: context, promise)
+    return try Hydra.await(in: context, body)
+}
+
+public enum Hydra {
+    
+    /// Awaits that the given promise fulfilled with its value or throws an error if the promise fails
+    ///
+    /// - Parameters:
+    ///   - context: context in which you want to execute the operation. If not specified default concurrent `awaitContext` is used instead.
+    ///   - promise: target promise
+    /// - Returns: fulfilled value of the promise
+    /// - Throws: throws an exception if promise fails due to an error
+    @discardableResult
+    public static func await<T>(in context: Context? = nil, _ promise: Promise<T>) throws -> T {
+        return try (context ?? awaitContext).await(promise)
+    }
+
+    /// Awaits that the given body is resolved. This is a shortcut which simply create a Promise; as for a Promise you need to
+    /// call `resolve` or `reject` in order to complete it.
+    ///
+    /// - Parameters:
+    ///   - context: context in which the body is executed (if not specified `background` is used)
+    ///   - body: closure to execute
+    /// - Returns: the value of the promise
+    /// - Throws: an exception if operation fails
+    @discardableResult
+    public static func await<T>(in context: Context = .background, _ body: @escaping ((_ fulfill: @escaping (T) -> (), _ reject: @escaping (Error) -> (), _ operation: PromiseStatus) throws -> ())) throws -> T {
+        let promise = Promise<T>(in: context, body)
+        return try Hydra.await(in: context, promise)
+    }
+    
 }
 
 
