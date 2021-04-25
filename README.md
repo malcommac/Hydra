@@ -1,5 +1,5 @@
-<p align="center">
-<img src="banner.png" width=476px alt="Hydra" title="Hydra">
+<p align="center" >
+  <img src="banner.png" width=300px alt="Hydra" title="Hydra">
 </p>
 
 <p align="center"><strong>Lightweight full-featured Promises, Async & Await Library in Swift</strong></p>
