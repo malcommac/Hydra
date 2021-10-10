@@ -174,7 +174,7 @@ It must implement at least one `Bool` property called `isCancelled`.
 
 When `isCancelled` is set to `true` it means someone outside the promise want to cancel the task.
 
-Its your responsibility to check from inside the `Promise`'s body the status of this variable by asking to `operation.isCancelled`.
+It's your responsibility to check from inside the `Promise`'s body the status of this variable by asking to `operation.isCancelled`.
 If `true` you can do all your best to cancel the operation; at the end of your operations just call `cancel()` and stop the workflow.
 
 Your promise must be also initialized using this token instance.
